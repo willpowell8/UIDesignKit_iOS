@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'UIDesignKit_Example' do
+  pod 'UIDesignKit', :path => '../'
+
+  target 'UIDesignKit_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
