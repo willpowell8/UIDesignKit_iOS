@@ -7,3 +7,10 @@
 //
 
 import Foundation
+import UIKit
+
+extension UIFont {
+    func toDesignString() -> String {
+        return "\(self.fontName)|\(self.familyName)|\(self.pointSize)"
+    }
+}
