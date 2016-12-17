@@ -72,6 +72,7 @@ extension UINavigationController {
         var dataReturn = data;
         
         dataReturn["barTintColor"] = ["type":"COLOR", "value":self.navigationBar.barTintColor?.toHexString()];
+        dataReturn["tintColor"] = ["type":"COLOR", "value":self.navigationBar.tintColor.toHexString()];
         return dataReturn;
     }
     
@@ -151,6 +152,9 @@ extension UINavigationController {
         // OVERRIDE TO GO HERE FOR INDIVIDUAL CLASSES
         self.applyData(data: data, property: "barTintColor", targetType: .color, apply: { (value) in
             self.navigationBar.barTintColor = value as! UIColor;
+        })
+        self.applyData(data: data, property: "tintColor", targetType: .color, apply: { (value) in
+            self.navigationBar.tintColor = value as! UIColor;
         })
     }
 
