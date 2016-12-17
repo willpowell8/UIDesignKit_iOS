@@ -29,7 +29,7 @@ public enum UIUserInterfaceIdiom : Int {
 
 public class UIDesign {
     
-    public static var server:String = "http://192.168.2.229:3000";
+    public static var server:String = "http://www.uidesignkit.com:3000";
     
     public static var socket:SocketIOClient?
     
