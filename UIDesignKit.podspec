@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'UIDesignKit'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of UIDesignKit.'
+  s.summary          = 'Remotely tweak and change colours, fonts, style and design parameters without recompiling your app.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,15 +18,15 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+UIDesignKit fills the need for allowing users to change things like the background colour of a label or the font of text on a button from a remote website in realtime. This means that developers can concentrate on the application logic and layout of the app rather than the precise design values. This also works well for multitennanted application support for different designs per tennant.
                        DESC
 
-  s.homepage         = 'https://github.com/<GITHUB_USERNAME>/UIDesignKit'
+  s.homepage         = 'https://github.com/willpowell8/UIDesignKit_iOS'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Will Powell' => 'willpowell8@gmail.com' }
-  s.source           = { :git => 'https://github.com/<GITHUB_USERNAME>/UIDesignKit.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.source           = { :git => 'https://github.com/willpowell8/UIDesignKit_iOS.git', :tag => s.version.to_s }
+  # s.social_media_url = 'https://twitter.com/willpowelluk>'
 
   s.ios.deployment_target = '8.0'
 
@@ -36,7 +36,6 @@ TODO: Add long description of the pod here.
   #   'UIDesignKit' => ['UIDesignKit/Assets/*.png']
   # }
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
     s.frameworks = 'UIKit'
     s.dependency 'Socket.IO-Client-Swift', '~>8.1.1'
     s.dependency 'SDWebImage', '~>3.8'
