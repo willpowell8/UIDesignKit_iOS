@@ -20,25 +20,25 @@ extension UIView{
         set(newValue) {
             objc_setAssociatedObject(self, &designKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
             checkForDesignUpdate()
-            setup();
+            designSetup();
         }
     }
     
-    func clear(){
+    func designClear(){
         NotificationCenter.default.removeObserver(self)
     }
     
-    func setup(){
-        self.clear()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateFromNotification), name: UIDesign.LOADED, object: nil)
+    func designSetup(){
+        self.designClear()
+        NotificationCenter.default.addObserver(self, selector: #selector(designUpdateFromNotification), name: UIDesign.LOADED, object: nil)
         let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
-        NotificationCenter.default.addObserver(self, selector: #selector(highlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(designHighlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
         let eventText = "DESIGN_UPDATE_\(DesignKey!)"
-        NotificationCenter.default.addObserver(self, selector: #selector(updateFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(designUpdateFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
         
     }
     
-    @objc private func updateFromNotification() {
+    @objc private func designUpdateFromNotification() {
         DispatchQueue.main.async(execute: {
             self.checkForDesignUpdate()
         })
@@ -46,7 +46,7 @@ extension UIView{
     }
     
     
-    public func highlight() {
+    public func designHighlight() {
         DispatchQueue.main.async(execute: {
             let originalCGColor = self.layer.backgroundColor
             UIView.animate(withDuration: 0.4, animations: {
@@ -64,7 +64,7 @@ extension UIView{
     private func checkForDesignUpdate(){
         if ((self.DesignKey?.isEmpty) != nil)  {
             guard let design = UIDesign.get(self.DesignKey!) else {
-                UIDesign.createKey(self.DesignKey!, type:self.getType(), properties: self.getAvailableProperties())
+                UIDesign.createKey(self.DesignKey!, type:self.getDesignType(), properties: self.getAvailableDesignProperties())
                 return;
             }
             let data = design["data"] as! [AnyHashable: Any];
@@ -75,19 +75,19 @@ extension UIView{
         }
     }
     
-    private func getAvailableProperties() -> [String:Any] {
+    private func getAvailableDesignProperties() -> [String:Any] {
         var data = [String:Any]();
-        return self.getProperties(data: data);
+        return self.getDesignProperties(data: data);
     }
     
-    public func getProperties(data:[String:Any]) -> [String:Any]{
+    public func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = data;
         dataReturn["backgroundColor"] = ["type":"COLOR", "value":self.backgroundColor?.toHexString()];
         dataReturn["cornerRadius"] = ["type":"INT", "value":self.layer.cornerRadius];
         return dataReturn;
     }
     
-    public func getType() -> String{
+    public func getDesignType() -> String{
         return "VIEW";
     }
     
@@ -154,7 +154,7 @@ extension UIView{
             }
         }else{
             // NEED TO ADD PROPERTY
-            let properties = self.getAvailableProperties()
+            let properties = self.getAvailableDesignProperties()
             UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: properties[property])
         }
     }

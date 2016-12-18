@@ -16,13 +16,13 @@ extension UIImageView{
             self.sd_setImage(with: value as! URL);
         })
     }
-    override public func getProperties(data:[String:Any]) -> [String:Any]{
-        var dataReturn = super.getProperties(data: data);
+    override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
+        var dataReturn = super.getDesignProperties(data: data);
         dataReturn["url"] = ["type":"URL"];
         return dataReturn;
     }
     
-    override public func getType() -> String{
+    override public func getDesignType() -> String{
         return "IMAGE";
     }
 }

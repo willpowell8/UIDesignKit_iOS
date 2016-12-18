@@ -42,6 +42,54 @@ public class UIDesign {
     public static var LOADED = Notification.Name(rawValue: "LOADED_DESIGN")
     
     
+    private static var _liveEnabled:Bool = false;
+    
+    public static var liveEnabled:Bool {
+        get {
+            return _liveEnabled;
+        }
+        set (newValue){
+            if(_liveEnabled != newValue){
+                _liveEnabled = newValue
+                if(newValue){
+                    startSocket();
+                }else{
+                    // end socket
+                    if((self.socket) != nil){
+                        self.socket?.disconnect()
+                    }
+                }
+            }
+            
+        }
+    }
+    
+    
+    public static func start(appKey:String, live:Bool){
+        self.appKey = appKey
+        loadDesign();
+        self.liveEnabled = live;
+        
+    }
+    
+    public static func start(appKey:String, useSettings:Bool){
+        self.appKey = appKey
+        NotificationCenter.default.addObserver(self, selector: #selector(UIDesign.defaultsChanged),
+                                               name: UserDefaults.didChangeNotification, object: nil)
+        loadDesign();
+    }
+    
+    @objc public static func defaultsChanged(){
+        let userDefaults = UserDefaults.standard
+        let val = userDefaults.bool(forKey: "live_design");
+        if(val == true && self.liveEnabled == false){
+            loadDesign();
+        }
+        self.liveEnabled = val;
+    }
+
+    
+    
     public static func start(appKey:String){
         self.appKey = appKey
         self.deviceType = "iPhone"

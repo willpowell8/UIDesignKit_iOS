@@ -21,14 +21,14 @@ extension UILabel{
         })
         
     }
-    override public func getProperties(data:[String:Any]) -> [String:Any]{
-        var dataReturn = super.getProperties(data: data);
+    override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
+        var dataReturn = super.getDesignProperties(data: data);
         dataReturn["textColor"] = ["type":"COLOR", "value":self.textColor.toHexString()];
         dataReturn["font"] = ["type":"FONT", "value": font.toDesignString()];
         return dataReturn;
     }
     
-    override public func getType() -> String{
+    override public func getDesignType() -> String{
         return "LABEL";
     }
 }
