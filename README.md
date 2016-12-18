@@ -5,11 +5,16 @@
 [![License](https://img.shields.io/cocoapods/l/UIDesignKit.svg?style=flat)](http://cocoapods.org/pods/UIDesignKit)
 [![Platform](https://img.shields.io/cocoapods/p/UIDesignKit.svg?style=flat)](http://cocoapods.org/pods/UIDesignKit)
 
+UIDesign Kit is a powerful tool for making tweaks and changes to the UI of your application without resubmitting to Apple. With this you can change colours, update fonts, add borders and much more all from the web UI.
+
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
+
+XCode 9.0+
 
 ## Installation
 
