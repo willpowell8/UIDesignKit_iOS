@@ -18,6 +18,7 @@ extension UIView{
             return objc_getAssociatedObject(self, &designKey) as? String
         }
         set(newValue) {
+            self.designClear()
             objc_setAssociatedObject(self, &designKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
             checkForDesignUpdate()
             designSetup();
@@ -25,11 +26,16 @@ extension UIView{
     }
     
     func designClear(){
-        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: UIDesign.LOADED, object: nil);
+        if DesignKey != nil && (DesignKey?.characters.count)! > 0 {
+            let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventHighlight), object: nil);
+            let eventText = "DESIGN_UPDATE_\(DesignKey!)"
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventText), object: nil);
+        }
     }
     
     func designSetup(){
-        self.designClear()
         NotificationCenter.default.addObserver(self, selector: #selector(designUpdateFromNotification), name: UIDesign.LOADED, object: nil)
         let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
         NotificationCenter.default.addObserver(self, selector: #selector(designHighlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
