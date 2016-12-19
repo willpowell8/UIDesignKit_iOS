@@ -18,41 +18,47 @@ extension UINavigationController {
             return objc_getAssociatedObject(self, &designKey) as? String
         }
         set(newValue) {
+            designClear()
             objc_setAssociatedObject(self, &designKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
             checkForDesignUpdate()
             setupNotifications();
         }
     }
 
-    func clear(){
-        NotificationCenter.default.removeObserver(self)
+    func designClear(){
+        NotificationCenter.default.removeObserver(self, name: UIDesign.LOADED, object: nil);
+        if DesignKey != nil && (DesignKey?.characters.count)! > 0 {
+            let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventHighlight), object: nil);
+            let eventText = "DESIGN_UPDATE_\(DesignKey!)"
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventText), object: nil);
+        }
     }
     
     func setupNotifications(){
-        self.clear()
-        NotificationCenter.default.addObserver(self, selector: #selector(updateFromNotification), name: UIDesign.LOADED, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateDesignFromNotification), name: UIDesign.LOADED, object: nil)
         let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
-        NotificationCenter.default.addObserver(self, selector: #selector(highlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(designHighlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
         let eventText = "DESIGN_UPDATE_\(DesignKey!)"
-        NotificationCenter.default.addObserver(self, selector: #selector(updateFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateDesignFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
         
     }
     
-    @objc private func updateFromNotification() {
+    @objc private func updateDesignFromNotification() {
         DispatchQueue.main.async(execute: {
             self.checkForDesignUpdate()
         })
     }
     
     
-    public func highlight() {
+    public func designHighlight() {
 
     }
     
     private func checkForDesignUpdate(){
         if ((self.DesignKey?.isEmpty) != nil)  {
             guard let design = UIDesign.get(self.DesignKey!) else {
-                UIDesign.createKey(self.DesignKey!, type:self.getType(), properties: self.getAvailableProperties())
+                UIDesign.createKey(self.DesignKey!, type:self.getType(), properties: self.getAvailableDesignProperties())
                 return;
             }
             let data = design["data"] as! [AnyHashable: Any];
@@ -63,12 +69,12 @@ extension UINavigationController {
         }
     }
     
-    private func getAvailableProperties() -> [String:Any] {
+    private func getAvailableDesignProperties() -> [String:Any] {
         var data = [String:Any]();
-        return self.getProperties(data: data);
+        return self.getDesignProperties(data: data);
     }
     
-    public func getProperties(data:[String:Any]) -> [String:Any]{
+    public func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = data;
         
         dataReturn["barTintColor"] = ["type":"COLOR", "value":self.navigationBar.barTintColor?.toHexString()];
@@ -143,7 +149,7 @@ extension UINavigationController {
             }
         }else{
             // NEED TO ADD PROPERTY
-            let properties = self.getAvailableProperties()
+            let properties = self.getAvailableDesignProperties()
             UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: properties[property])
         }
     }
