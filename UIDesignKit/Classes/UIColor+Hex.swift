@@ -11,7 +11,17 @@ import UIKit
 
 extension UIColor {
     convenience init(hexString:String) {
-        let hexString:String = hexString.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
+        var hexString:String = hexString.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
+        
+        var alpha = CGFloat(1.0);
+        let hexStringParts = hexString.characters.split{$0 == "|"}.map(String.init)
+        hexString = hexStringParts[0]
+        if hexStringParts.count > 1 {
+            let part2 = hexStringParts[1]
+            if let n = NumberFormatter().number(from: part2) {
+                alpha = CGFloat(n)
+            }
+        }
         let scanner            = Scanner(string: hexString)
         
         if (hexString.hasPrefix("#")) {
@@ -30,7 +40,7 @@ extension UIColor {
         let green = CGFloat(g) / 255.0
         let blue  = CGFloat(b) / 255.0
         
-        self.init(red:red, green:green, blue:blue, alpha:1)
+        self.init(red:red, green:green, blue:blue, alpha:alpha)
     }
     
     func toHexString() -> String {
@@ -43,6 +53,6 @@ extension UIColor {
         
         let rgb:Int = (Int)(r*255)<<16 | (Int)(g*255)<<8 | (Int)(b*255)<<0
         
-        return String(format:"#%06x", rgb)
+        return String(format:"#%06x", rgb)+"|\(a)"
     }
 }
