@@ -132,13 +132,15 @@ extension UINavigationController {
                         return;
                     }
                     let parts = value.characters.split{$0 == "|"}.map(String.init)
-                    var size = CGFloat(9.0)
-                    if let n = NumberFormatter().number(from: parts[2]) {
-                        size = CGFloat(n)
+                    if ( parts.count > 1 ) {
+                        var size = CGFloat(9.0)
+                        if let n = NumberFormatter().number(from: parts[2]) {
+                            size = CGFloat(n)
+                        }
+                        let descriptor = UIFontDescriptor(name: parts[0], size: size)
+                        let font = UIFont(descriptor: descriptor, size: size);
+                        apply(font);
                     }
-                    let descriptor = UIFontDescriptor(name: parts[0], size: size)
-                    let font = UIFont(descriptor: descriptor, size: size);
-                    apply(font);
                     break;
                 default:
                     
