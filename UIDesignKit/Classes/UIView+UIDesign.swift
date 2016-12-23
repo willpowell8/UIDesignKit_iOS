@@ -13,12 +13,17 @@ private var designKey: UInt8 = 9
 
 extension UIView{
     @IBInspectable
-    public var DesignKey: String? {
+    public var DesignKey: String?  {
         get {
             return objc_getAssociatedObject(self, &designKey) as? String
         }
         set(newValue) {
             self.designClear()
+            if(newValue?.isDesignStringAcceptable == false){
+                print("UIDESIGN ERROR: key contans invalid characters must be a-z,A-Z,0-9 and . only")
+                return;
+            }
+            
             objc_setAssociatedObject(self, &designKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
             checkForDesignUpdate()
             designSetup();
@@ -144,8 +149,10 @@ extension UIView{
                     }
                     let parts = value.characters.split{$0 == "|"}.map(String.init)
                     var size = CGFloat(9.0)
-                    if let n = NumberFormatter().number(from: parts[2]) {
-                        size = CGFloat(n)
+                    if(parts.count > 1){
+                        if let n = NumberFormatter().number(from: parts[2]) {
+                            size = CGFloat(n)
+                        }
                     }
                     let descriptor = UIFontDescriptor(name: parts[0], size: size)
                     let font = UIFont(descriptor: descriptor, size: size);
@@ -155,8 +162,6 @@ extension UIView{
                     
                     break;
                 }
-            }else{
-                //print("Value is not configured correctly \(elementType)");
             }
         }else{
             // NEED TO ADD PROPERTY

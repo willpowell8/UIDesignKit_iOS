@@ -9,6 +9,11 @@
 import Foundation
 import SocketIO
 
+public enum UIDesignError: Error {
+    case invalidDesignKey(key:String)
+}
+
+
 public enum UIDesignType: String
 {
     case color = "COLOR"
