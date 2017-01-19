@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension UIColor {
-    convenience init(hexString:String) {
+    public convenience init(hexString:String) {
         var hexString:String = hexString.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
         
         var alpha = CGFloat(1.0);
@@ -43,7 +43,7 @@ extension UIColor {
         self.init(red:red, green:green, blue:blue, alpha:alpha)
     }
     
-    func toHexString() -> String {
+    public func toHexString() -> String {
         var r:CGFloat = 0
         var g:CGFloat = 0
         var b:CGFloat = 0
