@@ -42,6 +42,7 @@ public class UIDesign {
     public static var deviceType:String = ""
     
     
+    public static var ignoreRemote:Bool = false
     private static var loadedDesign:[AnyHashable:Any]?
     
     public static var LOADED = Notification.Name(rawValue: "LOADED_DESIGN")

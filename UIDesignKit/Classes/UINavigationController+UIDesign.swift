@@ -64,6 +64,9 @@ extension UINavigationController {
             let data = design["data"] as! [AnyHashable: Any];
             let type = design["type"] as! String;
             DispatchQueue.main.async(execute: {
+                if UIDesign.ignoreRemote == true {
+                    return;
+                }
                 self.updateDesign(type:type, data: data)
             })
         }
