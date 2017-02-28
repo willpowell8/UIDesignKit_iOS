@@ -108,62 +108,64 @@ extension UIView{
     public func applyData(data:[AnyHashable:Any], property:String, targetType:UIDesignType, apply:@escaping (_ value: Any) -> Void){
         if data[property] != nil {
             let element = data[property] as! [AnyHashable: Any];
-            guard let elementType = UIDesignType(rawValue: element["type"] as! String) else {
-                return;
-            }
-            if element["universal"] != nil && elementType == targetType {
-                var propertyForDeviceType:String = "universal";
-                if element[UIDesign.deviceType] != nil {
-                    propertyForDeviceType = UIDesign.deviceType
+            if let elementT = element["type"] as? String {
+                guard let elementType = UIDesignType(rawValue: elementT) else {
+                    return;
                 }
-                switch(targetType){
-                    case .color:
-                        guard let value = element[propertyForDeviceType] as? String
-                        else{
-                            return;
-                        }
-                        
-                        let color = UIColor(hexString:value);
-                        apply(color);
-                        break;
-                    case .int:
-                        guard let value = element[propertyForDeviceType] as? Int
-                        else{
-                            return;
-                        }
-                        apply(value);
-                        break;
-                    case .url:
-                        guard let value = element[propertyForDeviceType] as? String else {
-                            print("URL VALUE NOT STRING");
-                            return;
-                        }
-                        if value != "<null>" {
-                            guard let url = URL(string:value) else{
+                if element["universal"] != nil && elementType == targetType {
+                    var propertyForDeviceType:String = "universal";
+                    if element[UIDesign.deviceType] != nil {
+                        propertyForDeviceType = UIDesign.deviceType
+                    }
+                    switch(targetType){
+                        case .color:
+                            guard let value = element[propertyForDeviceType] as? String
+                            else{
                                 return;
                             }
-                            apply(url);
+                            
+                            let color = UIColor(hexString:value);
+                            apply(color);
+                            break;
+                        case .int:
+                            guard let value = element[propertyForDeviceType] as? Int
+                            else{
+                                return;
+                            }
+                            apply(value);
+                            break;
+                        case .url:
+                            guard let value = element[propertyForDeviceType] as? String else {
+                                print("URL VALUE NOT STRING");
+                                return;
+                            }
+                            if value != "<null>" {
+                                guard let url = URL(string:value) else{
+                                    return;
+                                }
+                                apply(url);
+                            }
+                            break;
+                    case .font:
+                        guard let value = element[propertyForDeviceType] as? String else {
+                            print("Font VALUE NOT STRING");
+                            return;
                         }
+                        let parts = value.characters.split{$0 == "|"}.map(String.init)
+                        var size = CGFloat(9.0)
+                        if(parts.count > 1){
+                            if let n = NumberFormatter().number(from: parts[2]) {
+                                size = CGFloat(n)
+                            }
+                        }
+                        let descriptor = UIFontDescriptor(name: parts[0], size: size)
+                        let font = UIFont(descriptor: descriptor, size: size);
+                        apply(font);
                         break;
-                case .font:
-                    guard let value = element[propertyForDeviceType] as? String else {
-                        print("Font VALUE NOT STRING");
-                        return;
+                    default:
+                        
+                        break;
                     }
-                    let parts = value.characters.split{$0 == "|"}.map(String.init)
-                    var size = CGFloat(9.0)
-                    if(parts.count > 1){
-                        if let n = NumberFormatter().number(from: parts[2]) {
-                            size = CGFloat(n)
-                        }
-                    }
-                    let descriptor = UIFontDescriptor(name: parts[0], size: size)
-                    let font = UIFont(descriptor: descriptor, size: size);
-                    apply(font);
-                    break;
-                default:
-                    
-                    break;
                 }
             }
         }else{

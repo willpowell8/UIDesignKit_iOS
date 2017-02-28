@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIDesignKit'
-  s.version          = '1.0.8'
+  s.version          = '1.0.9'
   s.summary          = 'Remotely tweak and change colours, fonts, style and design parameters without recompiling your app.'
 
 # This description is used to generate tags and improve search results.
