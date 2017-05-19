@@ -28,7 +28,7 @@
             </objects>
             <point key="canvasLocation" x="-770" y="139"/>
         </scene>
-        <!--View Controller-->
+        <!--TESTER-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="UIDesignKit_Example" customModuleProvider="target" sceneMemberID="viewController">
@@ -73,7 +73,9 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="qbh-Nl-LJE"/>
+                    <navigationItem key="navigationItem" title="TESTER" id="qbh-Nl-LJE">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="4n1-bV-o3i"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
