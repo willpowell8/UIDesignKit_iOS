@@ -215,11 +215,6 @@ public class UIDesign {
     }
     
     public static func get(_ key:String) -> [AnyHashable:Any]?{
-        let m = self.loadedDesign
-        if m == nil {
-            return nil
-        }
-        
         guard let design =  self.loadedDesign[key] as? [AnyHashable:Any] else {
             return nil;
         }
