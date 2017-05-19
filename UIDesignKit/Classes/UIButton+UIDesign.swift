@@ -15,8 +15,7 @@ extension UIButton{
         
     }
     override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
-        var dataReturn = super.getDesignProperties(data: data);
-        //dataReturn["url"] = ["type":"URL"];
+        let dataReturn = super.getDesignProperties(data: data);
         return dataReturn;
     }
     

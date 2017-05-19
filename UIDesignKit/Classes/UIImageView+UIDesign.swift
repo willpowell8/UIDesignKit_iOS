@@ -13,7 +13,9 @@ extension UIImageView{
     override public func updateDesign(type:String, data:[AnyHashable: Any]) {
         super.updateDesign(type:type, data: data);
         self.applyData(data: data, property: "url", targetType: .url, apply: { (value) in
-            self.sd_setImage(with: value as! URL);
+            if let url = value as? URL {
+                self.sd_setImage(with: url)
+            }
         })
     }
     override public func getDesignProperties(data:[String:Any]) -> [String:Any]{

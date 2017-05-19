@@ -73,7 +73,7 @@ extension UINavigationController {
     }
     
     private func getAvailableDesignProperties() -> [String:Any] {
-        var data = [String:Any]();
+        let data = [String:Any]();
         return self.getDesignProperties(data: data);
     }
     
@@ -155,17 +155,24 @@ extension UINavigationController {
         }else{
             // NEED TO ADD PROPERTY
             let properties = self.getAvailableDesignProperties()
-            UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: properties[property])
+            if let propertyValue = properties[property] {
+                UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: propertyValue)
+            }
+            
         }
     }
     
     public func updateDesign(type:String, data:[AnyHashable: Any]) {
         // OVERRIDE TO GO HERE FOR INDIVIDUAL CLASSES
         self.applyData(data: data, property: "barTintColor", targetType: .color, apply: { (value) in
-            self.navigationBar.barTintColor = value as! UIColor;
+            if let v = value as? UIColor {
+                self.navigationBar.barTintColor = v
+            }
         })
         self.applyData(data: data, property: "tintColor", targetType: .color, apply: { (value) in
-            self.navigationBar.tintColor = value as! UIColor;
+            if let v = value as? UIColor {
+                self.navigationBar.tintColor = v
+            }
         })
     }
 

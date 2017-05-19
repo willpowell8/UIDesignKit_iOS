@@ -43,7 +43,7 @@ public class UIDesign {
     
     
     public static var ignoreRemote:Bool = false
-    private static var loadedDesign:[AnyHashable:Any]?
+    private static var loadedDesign = [AnyHashable:Any]()
     
     public static var LOADED = Notification.Name(rawValue: "LOADED_DESIGN")
     
@@ -127,7 +127,9 @@ public class UIDesign {
         guard let data = standard.object(forKey: "UIDesign") else {
             return
         }
-        self.loadedDesign = data as! [AnyHashable:Any];
+        if let loaded = data as? [AnyHashable:Any] {
+            self.loadedDesign = loaded
+        }
         NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
     }
     
@@ -141,10 +143,13 @@ public class UIDesign {
             (data, response, error) in
             if (response as? HTTPURLResponse) != nil {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [AnyHashable:Any]
-                    loadedDesign = json?["data"] as! [AnyHashable:Any];
-                    saveDesignToDisk(design: self.loadedDesign!);
-                    NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
+                    if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [AnyHashable:Any] {
+                        if let loaded = json["data"] as? [AnyHashable:Any] {
+                            self.loadedDesign = loaded
+                            saveDesignToDisk(design: self.loadedDesign);
+                            NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
+                        }
+                    }
                 } catch {
                     print("error serializing JSON: \(error)")
                 }
@@ -174,10 +179,8 @@ public class UIDesign {
             let property = dictionary["property"] as! String
             let form = dictionary["form"] as! String
             let value = dictionary["value"] as! String
-            let elementData = self.loadedDesign?[key];
-            
-            var keyElement = self.loadedDesign?[key] as! [AnyHashable:Any]
-            var keyData = keyElement["data"] as! [AnyHashable:Any]
+            var keyElement = self.loadedDesign[key] as! [AnyHashable:Any]
+            let keyData = keyElement["data"] as! [AnyHashable:Any]
             var outputProperties = [AnyHashable:Any]()
             for (vKey, vValue) in keyData {
                 if(vKey as! String == property){
@@ -189,7 +192,7 @@ public class UIDesign {
                 }
             }
             keyElement["data"] = outputProperties
-            self.loadedDesign?[key] = keyElement
+            self.loadedDesign[key] = keyElement
             let event = "DESIGN_UPDATE_\(key)"
             NotificationCenter.default.post(name: Notification.Name(rawValue: event), object: self)
         })
@@ -217,7 +220,7 @@ public class UIDesign {
             return nil
         }
         
-        guard let design =  self.loadedDesign?[key] as? [AnyHashable:Any] else {
+        guard let design =  self.loadedDesign[key] as? [AnyHashable:Any] else {
             return nil;
         }
        
@@ -225,10 +228,10 @@ public class UIDesign {
     }
     
     public static func createKey(_ key:String,type:String,  properties:[String:Any]){
-        if socket?.status == SocketIOClientStatus.connected && self.loadedDesign?[key] == nil {
+        if socket?.status == SocketIOClientStatus.connected && self.loadedDesign[key] == nil {
             //self.loadedDesign?[key] = key
             self.sendMessage(type: "key:add", data: ["appuuid":self.appKey!, "type":type, "key":key, "properties":properties])
-            self.loadedDesign?[key] = ["type": type, "data":properties];
+            self.loadedDesign[key] = ["type": type, "data":properties];
         }
     }
     
@@ -237,11 +240,11 @@ public class UIDesign {
             
             self.sendMessage(type: "key:add_property", data: ["appuuid":self.appKey!, "key":key, "name":property, "attribute":attribute])
             let attr = attribute  as! [AnyHashable:Any]
-            var keyElement = self.loadedDesign?[key] as! [AnyHashable:Any]
+            var keyElement = self.loadedDesign[key] as! [AnyHashable:Any]
             var keyData = keyElement["data"] as! [AnyHashable:Any]
             keyData[property] = ["universal":attr["value"]]
             keyElement["data"] = keyData
-            self.loadedDesign?[key] = keyElement
+            self.loadedDesign[key] = keyElement
         }
     }
 }

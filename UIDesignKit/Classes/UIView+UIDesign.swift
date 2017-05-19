@@ -90,7 +90,7 @@ extension UIView{
     }
     
     private func getAvailableDesignProperties() -> [String:Any] {
-        var data = [String:Any]();
+        let data = [String:Any]();
         return self.getDesignProperties(data: data);
     }
     
@@ -171,14 +171,18 @@ extension UIView{
         }else{
             // NEED TO ADD PROPERTY
             let properties = self.getAvailableDesignProperties()
-            UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: properties[property])
+            if let attribute = properties[property] {
+                UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: attribute)
+            }
         }
     }
     
     public func updateDesign(type:String, data:[AnyHashable: Any]) {
         // OVERRIDE TO GO HERE FOR INDIVIDUAL CLASSES
         self.applyData(data: data, property: "backgroundColor", targetType: .color, apply: { (value) in
-            self.backgroundColor = value as! UIColor;
+            if let v = value as? UIColor {
+                self.backgroundColor = v
+            }
         })
         
         self.applyData(data: data, property: "cornerRadius", targetType: .int, apply: { (value) in
