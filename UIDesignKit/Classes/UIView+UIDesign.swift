@@ -98,7 +98,17 @@ extension UIView{
         var dataReturn = data;
         dataReturn["backgroundColor"] = ["type":"COLOR", "value":self.backgroundColor?.toHexString()];
         dataReturn["cornerRadius"] = ["type":"INT", "value":self.layer.cornerRadius];
-        return dataReturn;
+        if self.layer.borderWidth > 0 {
+            dataReturn["borderWidth"] = ["type":"FLOAT", "value":self.layer.borderWidth];
+        }else{
+            dataReturn["borderWidth"] = ["type":"FLOAT", "value":self.layer.borderWidth];
+        }
+        if let borderColor = layer.borderColor {
+            dataReturn["borderColor"] = ["type":"COLOR", "value":UIColor(cgColor:borderColor).toHexString()];
+        }else{
+            dataReturn["borderColor"] = ["type":"COLOR"];
+        }
+        return dataReturn
     }
     
     public func getDesignType() -> String{
@@ -131,6 +141,14 @@ extension UIView{
                             guard let value = element[propertyForDeviceType] as? Int
                             else{
                                 return;
+                            }
+                            apply(value);
+                            break;
+                        
+                        case .float:
+                            guard let value = element[propertyForDeviceType] as? Float
+                                else{
+                                    return;
                             }
                             apply(value);
                             break;
@@ -185,8 +203,24 @@ extension UIView{
             }
         })
         
+        self.applyData(data: data, property: "borderColor", targetType: .color, apply: { (value) in
+            if let v = value as? UIColor {
+                self.layer.borderColor = v.cgColor
+            }
+        })
+        self.applyData(data: data, property: "borderWidth", targetType: .float, apply: { (value) in
+            if let v = value as? Float {
+                self.layer.borderWidth = CGFloat(v)
+            }
+        })
+        
         self.applyData(data: data, property: "cornerRadius", targetType: .int, apply: { (value) in
-            self.layer.cornerRadius = CGFloat(value as! Int);
+            if let v = value as? Int {
+                self.layer.cornerRadius = CGFloat(v);
+                if v > 0 {
+                    self.clipsToBounds = true
+                }
+            }
         })
     }
 }

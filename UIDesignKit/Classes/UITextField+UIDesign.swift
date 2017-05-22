@@ -16,7 +16,6 @@ extension UITextField{
     }
     override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
         let dataReturn = super.getDesignProperties(data: data);
-        //dataReturn["url"] = ["type":"URL"];
         return dataReturn;
     }
     

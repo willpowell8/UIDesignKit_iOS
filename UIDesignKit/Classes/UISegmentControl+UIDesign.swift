@@ -1,15 +1,13 @@
 //
-//  UIButton+UIDesign.swift
+//  UISegmentControl+UIDesign.swift
 //  Pods
 //
-//  Created by Will Powell on 26/11/2016.
+//  Created by Will Powell on 22/05/2017.
 //
 //
 
 import Foundation
-import SDWebImage
-
-extension UIButton{
+extension UISegmentedControl{
     override public func updateDesign(type:String, data:[AnyHashable: Any]) {
         super.updateDesign(type:type, data: data);
         self.applyData(data: data, property: "tintColor", targetType: .color, apply: { (value) in
@@ -26,6 +24,6 @@ extension UIButton{
     }
     
     override public func getDesignType() -> String{
-        return "BUTTON";
+        return "SEGMENTCONTROL";
     }
 }

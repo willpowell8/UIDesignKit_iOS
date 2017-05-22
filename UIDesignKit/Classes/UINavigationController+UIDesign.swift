@@ -82,6 +82,8 @@ extension UINavigationController {
         
         dataReturn["barTintColor"] = ["type":"COLOR", "value":self.navigationBar.barTintColor?.toHexString()];
         dataReturn["tintColor"] = ["type":"COLOR", "value":self.navigationBar.tintColor.toHexString()];
+        dataReturn["navigationTitleFontColor"] = ["type":"COLOR"];
+        dataReturn["navigationTitleFont"] = ["type":"FONT"];
         return dataReturn;
     }
     
@@ -92,7 +94,7 @@ extension UINavigationController {
     public func applyData(data:[AnyHashable:Any], property:String, targetType:UIDesignType, apply:@escaping (_ value: Any) -> Void){
         if data[property] != nil {
             let element = data[property] as! [AnyHashable: Any];
-            guard let elementType = UIDesignType(rawValue: element["type"] as! String) else {
+            guard let elementTypeString =  element["type"] as? String, let elementType = UIDesignType(rawValue:elementTypeString) else {
                 return;
             }
             if element["universal"] != nil && elementType == targetType {
@@ -172,6 +174,24 @@ extension UINavigationController {
         self.applyData(data: data, property: "tintColor", targetType: .color, apply: { (value) in
             if let v = value as? UIColor {
                 self.navigationBar.tintColor = v
+            }
+        })
+        
+        self.applyData(data: data, property: "navigationTitleFontColor", targetType: .color, apply: { (value) in
+            if let v = value as? UIColor {
+                if self.navigationBar.titleTextAttributes == nil {
+                    self.navigationBar.titleTextAttributes = [String:Any]()
+                }
+                self.navigationBar.titleTextAttributes?[NSForegroundColorAttributeName] = v
+            }
+        })
+        
+        self.applyData(data: data, property: "navigationTitleFont", targetType: .color, apply: { (value) in
+            if let v = value as? UIFont {
+                if self.navigationBar.titleTextAttributes == nil {
+                    self.navigationBar.titleTextAttributes = [String:Any]()
+                }
+                self.navigationBar.titleTextAttributes?[NSFontAttributeName] = v
             }
         })
     }

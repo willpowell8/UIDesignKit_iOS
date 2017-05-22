@@ -46,7 +46,7 @@ public class UIDesign {
     private static var loadedDesign = [AnyHashable:Any]()
     
     public static var LOADED = Notification.Name(rawValue: "LOADED_DESIGN")
-    
+    public static var hasLoaded = false
     
     private static var _liveEnabled:Bool = false;
     
@@ -146,6 +146,7 @@ public class UIDesign {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [AnyHashable:Any] {
                         if let loaded = json["data"] as? [AnyHashable:Any] {
                             self.loadedDesign = loaded
+                            self.hasLoaded = true
                             saveDesignToDisk(design: self.loadedDesign);
                             NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
                         }
@@ -223,7 +224,7 @@ public class UIDesign {
     }
     
     public static func createKey(_ key:String,type:String,  properties:[String:Any]){
-        if socket?.status == SocketIOClientStatus.connected && self.loadedDesign[key] == nil {
+        if socket?.status == SocketIOClientStatus.connected, self.loadedDesign[key] == nil, self.hasLoaded == true {
             //self.loadedDesign?[key] = key
             self.sendMessage(type: "key:add", data: ["appuuid":self.appKey!, "type":type, "key":key, "properties":properties])
             self.loadedDesign[key] = ["type": type, "data":properties];
@@ -231,7 +232,7 @@ public class UIDesign {
     }
     
     public static func addPropertyToKey(_ key:String, property:String, attribute:Any){
-        if socket?.status == SocketIOClientStatus.connected {
+        if socket?.status == SocketIOClientStatus.connected, self.hasLoaded == true {
             
             self.sendMessage(type: "key:add_property", data: ["appuuid":self.appKey!, "key":key, "name":property, "attribute":attribute])
             let attr = attribute  as! [AnyHashable:Any]
