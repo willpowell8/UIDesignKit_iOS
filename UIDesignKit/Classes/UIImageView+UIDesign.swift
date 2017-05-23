@@ -17,10 +17,17 @@ extension UIImageView{
                 self.sd_setImage(with: url)
             }
         })
+        
+        self.applyData(data: data, property: "contentMode", targetType: .int, apply: { (value) in
+            if let v = value as? Int, let contentModeVal = UIViewContentMode(rawValue:v)  {
+                self.contentMode = contentModeVal
+            }
+        })
     }
     override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data);
         dataReturn["url"] = ["type":"URL"];
+        dataReturn["contentMode"] = ["type":"INT", "value": self.contentMode.rawValue];
         return dataReturn;
     }
     
