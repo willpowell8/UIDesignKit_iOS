@@ -18,10 +18,23 @@ extension UIButton{
             }
         })
         
+        self.applyData(data: data, property: "textColorNormal", targetType: .color, apply: { (value) in
+            if let v = value as? UIColor {
+                self.setTitleColor(v, for: .normal)
+            }
+        })
+        
+        
     }
     override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data);
         dataReturn["tintColor"] = ["type":"COLOR", "value":self.tintColor.toHexString()];
+        self.titleColor(for: .normal)
+        if let textNormalColor = self.titleColor(for: .normal) {
+            dataReturn["textColorNormal"] = ["type":"COLOR", "value":textNormalColor.toHexString()];
+        }else{
+            dataReturn["textColorNormal"] = ["type":"COLOR"]
+        }
         return dataReturn;
     }
     
