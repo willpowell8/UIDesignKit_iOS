@@ -134,7 +134,7 @@ extension UIView{
                                 return;
                             }
                             
-                            let color = UIColor(hexString:value);
+                            let color = UIColor(fromHexString:value);
                             apply(color);
                             break;
                         case .int:

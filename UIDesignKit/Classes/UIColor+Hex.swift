@@ -10,9 +10,8 @@ import Foundation
 import UIKit
 
 extension UIColor {
-    public convenience init(hexString:String) {
-        var hexString:String = hexString.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
-        
+    public convenience init(fromHexString hexStr:String) {
+        var hexString:String = hexStr.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
         var alpha = CGFloat(1.0);
         let hexStringParts = hexString.characters.split{$0 == "|"}.map(String.init)
         hexString = hexStringParts[0]
@@ -30,15 +29,15 @@ extension UIColor {
         
         var color:UInt32 = 0
         scanner.scanHexInt32(&color)
-        
         let mask = 0x000000FF
         let r = Int(color >> 16) & mask
         let g = Int(color >> 8) & mask
         let b = Int(color) & mask
         
-        let red   = CGFloat(r) / 255.0
-        let green = CGFloat(g) / 255.0
-        let blue  = CGFloat(b) / 255.0
+        let red   = min(1,max(0,CGFloat(r) / 255.0))
+        let green = min(1,max(0,CGFloat(g) / 255.0))
+        let blue  = min(1,max(0,CGFloat(b) / 255.0))
+        alpha = min(1,max(0,alpha))
         
         self.init(red:red, green:green, blue:blue, alpha:alpha)
     }
