@@ -31,7 +31,11 @@ class DesignViewController:UIViewController{
         tableView?.dataSource = self
         tableView?.delegate = self
         self.view.addSubview(tableView!)
-        tableView?.frame = self.view.frame
+        tableView?.translatesAutoresizingMaskIntoConstraints = false
+        tableView?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
+        tableView?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
+        tableView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        tableView?.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
     }
     
     func close(){
@@ -49,6 +53,7 @@ class DesignViewController:UIViewController{
             strings.append(key)
             let cell = TextDesignViewCell()
             cell.property = key
+            cell.details = value as? [String:Any]
             cells.append(cell)
         })
         self.designStrings = strings
