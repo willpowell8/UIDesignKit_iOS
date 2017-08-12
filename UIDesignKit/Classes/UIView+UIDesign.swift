@@ -31,6 +31,7 @@ extension UIView{
     }
     
     func designClear(){
+        inlineEditClear()
         NotificationCenter.default.removeObserver(self, name: UIDesign.LOADED, object: nil);
         if DesignKey != nil && (DesignKey?.characters.count)! > 0 {
             let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
@@ -46,7 +47,7 @@ extension UIView{
         NotificationCenter.default.addObserver(self, selector: #selector(designHighlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
         let eventText = "DESIGN_UPDATE_\(DesignKey!)"
         NotificationCenter.default.addObserver(self, selector: #selector(designUpdateFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
-        
+        inlineEditAddGestureRecognizer()
     }
     
     @objc private func designUpdateFromNotification() {
@@ -80,13 +81,21 @@ extension UIView{
             }
             let data = design["data"] as! [AnyHashable: Any];
             let type = design["type"] as! String;
-            DispatchQueue.main.async(execute: {
-                if UIDesign.ignoreRemote == true {
-                    return;
-                }
-                self.updateDesign(type:type, data: data)
-            })
+            if Thread.isMainThread {
+                self.completeCheckForDesignUpdate(type: type, data: data)
+            }else{
+                DispatchQueue.main.async(execute: {
+                    self.completeCheckForDesignUpdate(type: type, data: data)
+                })
+            }
         }
+    }
+    
+    private func completeCheckForDesignUpdate(type:String, data:[AnyHashable:Any]){
+        if UIDesign.ignoreRemote == true {
+            return;
+        }
+        self.updateDesign(type:type, data: data)
     }
     
     private func getAvailableDesignProperties() -> [String:Any] {
@@ -222,5 +231,63 @@ extension UIView{
                 }
             }
         })
+    }
+    
+    
+    /// Inline Edit Gesture Recognizer Add
+    func inlineEditAddGestureRecognizer(){
+        if UIDesign.allowInlineEdit {
+            self.isUserInteractionEnabled = true
+            let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(inlineEditorGestureLongPress(_:)))
+            longPressRecognizer.accessibilityLabel = "LONG_DESIGN"
+            self.addGestureRecognizer(longPressRecognizer)
+        }
+        NotificationCenter.default.addObserver(self, selector: #selector(inlineEditStateUpdate), name: UIDesign.INLINE_EDIT_CHANGED, object: nil)
+    }
+    
+    /// Inline Editor - gesture recognize Long Press
+    func inlineEditorGestureLongPress(_ sender: UILongPressGestureRecognizer)
+    {
+        if sender.state == .began {
+            print("INLINE")
+            let inline = DesignInlineEditorHandler()
+            inline.showAlert(view: self)//, localizationKey: self.LocalizeKey!)
+        }
+    }
+    
+    /// Inline Edit State Update
+    func inlineEditStateUpdate(){
+        if UIDesign.allowInlineEdit {
+            var hasListener = false
+            if let recognizers = self.gestureRecognizers {
+                for recognizer in recognizers {
+                    if recognizer.accessibilityLabel == "LONG_DESIGN" {
+                        hasListener = true
+                    }
+                }
+            }
+            if hasListener == false {
+                inlineEditAddGestureRecognizer()
+            }
+        }else{
+            if let recognizers = self.gestureRecognizers {
+                for recognizer in recognizers {
+                    if recognizer.accessibilityLabel == "LONG_DESIGN" {
+                        self.removeGestureRecognizer(recognizer)
+                    }
+                }
+            }
+        }
+    }
+    
+    func inlineEditClear(){
+        NotificationCenter.default.removeObserver(self, name: UIDesign.INLINE_EDIT_CHANGED, object: nil);
+        if let recognizers = self.gestureRecognizers {
+            for recognizer in recognizers {
+                if recognizer.accessibilityLabel == "LONG_DESIGN" {
+                    self.removeGestureRecognizer(recognizer)
+                }
+            }
+        }
     }
 }

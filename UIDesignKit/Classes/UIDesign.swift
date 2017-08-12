@@ -46,7 +46,17 @@ public class UIDesign {
     private static var loadedDesign = [AnyHashable:Any]()
     
     public static var LOADED = Notification.Name(rawValue: "LOADED_DESIGN")
+    public static var INLINE_EDIT_CHANGED = Notification.Name(rawValue: "UIDESIGN_INLINE_EDIT")
     public static var hasLoaded = false
+    
+    public static var allowInlineEdit = false {
+        didSet{
+            if oldValue != allowInlineEdit {
+                NotificationCenter.default.post(name: UIDesign.INLINE_EDIT_CHANGED, object: nil)
+            }
+        }
+    }
+    
     
     private static var _liveEnabled:Bool = false;
     
@@ -129,8 +139,9 @@ public class UIDesign {
         }
         if let loaded = data as? [AnyHashable:Any] {
             self.loadedDesign = loaded
+            self.hasLoaded = true
+            NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
         }
-        NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
     }
     
     private static func loadDesign(){
@@ -146,7 +157,6 @@ public class UIDesign {
                     if let json = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as? [AnyHashable:Any] {
                         if let loaded = json["data"] as? [AnyHashable:Any] {
                             self.loadedDesign = loaded
-                            self.hasLoaded = true
                             saveDesignToDisk(design: self.loadedDesign);
                             NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
                         }
