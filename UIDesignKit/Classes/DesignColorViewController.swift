@@ -28,7 +28,7 @@ class DesignColorViewController: UIViewController{
     private var secondaryColorPickerView : UIView!
     private var mainColorSelectorImage : UIImageView!
     private var secondaryColorSelectorImage : UIImageView!
-    private var selectedColor : UIColor!
+    public var selectedColor : UIColor!
     
     //MARK: contructor
     
@@ -45,6 +45,11 @@ class DesignColorViewController: UIViewController{
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
         self.navigationItem.rightBarButtonItems = [doneButton]
         
+    }
+    
+    func applyColor(_ color:UIColor){
+        self.selectedColor = color
+        updateSecondaryPickerView(color: selectedColor)
     }
     
     func done(){

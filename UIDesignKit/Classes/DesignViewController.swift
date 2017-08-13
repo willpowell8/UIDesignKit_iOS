@@ -82,9 +82,10 @@ extension DesignViewController:UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = self.designCells?[indexPath.row] as? DesignViewCell {
             self.selectedCell = cell
-            if cell is ColorDesignViewCell {
+            if let colorCell = cell as? ColorDesignViewCell {
                 let colorVC = DesignColorViewController()
                 colorVC.delegate = self
+                colorVC.applyColor(colorCell.color)
                 self.navigationController?.pushViewController(colorVC, animated: true)
             }
         }
