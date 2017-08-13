@@ -189,23 +189,8 @@ public class UIDesign {
             let key = dictionary["key"] as! String
             let property = dictionary["property"] as! String
             let form = dictionary["form"] as! String
-            let value = dictionary["value"] as! String
-            var keyElement = self.loadedDesign[key] as! [AnyHashable:Any]
-            let keyData = keyElement["data"] as! [AnyHashable:Any]
-            var outputProperties = [AnyHashable:Any]()
-            for (vKey, vValue) in keyData {
-                if(vKey as! String == property){
-                    var vValueMod = vValue as! [AnyHashable:Any];
-                    vValueMod[form] = value
-                    outputProperties[vKey] = vValueMod
-                }else{
-                    outputProperties[vKey] = vValue
-                }
-            }
-            keyElement["data"] = outputProperties
-            self.loadedDesign[key] = keyElement
-            let event = "DESIGN_UPDATE_\(key)"
-            NotificationCenter.default.post(name: Notification.Name(rawValue: event), object: self)
+            let value = dictionary["value"]
+            self.updateLocalKeyProperty(key: key, property: property, form: form, value: value)
         })
         socket?.connect()
     }
@@ -239,6 +224,33 @@ public class UIDesign {
             self.sendMessage(type: "key:add", data: ["appuuid":self.appKey!, "type":type, "key":key, "properties":properties])
             self.loadedDesign[key] = ["type": type, "data":properties];
         }
+    }
+    
+    public static func updateKeyProperty(_ key:String, property:String, value:Any ){
+        if socket?.status == SocketIOClientStatus.connected, self.loadedDesign[key] != nil, self.hasLoaded == true {
+            //self.loadedDesign?[key] = key
+            self.sendMessage(type: "design:save", data: ["appuuid":self.appKey!,"key":key, "property":property, "value":value])
+            self.updateLocalKeyProperty(key: key, property: property, form: "universal", value: value)
+        }
+    }
+    
+    static func updateLocalKeyProperty(key:String, property:String, form:String, value:Any){
+        var keyElement = self.loadedDesign[key] as! [AnyHashable:Any]
+        let keyData = keyElement["data"] as! [AnyHashable:Any]
+        var outputProperties = [AnyHashable:Any]()
+        for (vKey, vValue) in keyData {
+            if(vKey as! String == property){
+                var vValueMod = vValue as! [AnyHashable:Any];
+                vValueMod[form] = value
+                outputProperties[vKey] = vValueMod
+            }else{
+                outputProperties[vKey] = vValue
+            }
+        }
+        keyElement["data"] = outputProperties
+        self.loadedDesign[key] = keyElement
+        let event = "DESIGN_UPDATE_\(key)"
+        NotificationCenter.default.post(name: Notification.Name(rawValue: event), object: self)
     }
     
     public static func addPropertyToKey(_ key:String, property:String, attribute:Any){

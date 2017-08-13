@@ -51,7 +51,16 @@ class DesignViewController:UIViewController{
         var cells = [DesignViewCell]()
         self.designProperties?.forEach({ (key,value) in
             strings.append(key)
-            let cell = TextDesignViewCell()
+            var cell = DesignViewCell()
+            if let details = value as? [String:Any] {
+                if let type = details["type"] as? String {
+                    switch(type){
+                        case "INT": cell = IntDesignViewCell()
+                        default: cell = TextDesignViewCell()
+                    }
+                }
+            }
+            cell.delegate = self
             cell.property = key
             cell.details = value as? [String:Any]
             cells.append(cell)
@@ -81,5 +90,11 @@ extension DesignViewController:UITableViewDataSource{
             return cell
         }
         return UITableViewCell()
+    }
+}
+
+extension DesignViewController:DesignViewCellDelegate{
+    func updateValue(property: String, value: Any) {
+        UIDesign.updateKeyProperty(self.designKey!, property: property, value: value)
     }
 }
