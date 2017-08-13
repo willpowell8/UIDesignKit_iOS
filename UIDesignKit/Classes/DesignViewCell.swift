@@ -150,7 +150,6 @@ class ColorDesignViewCell:DesignViewCell{
         }
         self.accessoryType = .disclosureIndicator
         alphaValueLabel = UILabel()
-        alphaValueLabel?.text = String(describing:self.color.cgColor.alpha)
         self.addSubview(alphaValueLabel!)
         alphaValueLabel?.translatesAutoresizingMaskIntoConstraints = false
         alphaValueLabel?.textAlignment = .right
@@ -169,7 +168,6 @@ class ColorDesignViewCell:DesignViewCell{
         alphaLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
 
         hexValueLabel = UILabel()
-        hexValueLabel?.text = self.color.toShortHexString().uppercased()
         self.addSubview(hexValueLabel!)
         hexValueLabel?.translatesAutoresizingMaskIntoConstraints = false
         hexValueLabel?.textAlignment = .left
@@ -179,17 +177,28 @@ class ColorDesignViewCell:DesignViewCell{
         hexValueLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         
         colorBox = UIView()
-        colorBox?.backgroundColor = self.color
         self.addSubview(colorBox!)
         colorBox?.translatesAutoresizingMaskIntoConstraints = false
         colorBox?.rightAnchor.constraint(equalTo: self.hexValueLabel!.leftAnchor, constant: -5).isActive = true
         colorBox?.heightAnchor.constraint(equalToConstant: 30).isActive = true
         colorBox?.widthAnchor.constraint(equalToConstant: 30).isActive = true
         colorBox?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        
+        self.updateDisplay()
     }
     
     func updateDisplay(){
-        
+        alphaValueLabel?.text = String(describing:self.color.cgColor.alpha)
+        hexValueLabel?.text = self.color.toShortHexString().uppercased()
+        colorBox?.backgroundColor = self.color
+    }
+    
+    func applyColor(_ color:UIColor){
+        self.color = color
+        if let property = self.property {
+            delegate?.updateValue(property: property, value: color.toHexString())
+        }
+        self.updateDisplay()
     }
 }
 

@@ -32,9 +32,9 @@ UIDesignKit fills the need for allowing users to change things like the backgrou
 
   s.source_files = 'UIDesignKit/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'UIDesignKit' => ['UIDesignKit/Assets/*.png']
-  # }
+   s.resource_bundles = {
+     'UIDesignKit' => ['UIDesignKit/Assets/*.png']
+   }
 
     s.frameworks = 'UIKit'
     s.dependency 'Socket.IO-Client-Swift'

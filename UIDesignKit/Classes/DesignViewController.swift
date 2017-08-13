@@ -20,11 +20,12 @@ class DesignViewController:UIViewController{
     var designKey:String?
     var designCells:[UITableViewCell]?
     var tableView:UITableView?
+    var selectedCell:DesignViewCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(close))
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
         self.navigationItem.leftBarButtonItems = [cancelButton]
         processView()
         tableView = UITableView()
@@ -79,9 +80,11 @@ class DesignViewController:UIViewController{
 
 extension DesignViewController:UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = self.designCells?[indexPath.row] {
+        if let cell = self.designCells?[indexPath.row] as? DesignViewCell {
+            self.selectedCell = cell
             if cell is ColorDesignViewCell {
                 let colorVC = DesignColorViewController()
+                colorVC.delegate = self
                 self.navigationController?.pushViewController(colorVC, animated: true)
             }
         }
@@ -107,5 +110,13 @@ extension DesignViewController:UITableViewDataSource{
 extension DesignViewController:DesignViewCellDelegate{
     func updateValue(property: String, value: Any) {
         UIDesign.updateKeyProperty(self.designKey!, property: property, value: value)
+    }
+}
+
+extension DesignViewController:DesignColorViewControllerDelegate{
+    func update(color: UIColor) {
+        if let cell = self.selectedCell as? ColorDesignViewCell {
+            cell.applyColor(color)
+        }
     }
 }
