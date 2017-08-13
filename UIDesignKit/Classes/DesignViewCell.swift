@@ -154,9 +154,9 @@ class ColorDesignViewCell:DesignViewCell{
         self.addSubview(alphaValueLabel!)
         alphaValueLabel?.translatesAutoresizingMaskIntoConstraints = false
         alphaValueLabel?.textAlignment = .right
-        alphaValueLabel?.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -37).isActive = true
+        alphaValueLabel?.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -34).isActive = true
         alphaValueLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        alphaValueLabel?.widthAnchor.constraint(equalToConstant: 23).isActive = true
+        alphaValueLabel?.widthAnchor.constraint(equalToConstant: 30).isActive = true
         alphaValueLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         
         alphaLabel = UILabel()
@@ -172,8 +172,8 @@ class ColorDesignViewCell:DesignViewCell{
         self.addSubview(hexValueLabel!)
         hexValueLabel?.translatesAutoresizingMaskIntoConstraints = false
         hexValueLabel?.textAlignment = .left
-        hexValueLabel?.rightAnchor.constraint(equalTo: self.alphaLabel!.leftAnchor, constant: -10).isActive = true
-        hexValueLabel?.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        hexValueLabel?.rightAnchor.constraint(equalTo: self.alphaLabel!.leftAnchor, constant: -5).isActive = true
+        hexValueLabel?.widthAnchor.constraint(equalToConstant: 70).isActive = true
         hexValueLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
         hexValueLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         
@@ -190,7 +190,8 @@ class ColorDesignViewCell:DesignViewCell{
     }
     
     func updateDisplay(){
-        alphaValueLabel?.text = String(describing:self.color.cgColor.alpha)
+        let alphaStr = roundf(Float(self.color.cgColor.alpha)*Float(10))/Float(10)
+        alphaValueLabel?.text = String(describing:alphaStr)
         hexValueLabel?.text = self.color.toShortHexString().uppercased()
         colorBox?.backgroundColor = self.color
     }

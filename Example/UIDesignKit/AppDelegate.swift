@@ -17,8 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        UIDesign.start(appKey: "5a17dc21-fe06-4ce5-983f-a7e1ec514ba6", live: true)
-        UIDesign.allowInlineEdit = true
+        UIDesign.start(appKey: "5a17dc21-fe06-4ce5-983f-a7e1ec514ba6", useSettings:true)
+        // UIDesign.allowInlineEdit = true
         // Override point for customization after application launch.
         return true
     }

@@ -102,6 +102,9 @@ public class UIDesign {
             loadDesign();
         }
         self.liveEnabled = val;
+        
+        let inlineEdit = userDefaults.bool(forKey: "live_design_edit");
+        self.allowInlineEdit = inlineEdit;
     }
 
     

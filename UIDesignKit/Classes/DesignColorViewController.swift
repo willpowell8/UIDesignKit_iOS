@@ -84,23 +84,100 @@ class DesignColorViewController: UIViewController{
         hexText?.addTarget(self, action: #selector(didChangeTextfield), for: UIControlEvents.editingChanged)
         
         
-        /*valueLabel?.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        valueLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        rLabel = UILabel()
+        self.view.addSubview(rLabel!)
+        rLabel?.text = "R:"
+        rLabel?.translatesAutoresizingMaskIntoConstraints = false
+        rLabel?.textAlignment = .left
+        rLabel?.leftAnchor.constraint(equalTo: self.colorWell!.rightAnchor, constant: 5).isActive = true
+        rLabel?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+        rLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        rLabel?.widthAnchor.constraint(equalToConstant: 30).isActive = true
         
-        slider = UISlider()
-        slider?.minimumValue = 0.0
-        slider?.maximumValue = 25.0
-        self.addSubview(slider!)
-        slider?.translatesAutoresizingMaskIntoConstraints = false
-        slider?.rightAnchor.constraint(equalTo: valueLabel!.leftAnchor, constant: -10).isActive = true
-        slider?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        slider?.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        slider?.widthAnchor.constraint(equalToConstant: 170).isActive = true
-        slider?.addTarget(self, action: #selector(didChangeSlider), for: UIControlEvents.valueChanged)
-        if let float = self.details?["value"] as? CGFloat {
-            slider?.value = Float(float)
-            updateDisplay()
-        }*/
+        rText = UITextField()
+        self.view.addSubview(rText!)
+        rText?.placeholder = "0-255"
+        rText?.translatesAutoresizingMaskIntoConstraints = false
+        rText?.leftAnchor.constraint(equalTo: self.rLabel!.rightAnchor, constant: 5).isActive = true
+        rText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+        rText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        rText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        rText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
+        
+        gLabel = UILabel()
+        self.view.addSubview(gLabel!)
+        gLabel?.text = "G:"
+        gLabel?.translatesAutoresizingMaskIntoConstraints = false
+        gLabel?.textAlignment = .left
+        gLabel?.leftAnchor.constraint(equalTo: self.rText!.rightAnchor, constant: 5).isActive = true
+        gLabel?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+        gLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        gLabel?.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        gText = UITextField()
+        self.view.addSubview(gText!)
+        gText?.placeholder = "0-255"
+        gText?.translatesAutoresizingMaskIntoConstraints = false
+        gText?.leftAnchor.constraint(equalTo: self.gLabel!.rightAnchor, constant: 5).isActive = true
+        gText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+        gText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        gText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        gText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
+        
+        bLabel = UILabel()
+        self.view.addSubview(bLabel!)
+        bLabel?.text = "B:"
+        bLabel?.translatesAutoresizingMaskIntoConstraints = false
+        bLabel?.textAlignment = .left
+        bLabel?.leftAnchor.constraint(equalTo: self.gText!.rightAnchor, constant: 5).isActive = true
+        bLabel?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+        bLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        bLabel?.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        
+        bText = UITextField()
+        self.view.addSubview(bText!)
+        bText?.placeholder = "0-255"
+        bText?.translatesAutoresizingMaskIntoConstraints = false
+        bText?.leftAnchor.constraint(equalTo: self.bLabel!.rightAnchor, constant: 5).isActive = true
+        bText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+        bText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        bText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        bText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
+        
+        
+        alphaLabel = UILabel()
+        self.view.addSubview(alphaLabel!)
+        alphaLabel?.text = "Alpha:"
+        alphaLabel?.translatesAutoresizingMaskIntoConstraints = false
+        alphaLabel?.textAlignment = .left
+        alphaLabel?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
+        alphaLabel?.topAnchor.constraint(equalTo: self.colorWell!.bottomAnchor, constant: 15).isActive = true
+        alphaLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        alphaLabel?.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        
+        alphaValue = UILabel()
+        self.view.addSubview(alphaValue!)
+        alphaValue?.text = "0.0"
+        alphaValue?.translatesAutoresizingMaskIntoConstraints = false
+        alphaValue?.textAlignment = .left
+        alphaValue?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
+        alphaValue?.centerYAnchor.constraint(equalTo: self.alphaLabel!.centerYAnchor).isActive = true
+        alphaValue?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        alphaValue?.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        alphaSlider = UISlider()
+        alphaSlider?.minimumValue = 0.0
+        alphaSlider?.maximumValue = 1.0
+        self.view.addSubview(alphaSlider!)
+        alphaSlider?.translatesAutoresizingMaskIntoConstraints = false
+        alphaSlider?.leftAnchor.constraint(equalTo: alphaLabel!.rightAnchor, constant: 10).isActive = true
+        alphaSlider?.rightAnchor.constraint(equalTo: alphaValue!.leftAnchor, constant: -10).isActive = true
+        alphaSlider?.centerYAnchor.constraint(equalTo: self.alphaLabel!.centerYAnchor).isActive = true
+        alphaSlider?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        alphaSlider?.addTarget(self, action: #selector(didChangeSlider), for: UIControlEvents.valueChanged)
+        
+        
+        
         
         huePicker = HuePicker(frame: CGRect(x: 0, y: 300, width: 100, height: 100))
         self.view.addSubview(huePicker!)
@@ -113,7 +190,7 @@ class DesignColorViewController: UIViewController{
         colorPicker = ColorPicker(frame: CGRect(x: 0, y: 200, width: 100, height: 100))
         self.view.addSubview(colorPicker!)
         colorPicker?.translatesAutoresizingMaskIntoConstraints = false
-        colorPicker?.topAnchor.constraint(equalTo: colorWell!.bottomAnchor, constant: 10).isActive = true
+        colorPicker?.topAnchor.constraint(equalTo: alphaLabel!.bottomAnchor, constant: 20).isActive = true
         colorPicker?.bottomAnchor.constraint(equalTo: huePicker!.topAnchor, constant: -30).isActive = true
         colorPicker?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
         colorPicker?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
@@ -134,19 +211,39 @@ class DesignColorViewController: UIViewController{
     
     func didChangeTextfield(){
         if let colorStr = self.hexText?.text, colorStr.characters.count == 7 {
-           let color = UIColor(fromHexString: colorStr)
+            var color = UIColor(fromHexString: colorStr)
+            color = color.withAlphaComponent(CGFloat(getAlphaValue()))
             self.applyColor(color)
         }
     }
     
+    func didChangeRGBTextfield(){
+        
+    }
+    func didChangeSlider(){
+        self.alphaValue?.text = String(describing:getAlphaValue())
+    }
+    
+    func getAlphaValue()->Float{
+        if let float = self.alphaSlider?.value {
+            return roundf(float*Float(10))/Float(10)
+        }
+        return 0
+    }
+    
     
     func close(){
-        self.delegate?.update(color: (pickerController?.color)!)
-        self.navigationController?.popViewController(animated: true)
+        if var color = pickerController?.color {
+            color = color.withAlphaComponent(CGFloat(getAlphaValue()))
+            self.delegate?.update(color: color)
+            self.navigationController?.popViewController(animated: true)
+        }
     }
     
     func applyColor(_ color:UIColor){
         selectedColor = color
+        self.alphaSlider?.value = Float(color.cgColor.alpha)
+        self.alphaValue?.text = String(describing:getAlphaValue())
         self.hexText?.text = color.toShortHexString()
         self.pickerController?.color = color
     }
