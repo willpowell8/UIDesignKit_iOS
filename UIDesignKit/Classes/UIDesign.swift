@@ -228,7 +228,6 @@ public class UIDesign {
     
     public static func updateKeyProperty(_ key:String, property:String, value:Any ){
         if socket?.status == SocketIOClientStatus.connected, self.loadedDesign[key] != nil, self.hasLoaded == true {
-            //self.loadedDesign?[key] = key
             self.sendMessage(type: "design:save", data: ["appuuid":self.appKey!,"key":key, "property":property, "value":value])
             self.updateLocalKeyProperty(key: key, property: property, form: "universal", value: value)
         }
