@@ -30,6 +30,7 @@ class DesignViewController:UIViewController{
         tableView = UITableView()
         tableView?.dataSource = self
         tableView?.delegate = self
+        //tableView?.allowsSelection = false
         self.view.addSubview(tableView!)
         tableView?.translatesAutoresizingMaskIntoConstraints = false
         tableView?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
@@ -77,7 +78,14 @@ class DesignViewController:UIViewController{
 }
 
 extension DesignViewController:UITableViewDelegate{
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = self.designCells?[indexPath.row] {
+            if cell is ColorDesignViewCell {
+                let colorVC = DesignColorViewController()
+                self.navigationController?.pushViewController(colorVC, animated: true)
+            }
+        }
+    }
 }
 
 extension DesignViewController:UITableViewDataSource{

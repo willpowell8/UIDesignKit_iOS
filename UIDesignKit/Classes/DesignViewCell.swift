@@ -35,6 +35,14 @@ class DesignViewCell:UITableViewCell {
     open func setup(){
         
     }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        
+    }
 }
 
 class TextDesignViewCell:DesignViewCell{
