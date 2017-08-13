@@ -134,6 +134,7 @@ class DesignColorViewController: UIViewController{
         bLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
         bLabel?.widthAnchor.constraint(equalToConstant: 20).isActive = true
         
+        
         bText = UITextField()
         self.view.addSubview(bText!)
         bText?.placeholder = "0-255"
@@ -144,6 +145,12 @@ class DesignColorViewController: UIViewController{
         bText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
         bText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
         
+        rLabel?.isHidden = true
+        rText?.isHidden = true
+        gLabel?.isHidden = true
+        gText?.isHidden = true
+        bLabel?.isHidden = true
+        bText?.isHidden = true
         
         alphaLabel = UILabel()
         self.view.addSubview(alphaLabel!)
