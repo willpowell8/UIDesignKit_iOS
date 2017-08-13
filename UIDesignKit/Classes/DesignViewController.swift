@@ -56,6 +56,9 @@ class DesignViewController:UIViewController{
                 if let type = details["type"] as? String {
                     switch(type){
                         case "INT": cell = IntDesignViewCell()
+                        case "FLOAT": cell = FloatDesignViewCell()
+                        case "COLOR": cell = ColorDesignViewCell()
+                        case "FONT": cell = FontDesignViewCell()
                         default: cell = TextDesignViewCell()
                     }
                 }
