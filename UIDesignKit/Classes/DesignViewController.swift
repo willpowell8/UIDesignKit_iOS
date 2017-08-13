@@ -86,6 +86,7 @@ extension DesignViewController:UITableViewDelegate{
                 let colorVC = DesignColorViewController()
                 colorVC.delegate = self
                 colorVC.applyColor(colorCell.color)
+                colorVC.property = colorCell.property
                 self.navigationController?.pushViewController(colorVC, animated: true)
             }
         }

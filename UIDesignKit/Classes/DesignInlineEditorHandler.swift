@@ -17,6 +17,7 @@ class DesignInlineEditorHandler:NSObject {
         let vc = DesignViewController()
         vc.targetView = view
         let popController = UINavigationController(rootViewController: vc)//ManualLocalizeViewController(nibName: "ManualLocalizeViewController", bundle: bundle)
+        popController.navigationBar.barStyle = .default
         
         if let vc = getParent(view) {
             vc.present(popController, animated: true, completion: nil)
