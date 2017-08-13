@@ -143,6 +143,7 @@ class ColorDesignViewCell:DesignViewCell{
     var hexValueLabel:UILabel?
     var colorBox:UIView?
     var color:UIColor = .black
+    
     override func setup() {
         super.setup()
         if let colorStr = self.details?["value"] as? String {
@@ -183,7 +184,8 @@ class ColorDesignViewCell:DesignViewCell{
         colorBox?.heightAnchor.constraint(equalToConstant: 30).isActive = true
         colorBox?.widthAnchor.constraint(equalToConstant: 30).isActive = true
         colorBox?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        
+        colorBox?.layer.borderColor = UIColor.gray.cgColor
+        colorBox?.layer.borderWidth = 1.0
         self.updateDisplay()
     }
     
