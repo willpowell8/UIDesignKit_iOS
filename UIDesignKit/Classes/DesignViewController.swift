@@ -34,10 +34,12 @@ class DesignViewController:UIViewController{
         //tableView?.allowsSelection = false
         self.view.addSubview(tableView!)
         tableView?.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 9.0, *) {
         tableView?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         tableView?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
         tableView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
         tableView?.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        }
     }
     
     func close(){

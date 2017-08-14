@@ -57,30 +57,43 @@ class DesignColorViewController: UIViewController{
         self.view.addSubview(colorWell!)
         
         colorWell?.translatesAutoresizingMaskIntoConstraints = false
-        colorWell?.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100).isActive = true
-        colorWell?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
-        colorWell?.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        colorWell?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        if #available(iOS 9.0, *) {
+            colorWell?.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 100).isActive = true
+            colorWell?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
+            colorWell?.heightAnchor.constraint(equalToConstant: 60).isActive = true
+            colorWell?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        }else{
+            // todo
+        }
+        
         
         hexLabel = UILabel()
         self.view.addSubview(hexLabel!)
         hexLabel?.text = "Hex Value:"
         hexLabel?.translatesAutoresizingMaskIntoConstraints = false
         hexLabel?.textAlignment = .left
-        hexLabel?.leftAnchor.constraint(equalTo: self.colorWell!.rightAnchor, constant: 5).isActive = true
-        hexLabel?.topAnchor.constraint(equalTo: self.colorWell!.topAnchor, constant: 0).isActive = true
-        hexLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        hexLabel?.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        if #available(iOS 9.0, *) {
+            hexLabel?.leftAnchor.constraint(equalTo: self.colorWell!.rightAnchor, constant: 5).isActive = true
+            hexLabel?.topAnchor.constraint(equalTo: self.colorWell!.topAnchor, constant: 0).isActive = true
+            hexLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            hexLabel?.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        }else{
+            // todo
+        }
         
         hexText = UITextField()
         self.view.addSubview(hexText!)
         hexText?.placeholder = "eg . #FFFFFF"
         hexText?.translatesAutoresizingMaskIntoConstraints = false
-        hexText?.leftAnchor.constraint(equalTo: self.hexLabel!.rightAnchor, constant: 5).isActive = true
-        hexText?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
-        hexText?.topAnchor.constraint(equalTo: self.hexLabel!.topAnchor, constant: 0).isActive = true
-        hexText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        hexText?.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        if #available(iOS 9.0, *) {
+            hexText?.leftAnchor.constraint(equalTo: self.hexLabel!.rightAnchor, constant: 5).isActive = true
+            hexText?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
+            hexText?.topAnchor.constraint(equalTo: self.hexLabel!.topAnchor, constant: 0).isActive = true
+            hexText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            hexText?.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        }else{
+            // todo
+        }
         hexText?.addTarget(self, action: #selector(didChangeTextfield), for: UIControlEvents.editingChanged)
         
         
@@ -89,39 +102,50 @@ class DesignColorViewController: UIViewController{
         rLabel?.text = "R:"
         rLabel?.translatesAutoresizingMaskIntoConstraints = false
         rLabel?.textAlignment = .left
-        rLabel?.leftAnchor.constraint(equalTo: self.colorWell!.rightAnchor, constant: 5).isActive = true
-        rLabel?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
-        rLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        rLabel?.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        
+        if #available(iOS 9.0, *) {
+            rLabel?.leftAnchor.constraint(equalTo: self.colorWell!.rightAnchor, constant: 5).isActive = true
+            rLabel?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+            rLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            rLabel?.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        }else{
+            // todo
+        }
         rText = UITextField()
         self.view.addSubview(rText!)
         rText?.placeholder = "0-255"
         rText?.translatesAutoresizingMaskIntoConstraints = false
-        rText?.leftAnchor.constraint(equalTo: self.rLabel!.rightAnchor, constant: 5).isActive = true
-        rText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
-        rText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        rText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        rText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
-        
+        if #available(iOS 9.0, *) {
+            rText?.leftAnchor.constraint(equalTo: self.rLabel!.rightAnchor, constant: 5).isActive = true
+            rText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+            rText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            rText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+            rText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
+        }else{
+                // todo
+        }
         gLabel = UILabel()
         self.view.addSubview(gLabel!)
         gLabel?.text = "G:"
         gLabel?.translatesAutoresizingMaskIntoConstraints = false
         gLabel?.textAlignment = .left
-        gLabel?.leftAnchor.constraint(equalTo: self.rText!.rightAnchor, constant: 5).isActive = true
-        gLabel?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
-        gLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        gLabel?.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        
+        if #available(iOS 9.0, *) {
+            gLabel?.leftAnchor.constraint(equalTo: self.rText!.rightAnchor, constant: 5).isActive = true
+            gLabel?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+            gLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            gLabel?.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        }else{
+            // todo
+        }
         gText = UITextField()
         self.view.addSubview(gText!)
         gText?.placeholder = "0-255"
         gText?.translatesAutoresizingMaskIntoConstraints = false
-        gText?.leftAnchor.constraint(equalTo: self.gLabel!.rightAnchor, constant: 5).isActive = true
-        gText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
-        gText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        gText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        if #available(iOS 9.0, *) {
+            gText?.leftAnchor.constraint(equalTo: self.gLabel!.rightAnchor, constant: 5).isActive = true
+            gText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+            gText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            gText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        }
         gText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
         
         bLabel = UILabel()
@@ -129,20 +153,23 @@ class DesignColorViewController: UIViewController{
         bLabel?.text = "B:"
         bLabel?.translatesAutoresizingMaskIntoConstraints = false
         bLabel?.textAlignment = .left
-        bLabel?.leftAnchor.constraint(equalTo: self.gText!.rightAnchor, constant: 5).isActive = true
-        bLabel?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
-        bLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        bLabel?.widthAnchor.constraint(equalToConstant: 20).isActive = true
-        
+        if #available(iOS 9.0, *) {
+            bLabel?.leftAnchor.constraint(equalTo: self.gText!.rightAnchor, constant: 5).isActive = true
+            bLabel?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+            bLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            bLabel?.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        }
         
         bText = UITextField()
         self.view.addSubview(bText!)
         bText?.placeholder = "0-255"
         bText?.translatesAutoresizingMaskIntoConstraints = false
-        bText?.leftAnchor.constraint(equalTo: self.bLabel!.rightAnchor, constant: 5).isActive = true
-        bText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
-        bText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        bText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        if #available(iOS 9.0, *) {
+            bText?.leftAnchor.constraint(equalTo: self.bLabel!.rightAnchor, constant: 5).isActive = true
+            bText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
+            bText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+            bText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        }
         bText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
         
         rLabel?.isHidden = true
@@ -157,30 +184,34 @@ class DesignColorViewController: UIViewController{
         alphaLabel?.text = "Alpha:"
         alphaLabel?.translatesAutoresizingMaskIntoConstraints = false
         alphaLabel?.textAlignment = .left
-        alphaLabel?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
-        alphaLabel?.topAnchor.constraint(equalTo: self.colorWell!.bottomAnchor, constant: 15).isActive = true
-        alphaLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        alphaLabel?.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        
+        if #available(iOS 9.0, *) {
+            alphaLabel?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
+            alphaLabel?.topAnchor.constraint(equalTo: self.colorWell!.bottomAnchor, constant: 15).isActive = true
+            alphaLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            alphaLabel?.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        }
         alphaValue = UILabel()
         self.view.addSubview(alphaValue!)
         alphaValue?.text = "0.0"
         alphaValue?.translatesAutoresizingMaskIntoConstraints = false
         alphaValue?.textAlignment = .left
+        if #available(iOS 9.0, *) {
         alphaValue?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
         alphaValue?.centerYAnchor.constraint(equalTo: self.alphaLabel!.centerYAnchor).isActive = true
         alphaValue?.heightAnchor.constraint(equalToConstant: 20).isActive = true
         alphaValue?.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        
+        }
         alphaSlider = UISlider()
         alphaSlider?.minimumValue = 0.0
         alphaSlider?.maximumValue = 1.0
         self.view.addSubview(alphaSlider!)
         alphaSlider?.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 9.0, *) {
         alphaSlider?.leftAnchor.constraint(equalTo: alphaLabel!.rightAnchor, constant: 10).isActive = true
         alphaSlider?.rightAnchor.constraint(equalTo: alphaValue!.leftAnchor, constant: -10).isActive = true
         alphaSlider?.centerYAnchor.constraint(equalTo: self.alphaLabel!.centerYAnchor).isActive = true
         alphaSlider?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        }
         alphaSlider?.addTarget(self, action: #selector(didChangeSlider), for: UIControlEvents.valueChanged)
         
         
@@ -189,20 +220,23 @@ class DesignColorViewController: UIViewController{
         huePicker = HuePicker(frame: CGRect(x: 0, y: 300, width: 100, height: 100))
         self.view.addSubview(huePicker!)
         huePicker?.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 9.0, *) {
         huePicker?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
         huePicker?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
         huePicker?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
         huePicker?.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        }
         
         colorPicker = ColorPicker(frame: CGRect(x: 0, y: 200, width: 100, height: 100))
         self.view.addSubview(colorPicker!)
         colorPicker?.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 9.0, *) {
         colorPicker?.topAnchor.constraint(equalTo: alphaLabel!.bottomAnchor, constant: 20).isActive = true
         colorPicker?.bottomAnchor.constraint(equalTo: huePicker!.topAnchor, constant: -30).isActive = true
         colorPicker?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
         colorPicker?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
         colorPicker?.heightAnchor.constraint(equalToConstant: 400).isActive = true
-        
+        }
         pickerController = ColorPickerController(svPickerView: colorPicker!, huePickerView: huePicker!, colorWell: colorWell!)
         pickerController?.color = UIColor.red
         pickerController?.onColorChange = {(color, finished) in

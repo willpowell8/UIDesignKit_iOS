@@ -11,16 +11,14 @@ import Foundation
 class DesignInlineEditorHandler:NSObject {
     
     func showAlert(view:UIView){
-        //let podBundle =  Bundle.init(for: DesignInlineEditorHandler.self)
-        //let bundleURL = podBundle.url(forResource: "LocalizationKit" , withExtension: "bundle")
-        //let bundle = Bundle(url: bundleURL!)!
         let vc = DesignViewController()
         vc.targetView = view
-        let popController = UINavigationController(rootViewController: vc)//ManualLocalizeViewController(nibName: "ManualLocalizeViewController", bundle: bundle)
+        let popController = UINavigationController(rootViewController: vc)
         popController.navigationBar.barStyle = .default
-        
-        if let vc = getParent(view) {
-            vc.present(popController, animated: true, completion: nil)
+        if #available(iOS 9.0, *) {
+            if let vc = getParent(view) {
+                vc.present(popController, animated: true, completion: nil)
+            }
         }
     }
     
