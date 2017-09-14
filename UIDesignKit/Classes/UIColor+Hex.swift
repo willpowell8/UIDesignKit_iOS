@@ -17,7 +17,7 @@ extension UIColor {
         hexString = hexStringParts[0]
         if hexStringParts.count > 1 {
             let part2 = hexStringParts[1]
-            if let n = NumberFormatter().number(from: part2) {
+            if let n = Float(part2) {
                 alpha = CGFloat(n)
             }
         }

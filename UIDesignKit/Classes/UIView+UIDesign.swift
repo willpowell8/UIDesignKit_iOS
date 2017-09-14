@@ -181,7 +181,7 @@ extension UIView{
                         let parts = value.characters.split{$0 == "|"}.map(String.init)
                         var size = CGFloat(9.0)
                         if(parts.count > 1){
-                            if let n = NumberFormatter().number(from: parts[2]) {
+                            if let n = Float(parts[2]) {
                                 size = CGFloat(n)
                             }
                         }
