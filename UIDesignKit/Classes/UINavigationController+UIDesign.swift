@@ -27,7 +27,7 @@ extension UINavigationController {
 
     func designClear(){
         NotificationCenter.default.removeObserver(self, name: UIDesign.LOADED, object: nil);
-        if DesignKey != nil && (DesignKey?.characters.count)! > 0 {
+        if DesignKey != nil && (DesignKey?.count)! > 0 {
             let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventHighlight), object: nil);
             let eventText = "DESIGN_UPDATE_\(DesignKey!)"
@@ -136,7 +136,7 @@ extension UINavigationController {
                         print("Font VALUE NOT STRING");
                         return;
                     }
-                    let parts = value.characters.split{$0 == "|"}.map(String.init)
+                    let parts = value.split{$0 == "|"}.map(String.init)
                     if ( parts.count > 1 ) {
                         var size = CGFloat(9.0)
                         if let n = Float(parts[2]) {
