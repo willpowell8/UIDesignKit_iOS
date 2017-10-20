@@ -186,7 +186,7 @@ extension UINavigationController {
             }
         })
         
-        self.applyData(data: data, property: "navigationTitleFont", targetType: .color, apply: { (value) in
+        self.applyData(data: data, property: "navigationTitleFont", targetType: .font, apply: { (value) in
             if let v = value as? UIFont {
                 if self.navigationBar.titleTextAttributes == nil {
                     self.navigationBar.titleTextAttributes = [String:Any]()
