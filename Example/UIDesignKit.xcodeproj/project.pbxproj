@@ -15,6 +15,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		8104AA7F1E06C3C200D18B2C /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8104AA7E1E06C3C200D18B2C /* Settings.bundle */; };
+		8139B28D1F9A46AE005CBD4B /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 8139B28C1F9A46AE005CBD4B /* CHANGELOG.md */; };
 		99ABBEF386F4709A7A6189DE /* Pods_UIDesignKit_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F04D7CC57DEF0C8C7D4C6B6 /* Pods_UIDesignKit_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		8104AA7E1E06C3C200D18B2C /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		8139B28C1F9A46AE005CBD4B /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		98602D873F8F7D70AA5F50A6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9F91244476712A05A597D95E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		A493C89639D62F592D552755 /* Pods-UIDesignKit_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIDesignKit_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UIDesignKit_Tests/Pods-UIDesignKit_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				30DAD88626B1A1E206579CEF /* UIDesignKit.podspec */,
 				98602D873F8F7D70AA5F50A6 /* README.md */,
 				9F91244476712A05A597D95E /* LICENSE */,
+				8139B28C1F9A46AE005CBD4B /* CHANGELOG.md */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8104AA7F1E06C3C200D18B2C /* Settings.bundle in Resources */,
+				8139B28D1F9A46AE005CBD4B /* CHANGELOG.md in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,

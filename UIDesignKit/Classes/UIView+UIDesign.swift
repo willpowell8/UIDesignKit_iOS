@@ -33,21 +33,23 @@ extension UIView{
     func designClear(){
         inlineEditClear()
         NotificationCenter.default.removeObserver(self, name: UIDesign.LOADED, object: nil);
-        if DesignKey != nil && (DesignKey?.characters.count)! > 0 {
-            let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
+        if let key = DesignKey, !key.isEmpty {
+            let eventHighlight = "DESIGN_HIGHLIGHT_\(key)"
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventHighlight), object: nil);
-            let eventText = "DESIGN_UPDATE_\(DesignKey!)"
+            let eventText = "DESIGN_UPDATE_\(key)"
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventText), object: nil);
         }
     }
     
     func designSetup(){
-        NotificationCenter.default.addObserver(self, selector: #selector(designUpdateFromNotification), name: UIDesign.LOADED, object: nil)
-        let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
-        NotificationCenter.default.addObserver(self, selector: #selector(designHighlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
-        let eventText = "DESIGN_UPDATE_\(DesignKey!)"
-        NotificationCenter.default.addObserver(self, selector: #selector(designUpdateFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
-        inlineEditAddGestureRecognizer()
+         if let key = DesignKey, !key.isEmpty {
+            NotificationCenter.default.addObserver(self, selector: #selector(designUpdateFromNotification), name: UIDesign.LOADED, object: nil)
+            let eventHighlight = "DESIGN_HIGHLIGHT_\(key)"
+            NotificationCenter.default.addObserver(self, selector: #selector(designHighlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
+            let eventText = "DESIGN_UPDATE_\(key)"
+            NotificationCenter.default.addObserver(self, selector: #selector(designUpdateFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
+            inlineEditAddGestureRecognizer()
+        }
     }
     
     @objc private func designUpdateFromNotification() {
@@ -248,10 +250,9 @@ extension UIView{
     /// Inline Editor - gesture recognize Long Press
     func inlineEditorGestureLongPress(_ sender: UILongPressGestureRecognizer)
     {
-        if sender.state == .began {
-            print("INLINE")
+        if sender.state == .began, sender.view == self {
             let inline = DesignInlineEditorHandler()
-            inline.showAlert(view: self)//, localizationKey: self.LocalizeKey!)
+            inline.showAlert(view: self)
         }
     }
     
