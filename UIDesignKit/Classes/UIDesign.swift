@@ -192,8 +192,9 @@ public class UIDesign {
             let key = dictionary["key"] as! String
             let property = dictionary["property"] as! String
             let form = dictionary["form"] as! String
-            let value = dictionary["value"]
-            self.updateLocalKeyProperty(key: key, property: property, form: form, value: value)
+            if let value = dictionary["value"] {
+                self.updateLocalKeyProperty(key: key, property: property, form: form, value: value)
+            }
         })
         socket?.connect()
     }
@@ -217,7 +218,6 @@ public class UIDesign {
         guard let design =  self.loadedDesign[key] as? [AnyHashable:Any] else {
             return nil;
         }
-       
         return design
     }
     

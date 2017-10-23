@@ -239,7 +239,6 @@ extension UIView{
     /// Inline Edit Gesture Recognizer Add
     func inlineEditAddGestureRecognizer(){
         if UIDesign.allowInlineEdit {
-            self.isUserInteractionEnabled = true
             let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(inlineEditorGestureLongPress(_:)))
             longPressRecognizer.accessibilityLabel = "LONG_DESIGN"
             self.addGestureRecognizer(longPressRecognizer)
@@ -259,22 +258,29 @@ extension UIView{
     /// Inline Edit State Update
     func inlineEditStateUpdate(){
         if UIDesign.allowInlineEdit {
-            var hasListener = false
-            if let recognizers = self.gestureRecognizers {
-                for recognizer in recognizers {
-                    if recognizer.accessibilityLabel == "LONG_DESIGN" {
-                        hasListener = true
+            DispatchQueue.main.async {
+                self.isUserInteractionEnabled = true
+                var hasListener = false
+                if let recognizers = self.gestureRecognizers {
+                    for recognizer in recognizers {
+                        if recognizer.accessibilityLabel == "LONG_DESIGN" {
+                            hasListener = true
+                        }
                     }
                 }
+                if hasListener == false {
+                    self.inlineEditAddGestureRecognizer()
+                }
             }
-            if hasListener == false {
-                inlineEditAddGestureRecognizer()
-            }
+            
         }else{
-            if let recognizers = self.gestureRecognizers {
-                for recognizer in recognizers {
-                    if recognizer.accessibilityLabel == "LONG_DESIGN" {
-                        self.removeGestureRecognizer(recognizer)
+            DispatchQueue.main.async {
+                self.isUserInteractionEnabled = false
+                if let recognizers = self.gestureRecognizers {
+                    for recognizer in recognizers {
+                        if recognizer.accessibilityLabel == "LONG_DESIGN" {
+                            self.removeGestureRecognizer(recognizer)
+                        }
                     }
                 }
             }

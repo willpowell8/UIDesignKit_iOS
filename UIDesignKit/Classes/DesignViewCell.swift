@@ -181,7 +181,7 @@ class ColorDesignViewCell:DesignViewCell{
         hexValueLabel?.textAlignment = .left
         if #available(iOS 9.0, *) {
         hexValueLabel?.rightAnchor.constraint(equalTo: self.alphaLabel!.leftAnchor, constant: -5).isActive = true
-        hexValueLabel?.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        hexValueLabel?.widthAnchor.constraint(equalToConstant: 80).isActive = true
         hexValueLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
         hexValueLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         }

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIDesignKit'
-  s.version          = '1.0.20'
+  s.version          = '1.0.21'
   s.summary          = 'Remotely tweak and change colours, fonts, style and design parameters without recompiling your app.'
 
 # This description is used to generate tags and improve search results.
@@ -37,6 +37,6 @@ UIDesignKit fills the need for allowing users to change things like the backgrou
    }
 
     s.frameworks = 'UIKit'
-    s.dependency 'Socket.IO-Client-Swift'
+    s.dependency 'Socket.IO-Client-Swift', '~> 8.3.3'
     s.dependency 'SDWebImage'
 end
