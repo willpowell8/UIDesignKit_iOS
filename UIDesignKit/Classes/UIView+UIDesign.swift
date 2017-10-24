@@ -241,7 +241,7 @@ extension UIView{
         if UIDesign.allowInlineEdit {
             DispatchQueue.main.async {
                 self.isUserInteractionEnabled = true
-                let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(design_inlineEditorGestureLongPress(_:)))
+                let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.design_inlineEditorGestureLongPress(_:)))
                 longPressRecognizer.accessibilityLabel = "LONG_DESIGN"
                 self.addGestureRecognizer(longPressRecognizer)
             }
