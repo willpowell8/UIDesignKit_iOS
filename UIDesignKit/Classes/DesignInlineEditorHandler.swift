@@ -15,6 +15,7 @@ class DesignInlineEditorHandler:NSObject {
         vc.targetView = view
         let popController = UINavigationController(rootViewController: vc)
         popController.navigationBar.barStyle = .default
+        popController.modalPresentationStyle = .formSheet
         if #available(iOS 9.0, *) {
             if let vc = getParent(view) {
                 vc.present(popController, animated: true, completion: nil)

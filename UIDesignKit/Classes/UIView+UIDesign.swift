@@ -273,17 +273,6 @@ extension UIView{
                 }
             }
             
-        }else{
-            DispatchQueue.main.async {
-                self.isUserInteractionEnabled = false
-                if let recognizers = self.gestureRecognizers {
-                    for recognizer in recognizers {
-                        if recognizer.accessibilityLabel == "LONG_DESIGN" {
-                            self.removeGestureRecognizer(recognizer)
-                        }
-                    }
-                }
-            }
         }
     }
     
