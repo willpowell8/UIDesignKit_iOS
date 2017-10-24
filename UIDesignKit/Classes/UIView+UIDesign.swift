@@ -239,9 +239,12 @@ extension UIView{
     /// Inline Edit Gesture Recognizer Add
     func design_inlineEditAddGestureRecognizer(){
         if UIDesign.allowInlineEdit {
-            let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(design_inlineEditorGestureLongPress(_:)))
-            longPressRecognizer.accessibilityLabel = "LONG_DESIGN"
-            self.addGestureRecognizer(longPressRecognizer)
+            DispatchQueue.main.async {
+                self.isUserInteractionEnabled = true
+                let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(design_inlineEditorGestureLongPress(_:)))
+                longPressRecognizer.accessibilityLabel = "LONG_DESIGN"
+                self.addGestureRecognizer(longPressRecognizer)
+            }
         }
         NotificationCenter.default.addObserver(self, selector: #selector(design_inlineEditStateUpdate), name: UIDesign.INLINE_EDIT_CHANGED, object: nil)
     }
