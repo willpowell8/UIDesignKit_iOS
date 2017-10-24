@@ -31,7 +31,7 @@ extension UIView{
     }
     
     func designClear(){
-        inlineEditClear()
+        design_inlineEditClear()
         NotificationCenter.default.removeObserver(self, name: UIDesign.LOADED, object: nil);
         if let key = DesignKey, !key.isEmpty {
             let eventHighlight = "DESIGN_HIGHLIGHT_\(key)"
@@ -48,7 +48,7 @@ extension UIView{
             NotificationCenter.default.addObserver(self, selector: #selector(designHighlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
             let eventText = "DESIGN_UPDATE_\(key)"
             NotificationCenter.default.addObserver(self, selector: #selector(designUpdateFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
-            inlineEditAddGestureRecognizer()
+            design_inlineEditAddGestureRecognizer()
         }
     }
     
@@ -237,17 +237,17 @@ extension UIView{
     
     
     /// Inline Edit Gesture Recognizer Add
-    func inlineEditAddGestureRecognizer(){
+    func design_inlineEditAddGestureRecognizer(){
         if UIDesign.allowInlineEdit {
-            let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(inlineEditorGestureLongPress(_:)))
+            let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(design_inlineEditorGestureLongPress(_:)))
             longPressRecognizer.accessibilityLabel = "LONG_DESIGN"
             self.addGestureRecognizer(longPressRecognizer)
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(inlineEditStateUpdate), name: UIDesign.INLINE_EDIT_CHANGED, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(design_inlineEditStateUpdate), name: UIDesign.INLINE_EDIT_CHANGED, object: nil)
     }
     
     /// Inline Editor - gesture recognize Long Press
-    func inlineEditorGestureLongPress(_ sender: UILongPressGestureRecognizer)
+    func design_inlineEditorGestureLongPress(_ sender: UILongPressGestureRecognizer)
     {
         if sender.state == .began, sender.view == self {
             let inline = DesignInlineEditorHandler()
@@ -256,7 +256,7 @@ extension UIView{
     }
     
     /// Inline Edit State Update
-    func inlineEditStateUpdate(){
+    func design_inlineEditStateUpdate(){
         if UIDesign.allowInlineEdit {
             DispatchQueue.main.async {
                 self.isUserInteractionEnabled = true
@@ -269,14 +269,14 @@ extension UIView{
                     }
                 }
                 if hasListener == false {
-                    self.inlineEditAddGestureRecognizer()
+                    self.design_inlineEditAddGestureRecognizer()
                 }
             }
             
         }
     }
     
-    func inlineEditClear(){
+    func design_inlineEditClear(){
         NotificationCenter.default.removeObserver(self, name: UIDesign.INLINE_EDIT_CHANGED, object: nil);
         if let recognizers = self.gestureRecognizers {
             for recognizer in recognizers {
