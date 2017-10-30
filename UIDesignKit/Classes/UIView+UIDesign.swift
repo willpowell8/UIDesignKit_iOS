@@ -53,10 +53,13 @@ extension UIView{
     }
     
     @objc private func designUpdateFromNotification() {
-        DispatchQueue.main.async(execute: {
+        if Thread.isMainThread {
             self.checkForDesignUpdate()
-        })
-        
+        }else{
+            DispatchQueue.main.async(execute: {
+                self.checkForDesignUpdate()
+            })
+        }
     }
     
     

@@ -45,9 +45,13 @@ extension UINavigationController {
     }
     
     @objc private func updateDesignFromNotification() {
-        DispatchQueue.main.async(execute: {
+        if Thread.isMainThread {
             self.checkForDesignUpdate()
-        })
+        }else{
+            DispatchQueue.main.async(execute: {
+                self.checkForDesignUpdate()
+            })
+        }
     }
     
     
