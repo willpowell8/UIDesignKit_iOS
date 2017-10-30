@@ -8,8 +8,55 @@
 
 import Foundation
 import UIKit
-
+private var themeKey: UInt8 = 10
 extension UIColor {
+    
+    public var ThemeKey: String?  {
+        get {
+            return objc_getAssociatedObject(self, &themeKey) as? String
+        }
+        set(newValue) {
+            design_ThemeClear()
+            if(newValue?.isDesignStringAcceptable == false){
+                print("UIDESIGN ERROR: key contans invalid characters must be a-z,A-Z,0-9 and . only")
+                return;
+            }
+            
+            objc_setAssociatedObject(self, &themeKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+            if newValue != nil {
+                design_ThemeSetup()
+                design_apply()
+            }
+        }
+    }
+    
+    func design_ThemeClear(){
+        NotificationCenter.default.removeObserver(self, name: UIDesign.LOADED, object: nil);
+        guard let themeKey = ThemeKey, !themeKey.isEmpty else {
+            return
+        }
+        let eventText = "THEME_UPDATE_\(themeKey)"
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventText), object: nil);
+    }
+    
+    func design_ThemeSetup(){
+        if let key = ThemeKey, !key.isEmpty {
+            NotificationCenter.default.addObserver(self, selector: #selector(design_themeUpdatedFromNotifiation), name: UIDesign.LOADED, object: nil)
+            let eventText = "THEME_UPDATE_\(key)"
+            NotificationCenter.default.addObserver(self, selector: #selector(design_themeUpdatedFromNotifiation), name: NSNotification.Name(rawValue:eventText), object: nil)
+        }
+    }
+    
+    func design_themeUpdatedFromNotifiation(){
+        design_apply()
+    }
+    
+    func design_apply(){
+        if let themeKey = self.ThemeKey, let themeData = UIDesign.getThemeValue(themeKey, type: "COLOR", value: toHexString()), let themeValue = themeData["value"] as? String {
+            print("THeme value",themeValue)
+        }
+    }
+    
     public convenience init(fromHexString hexStr:String) {
         var hexString:String = hexStr.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
         var alpha = CGFloat(1.0);

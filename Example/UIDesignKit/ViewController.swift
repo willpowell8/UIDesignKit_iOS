@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import UIDesignKit
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let color = UIColor(red: 1.0, green: 0, blue: 0, alpha: 1.0)
+        color.ThemeKey = "WarningColor"
         // Do any additional setup after loading the view, typically from a nib.
     }
 

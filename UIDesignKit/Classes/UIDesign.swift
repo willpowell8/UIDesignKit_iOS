@@ -44,6 +44,7 @@ public class UIDesign {
     
     public static var ignoreRemote:Bool = false
     private static var loadedDesign = [AnyHashable:Any]()
+    private static var loadedTheme = [AnyHashable:Any]()
     
     public static var LOADED = Notification.Name(rawValue: "LOADED_DESIGN")
     public static var INLINE_EDIT_CHANGED = Notification.Name(rawValue: "UIDESIGN_INLINE_EDIT")
@@ -223,7 +224,6 @@ public class UIDesign {
     
     public static func createKey(_ key:String,type:String,  properties:[String:Any]){
         if socket?.status == SocketIOClientStatus.connected, self.loadedDesign[key] == nil, self.hasLoaded == true {
-            //self.loadedDesign?[key] = key
             self.sendMessage(type: "key:add", data: ["appuuid":self.appKey!, "type":type, "key":key, "properties":properties])
             self.loadedDesign[key] = ["type": type, "data":properties];
         }
@@ -237,14 +237,16 @@ public class UIDesign {
     }
     
     static func updateLocalKeyProperty(key:String, property:String, form:String, value:Any){
-        var keyElement = self.loadedDesign[key] as! [AnyHashable:Any]
-        let keyData = keyElement["data"] as! [AnyHashable:Any]
+        guard var keyElement = self.loadedDesign[key] as? [AnyHashable:Any], let keyData = keyElement["data"] as? [AnyHashable:Any] else {
+            return
+        }
         var outputProperties = [AnyHashable:Any]()
         for (vKey, vValue) in keyData {
-            if(vKey as! String == property){
-                var vValueMod = vValue as! [AnyHashable:Any];
-                vValueMod[form] = value
-                outputProperties[vKey] = vValueMod
+            if let vKeyStr = vKey as? String, vKeyStr == property{
+                if var vValueMod = vValue as? [AnyHashable:Any] {
+                    vValueMod[form] = value
+                    outputProperties[vKey] = vValueMod
+                }
             }else{
                 outputProperties[vKey] = vValue
             }
@@ -257,14 +259,31 @@ public class UIDesign {
     
     public static func addPropertyToKey(_ key:String, property:String, attribute:Any){
         if socket?.status == SocketIOClientStatus.connected, self.hasLoaded == true {
-            
             self.sendMessage(type: "key:add_property", data: ["appuuid":self.appKey!, "key":key, "name":property, "attribute":attribute])
-            let attr = attribute  as! [AnyHashable:Any]
-            var keyElement = self.loadedDesign[key] as! [AnyHashable:Any]
-            var keyData = keyElement["data"] as! [AnyHashable:Any]
-            keyData[property] = ["universal":attr["value"]]
-            keyElement["data"] = keyData
-            self.loadedDesign[key] = keyElement
+            if let attr = attribute  as? [AnyHashable:Any],var keyElement = self.loadedDesign[key] as? [AnyHashable:Any],  var keyData = keyElement["data"] as? [AnyHashable:Any]{
+                keyData[property] = ["universal":attr["value"]]
+                keyElement["data"] = keyData
+                self.loadedDesign[key] = keyElement
+            }
+        }
+    }
+    
+    public static func getThemeValue(_ name:String, type:String, value:String) -> [AnyHashable:Any]?{
+        guard let theme =  self.loadedTheme[name] as? [AnyHashable:Any] else {
+            addThemeToKey(name, type: type, value: value)
+            return ["value":value];
+        }
+        return theme
+    }
+    
+    public static func addThemeToKey(_ name:String, type:String, value:String){
+        if socket?.status == SocketIOClientStatus.connected, self.hasLoaded == true {
+            self.sendMessage(type: "theme:save", data: ["appuuid":self.appKey!, "name":name, "type":type, "value":value])
+            /*if var keyElement = self.loadedTheme[name] as? [AnyHashable:Any],  var keyData = keyElement["data"] as? [AnyHashable:Any]{
+                keyData[property] = ["universal":attr["value"]]
+                keyElement["data"] = keyData
+                self.loadedDesign[key] = keyElement
+            }*/
         }
     }
 }
