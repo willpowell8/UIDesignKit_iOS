@@ -1,6 +1,9 @@
 
 # UIDesignKit - Change Log
 
+## 1.0.26 - bug fixes
+update to fix issue on navigation controller where header was flickering because of async step
+
 ## 1.0.23 - bug fixes
 fixed issues when used in conjunction with Localizationkit
 
