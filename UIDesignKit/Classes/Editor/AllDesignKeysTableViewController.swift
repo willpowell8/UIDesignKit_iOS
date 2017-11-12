@@ -56,5 +56,11 @@ class AllDesignKeysTableViewController: UITableViewController {
 
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let value = values[indexPath.row]
+        let elementData = UIDesign.get(value)
+        print("GOT KEY DATA")
+    }
 
 }

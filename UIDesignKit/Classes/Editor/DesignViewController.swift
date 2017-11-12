@@ -15,33 +15,35 @@ class DesignViewController:UIViewController{
         }
     }
     
-    var designProperties:[String:Any]?
+    var designProperties:[String:Any]? {
+        didSet{
+            applyDesignProperties()
+        }
+    }
     var designStrings:[String]?
     var designKey:String?
     var designCells:[UITableViewCell]?
-    var tableView:UITableView?
+    var tableView = UITableView()
     var selectedCell:DesignViewCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        view.backgroundColor = .white
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
-        self.navigationItem.leftBarButtonItems = [cancelButton]
+        navigationItem.leftBarButtonItems = [cancelButton]
         
         let openAll = UIBarButtonItem(title: "All Keys", style: .plain, target: self, action: #selector(closeAndOpenAll))
-        self.navigationItem.rightBarButtonItems = [openAll]
+        navigationItem.rightBarButtonItems = [openAll]
         processView()
-        tableView = UITableView()
-        tableView?.dataSource = self
-        tableView?.delegate = self
-        //tableView?.allowsSelection = false
-        self.view.addSubview(tableView!)
-        tableView?.translatesAutoresizingMaskIntoConstraints = false
+        tableView.dataSource = self
+        tableView.delegate = self
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 9.0, *) {
-            tableView?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
-            tableView?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
-            tableView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-            tableView?.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         }
     }
     
@@ -55,14 +57,18 @@ class DesignViewController:UIViewController{
         }
     }
     
-    func processView(){
+    private func processView(){
         guard let target = targetView else {
             return
         }
-        self.designProperties = target.getDesignProperties(data: [String:Any]())
+        designKey = target.DesignKey
+        designProperties = target.getDesignProperties(data: [String:Any]())
+    }
+    
+    func applyDesignProperties(){
         var strings = [String]()
         var cells = [DesignViewCell]()
-        self.designProperties?.forEach({ (key,value) in
+        designProperties?.forEach({ (key,value) in
             strings.append(key)
             var cell = DesignViewCell()
             if let details = value as? [String:Any] {
@@ -82,27 +88,27 @@ class DesignViewController:UIViewController{
             cell.details = value as? [String:Any]
             cells.append(cell)
         })
-        self.designStrings = strings
-        self.designKey = target.DesignKey
-        self.designCells = cells
-        self.navigationItem.title = self.designKey
-        self.tableView?.reloadData()
+        designStrings = strings
+        
+        designCells = cells
+        navigationItem.title = designKey
+        tableView.reloadData()
     }
 }
 
 extension DesignViewController:UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = self.designCells?[indexPath.row] as? DesignViewCell {
-            self.selectedCell = cell
+            selectedCell = cell
             if let colorCell = cell as? ColorDesignViewCell {
                 let colorVC = DesignColorViewController()
                 colorVC.delegate = self
                 colorVC.applyColor(colorCell.color)
                 colorVC.property = colorCell.property
-                self.navigationController?.pushViewController(colorVC, animated: true)
+                navigationController?.pushViewController(colorVC, animated: true)
             }else if cell is FontDesignViewCell {
                 let fontSelector = FontSelectorViewController()
-                self.navigationController?.pushViewController(fontSelector, animated: true)
+                navigationController?.pushViewController(fontSelector, animated: true)
             }
         }
     }
@@ -110,29 +116,26 @@ extension DesignViewController:UITableViewDelegate{
 
 extension DesignViewController:UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        if let cells = self.designCells {
-            return cells.count
-        }
-        return 0
+        return designCells?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        if let cell = self.designCells?[indexPath.row] {
-            return cell
-        }
-        return UITableViewCell()
+        return designCells?[indexPath.row] ?? UITableViewCell()
     }
 }
 
 extension DesignViewController:DesignViewCellDelegate{
     func updateValue(property: String, value: Any) {
-        UIDesign.updateKeyProperty(self.designKey!, property: property, value: value)
+        guard let designKey = self.designKey else{
+            return
+        }
+        UIDesign.updateKeyProperty(designKey, property: property, value: value)
     }
 }
 
 extension DesignViewController:DesignColorViewControllerDelegate{
     func update(color: UIColor) {
-        if let cell = self.selectedCell as? ColorDesignViewCell {
+        if let cell = selectedCell as? ColorDesignViewCell {
             cell.applyColor(color)
         }
     }
