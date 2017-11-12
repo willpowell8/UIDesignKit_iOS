@@ -59,8 +59,20 @@ class AllDesignKeysTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let value = values[indexPath.row]
-        let elementData = UIDesign.get(value)
-        print("GOT KEY DATA")
+        if let elementData = UIDesign.get(value), let data = elementData["data"] as?[String:Any] {
+            var formatterData = [String:Any]()
+            data.forEach({ (arg) in
+                let (key, value) = arg
+                if var dataV = value as? [String:Any] {
+                    dataV["value"] = dataV["universal"]
+                    formatterData[key] = dataV
+                }
+            })
+            let vc = DesignViewController()
+            vc.designKey = value
+            vc.designProperties = formatterData
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
 }

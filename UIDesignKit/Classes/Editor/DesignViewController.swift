@@ -29,12 +29,6 @@ class DesignViewController:UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
-        navigationItem.leftBarButtonItems = [cancelButton]
-        
-        let openAll = UIBarButtonItem(title: "All Keys", style: .plain, target: self, action: #selector(closeAndOpenAll))
-        navigationItem.rightBarButtonItems = [openAll]
-        processView()
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
@@ -45,6 +39,14 @@ class DesignViewController:UIViewController{
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         }
+    }
+    
+    func addDesignViewButton(){
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
+        navigationItem.leftBarButtonItems = [cancelButton]
+        
+        let openAll = UIBarButtonItem(title: "All Keys", style: .plain, target: self, action: #selector(closeAndOpenAll))
+        navigationItem.rightBarButtonItems = [openAll]
     }
     
     func close(){
@@ -61,6 +63,7 @@ class DesignViewController:UIViewController{
         guard let target = targetView else {
             return
         }
+        addDesignViewButton()
         designKey = target.DesignKey
         designProperties = target.getDesignProperties(data: [String:Any]())
     }
