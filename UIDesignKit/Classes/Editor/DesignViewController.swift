@@ -27,6 +27,9 @@ class DesignViewController:UIViewController{
         self.view.backgroundColor = .white
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
         self.navigationItem.leftBarButtonItems = [cancelButton]
+        
+        let openAll = UIBarButtonItem(title: "All Keys", style: .plain, target: self, action: #selector(closeAndOpenAll))
+        self.navigationItem.rightBarButtonItems = [openAll]
         processView()
         tableView = UITableView()
         tableView?.dataSource = self
@@ -35,15 +38,21 @@ class DesignViewController:UIViewController{
         self.view.addSubview(tableView!)
         tableView?.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 9.0, *) {
-        tableView?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
-        tableView?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
-        tableView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        tableView?.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+            tableView?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
+            tableView?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
+            tableView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+            tableView?.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
         }
     }
     
     func close(){
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    func closeAndOpenAll(){
+        self.dismiss(animated: true) {
+            UIDesign.showAllDesignKeysView()
+        }
     }
     
     func processView(){
@@ -91,6 +100,9 @@ extension DesignViewController:UITableViewDelegate{
                 colorVC.applyColor(colorCell.color)
                 colorVC.property = colorCell.property
                 self.navigationController?.pushViewController(colorVC, animated: true)
+            }else if cell is FontDesignViewCell {
+                let fontSelector = FontSelectorViewController()
+                self.navigationController?.pushViewController(fontSelector, animated: true)
             }
         }
     }

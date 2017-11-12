@@ -43,7 +43,7 @@ public class UIDesign {
     
     
     public static var ignoreRemote:Bool = false
-    private static var loadedDesign = [AnyHashable:Any]()
+    internal static var loadedDesign = [AnyHashable:Any]()
     private static var loadedTheme = [AnyHashable:Any]()
     
     public static var LOADED = Notification.Name(rawValue: "LOADED_DESIGN")
@@ -145,6 +145,16 @@ public class UIDesign {
             self.loadedDesign = loaded
             self.hasLoaded = true
             NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
+        }
+    }
+    
+    public static func showAllDesignKeysView(){
+        let v = AllDesignKeysTableViewController()
+        if let vc = UIApplication.shared.keyWindow?.rootViewController {
+            let popController = UINavigationController(rootViewController: v)
+            popController.navigationBar.barStyle = .default
+            popController.modalPresentationStyle = .formSheet
+            vc.present(popController, animated: true, completion: nil)
         }
     }
     

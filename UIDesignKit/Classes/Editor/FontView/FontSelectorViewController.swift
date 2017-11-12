@@ -12,6 +12,7 @@ class FontSelectorViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .white
         self.navigationItem.title = "Font Selector"
         // Do any additional setup after loading the view.
     }
