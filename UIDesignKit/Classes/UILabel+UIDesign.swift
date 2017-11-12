@@ -20,11 +20,16 @@ extension UILabel{
             self.font = value as! UIFont;
         })
         
+        self.applyData(data: data, property: "adjustsFontSizeToFitWidth", targetType: .bool, apply: {(value) in
+            self.adjustsFontSizeToFitWidth = value as! Bool;
+        })
+        
     }
     override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data);
-        dataReturn["textColor"] = ["type":"COLOR", "value":self.textColor.toHexString()];
-        dataReturn["font"] = ["type":"FONT", "value": font.toDesignString()];
+        dataReturn["textColor"] = ["type":"COLOR", "value":self.textColor.toHexString()]
+        dataReturn["font"] = ["type":"FONT", "value": font.toDesignString()]
+        dataReturn["adjustsFontSizeToFitWidth"] =  ["type":"BOOL", "value": adjustsFontSizeToFitWidth ? 1 : 0]
         return dataReturn;
     }
     

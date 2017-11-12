@@ -63,6 +63,7 @@ class DesignViewController:UIViewController{
                         case "FLOAT": cell = FloatDesignViewCell()
                         case "COLOR": cell = ColorDesignViewCell()
                         case "FONT": cell = FontDesignViewCell()
+                        case "BOOL": cell = BoolDesignViewCell()
                         default: cell = TextDesignViewCell()
                     }
                 }

@@ -135,6 +135,40 @@ class IntDesignViewCell:DesignViewCell{
     }
 }
 
+class BoolDesignViewCell:DesignViewCell{
+    var valueLabel:UILabel?
+    var uiswitch:UISwitch?
+    override func setup(){
+        valueLabel = UILabel()
+        self.addSubview(valueLabel!)
+        valueLabel?.translatesAutoresizingMaskIntoConstraints = false
+        valueLabel?.textAlignment = .right
+        if #available(iOS 9.0, *) {
+            valueLabel?.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -30).isActive = true
+            valueLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            valueLabel?.widthAnchor.constraint(equalToConstant: 40).isActive = true
+            valueLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        }
+        uiswitch = UISwitch()
+        self.addSubview(uiswitch!)
+        uiswitch?.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 9.0, *) {
+            uiswitch?.rightAnchor.constraint(equalTo: valueLabel!.leftAnchor, constant: -10).isActive = true
+            uiswitch?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        }
+        uiswitch?.addTarget(self, action: #selector(didChangeSwitch), for: UIControlEvents.valueChanged)
+        if let boolVal = self.details?["value"] as? Int {
+            uiswitch?.isOn = boolVal == 1
+        }
+    }
+    func didChangeSwitch(){
+        if let property = self.property, let ui = uiswitch {
+            delegate?.updateValue(property: property, value: ui.isOn ? 1 : 0)
+        }
+    }
+}
+
+
 class FloatDesignViewCell:IntDesignViewCell{
     override func setup() {
         self.roundingFactor = Float(10)

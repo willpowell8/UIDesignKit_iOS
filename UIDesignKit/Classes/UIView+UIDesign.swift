@@ -158,6 +158,13 @@ extension UIView{
                             }
                             apply(value);
                             break;
+                        case .bool:
+                            guard let value = element[propertyForDeviceType] as? Int
+                                else{
+                                    return;
+                            }
+                            apply(value==1);
+                            break;
                         
                         case .float:
                             guard let value = element[propertyForDeviceType] as? Float
