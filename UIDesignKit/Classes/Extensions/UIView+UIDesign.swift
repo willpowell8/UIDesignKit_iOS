@@ -108,7 +108,7 @@ extension UIView{
         return self.getDesignProperties(data: data);
     }
     
-    public func getDesignProperties(data:[String:Any]) -> [String:Any]{
+    open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = data;
         dataReturn["backgroundColor"] = ["type":"COLOR", "value":self.backgroundColor?.toHexString()];
         dataReturn["cornerRadius"] = ["type":"INT", "value":self.layer.cornerRadius];
@@ -216,7 +216,7 @@ extension UIView{
         }
     }
     
-    public func updateDesign(type:String, data:[AnyHashable: Any]) {
+    open func updateDesign(type:String, data:[AnyHashable: Any]) {
         // OVERRIDE TO GO HERE FOR INDIVIDUAL CLASSES
         self.applyData(data: data, property: "backgroundColor", targetType: .color, apply: { (value) in
             if let v = value as? UIColor {

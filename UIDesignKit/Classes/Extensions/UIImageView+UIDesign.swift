@@ -10,7 +10,7 @@ import Foundation
 import SDWebImage
 
 extension UIImageView{
-    override public func updateDesign(type:String, data:[AnyHashable: Any]) {
+    override open func updateDesign(type:String, data:[AnyHashable: Any]) {
         super.updateDesign(type:type, data: data);
         self.applyData(data: data, property: "url", targetType: .url, apply: { (value) in
             if let url = value as? URL {
@@ -24,7 +24,7 @@ extension UIImageView{
             }
         })
     }
-    override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
+    override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data);
         dataReturn["url"] = ["type":"URL"];
         dataReturn["contentMode"] = ["type":"INT", "value": self.contentMode.rawValue];

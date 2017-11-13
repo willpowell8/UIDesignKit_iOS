@@ -10,7 +10,7 @@ import Foundation
 import SDWebImage
 
 extension UILabel{
-    override public func updateDesign(type:String, data:[AnyHashable: Any]) {
+    override open func updateDesign(type:String, data:[AnyHashable: Any]) {
         super.updateDesign(type:type, data: data);
         self.applyData(data: data, property: "textColor", targetType: .color, apply: { (value) in
             self.textColor = value as! UIColor;
@@ -25,7 +25,7 @@ extension UILabel{
         })
         
     }
-    override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
+    override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data);
         dataReturn["textColor"] = ["type":"COLOR", "value":self.textColor.toHexString()]
         dataReturn["font"] = ["type":"FONT", "value": font.toDesignString()]

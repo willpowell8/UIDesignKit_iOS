@@ -8,7 +8,7 @@
 
 import Foundation
 extension UISearchBar{
-    override public func updateDesign(type:String, data:[AnyHashable: Any]) {
+    override open func updateDesign(type:String, data:[AnyHashable: Any]) {
         super.updateDesign(type:type, data: data);
         self.applyData(data: data, property: "tintColor", targetType: .color, apply: { (value) in
             if let v = value as? UIColor {
@@ -22,7 +22,7 @@ extension UISearchBar{
         })
         
     }
-    override public func getDesignProperties(data:[String:Any]) -> [String:Any]{
+    override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data);
         dataReturn["tintColor"] = ["type":"COLOR", "value":self.tintColor.toHexString()];
         if let barTintColor = self.barTintColor {
