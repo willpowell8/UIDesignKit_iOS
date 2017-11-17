@@ -1,6 +1,8 @@
 
 # UIDesignKit - Change Log
 
+## 1.1.3 - added alphabetical sort and search bar to all properties list
+
 ## 1.1.2 - made updateDesign and getProperties open to create your own components
 
 ## 1.1.0 - added view all fields, added boolean switch renderer

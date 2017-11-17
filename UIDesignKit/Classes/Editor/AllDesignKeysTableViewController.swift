@@ -10,21 +10,33 @@ import UIKit
 class AllDesignKeysTableViewController: UITableViewController {
     
     var values = [String]()
+    var originalValues = [String]()
+     let searchController = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "UIDesignKit Keys"
+        // Setup the Scope Bar
+        //searchController.searchBar.scopeButtonTitles = ["All", "Recent"]
+        self.definesPresentationContext = true 
+        searchController.searchBar.delegate = self
+        searchController.dimsBackgroundDuringPresentation = false
+        self.tableView.tableHeaderView = searchController.searchBar
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
         self.navigationItem.leftBarButtonItems = [cancelButton]
-        var values = [String]()
+        var originalValues1 = [String]()
         UIDesign.loadedDesign.forEach { (arg) in
             let (key, _) = arg
             if let k = key as? String {
-                values.append(k)
+                originalValues1.append(k)
             }
         }
+        originalValues = originalValues1.sorted { (v1, v2) -> Bool in
+            return v1 < v2
+        }
+        values = originalValues
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "KEYCELL")
-        self.values = values
+        tableView.reloadData()
     }
     
     func close(){
@@ -59,6 +71,7 @@ class AllDesignKeysTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let value = values[indexPath.row]
+        searchController.searchBar.resignFirstResponder()
         if let elementData = UIDesign.get(value), let data = elementData["data"] as?[String:Any] {
             var formatterData = [String:Any]()
             data.forEach({ (arg) in
@@ -75,4 +88,37 @@ class AllDesignKeysTableViewController: UITableViewController {
         }
     }
 
+}
+
+extension AllDesignKeysTableViewController: UISearchBarDelegate {
+    // MARK: - UISearchBar Delegate
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        //filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        values = originalValues
+        tableView.reloadData()
+        return
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let searchTerm = searchBar.text, !searchTerm.isEmpty else{
+            values = originalValues
+            tableView.reloadData()
+            return
+        }
+        values = originalValues.filter({ (str) -> Bool in
+            return str.lowercased().contains(searchTerm.lowercased())
+        })
+        tableView.reloadData()
+    }
+}
+
+extension AllDesignKeysTableViewController: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        
+    }
 }
