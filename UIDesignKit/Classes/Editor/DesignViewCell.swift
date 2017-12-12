@@ -250,5 +250,8 @@ class FontDesignViewCell:DesignViewCell{
     override func setup() {
         super.setup()
         self.accessoryType = .disclosureIndicator
+        if let strValue = self.details?["value"] as? String {
+            detailTextLabel?.text = strValue
+        }
     }
 }

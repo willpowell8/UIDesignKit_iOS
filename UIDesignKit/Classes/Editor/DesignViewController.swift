@@ -80,7 +80,7 @@ class DesignViewController:UIViewController{
                         case "INT": cell = IntDesignViewCell()
                         case "FLOAT": cell = FloatDesignViewCell()
                         case "COLOR": cell = ColorDesignViewCell()
-                        case "FONT": cell = FontDesignViewCell()
+                        case "FONT": cell = FontDesignViewCell(style: .value1, reuseIdentifier: "FontCell")
                         case "BOOL": cell = BoolDesignViewCell()
                         default: cell = TextDesignViewCell()
                     }
