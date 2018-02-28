@@ -13,6 +13,8 @@ protocol FontListDelegate {
 
 class FontList:UITableViewController {
     
+    
+    
     var selectedFontFamily:String?
     var selectedFont:String?
     var delegate:FontListDelegate?
@@ -71,10 +73,21 @@ class FontSelectorViewController: UIViewController, FontListDelegate {
     
     let tableView = UITableView()
     var designCells:[UITableViewCell]?
-    var designFont:UIFont?
+    var designFont:UIFont? {
+        didSet{
+            if Thread.isMainThread {
+                demoFontLabel.font = designFont
+            }else{
+                DispatchQueue.main.async {
+                    self.demoFontLabel.font = self.designFont
+                }
+            }
+        }
+    }
     var property:String?
     var selectedCell:DesignViewCell?
     var delegate:FontSelectorViewControllerDelegate?
+    var demoFontLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,6 +125,16 @@ class FontSelectorViewController: UIViewController, FontListDelegate {
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
         }
         tableView.reloadData()
+        
+        view.addSubview(demoFontLabel)
+        if #available(iOS 9.0, *) {
+            demoFontLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+            demoFontLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+            demoFontLabel.heightAnchor.constraint(equalToConstant: 200).isActive = true
+            demoFontLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        }
+        demoFontLabel.text = "Example Font"
+        demoFontLabel.font = self.designFont
         
         // Do any additional setup after loading the view.
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClick))
