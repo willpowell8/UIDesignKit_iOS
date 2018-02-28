@@ -46,7 +46,9 @@ class FontList:UITableViewController {
         let cell = UITableViewCell()
         let family = fonts[indexPath.section]
         let font = family.children[indexPath.row]
+        let fontValue = UIFont(name: font, size: 14.0)
         cell.textLabel?.text = font
+        cell.textLabel?.font = fontValue
         cell.accessoryType = selectedFont == font ? .checkmark : .none
         return cell
     }
