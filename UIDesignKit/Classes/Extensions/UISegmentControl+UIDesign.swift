@@ -15,11 +15,35 @@ extension UISegmentedControl{
                 self.tintColor = v
             }
         })
+        self.applyData(data: data, property: "normalFont", targetType: .font) { (value) in
+            if let v = value as? UIFont {
+                self.setTitleTextAttributes([NSFontAttributeName: v],
+                                                        for: .normal)
+            }
+        }
         
+        self.applyData(data: data, property: "selectedFont", targetType: .font) { (value) in
+            if let v = value as? UIFont {
+                self.setTitleTextAttributes([NSFontAttributeName: v],
+                                            for: .selected)
+            }
+        }
     }
     override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data);
         dataReturn["tintColor"] = ["type":"COLOR", "value":self.tintColor.toHexString()];
+        let normalFontAttributes = self.titleTextAttributes(for: .normal)
+        if let font = normalFontAttributes?[NSFontAttributeName] as? UIFont {
+            dataReturn["normalFont"] = ["type":"FONT", "value":font.toDesignString()];
+        }else{
+            dataReturn["normalFont"] = ["type":"FONT"]
+        }
+        let selectedFontAttributes = self.titleTextAttributes(for: .selected)
+        if let font = selectedFontAttributes?[NSFontAttributeName] as? UIFont {
+            dataReturn["selectedFont"] = ["type":"FONT", "value":font.toDesignString()];
+        }else{
+            dataReturn["selectedFont"] = ["type":"FONT"]
+        }
         return dataReturn;
     }
     

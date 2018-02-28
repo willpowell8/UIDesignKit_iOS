@@ -23,6 +23,12 @@ extension UIButton{
                 self.setTitleColor(v, for: .normal)
             }
         })
+    
+        self.applyData(data: data, property: "font", targetType: .font) { (value) in
+            if let v = value as? UIFont {
+                self.titleLabel?.font = v
+            }
+        }
         
         
     }
@@ -34,6 +40,11 @@ extension UIButton{
             dataReturn["textColorNormal"] = ["type":"COLOR", "value":textNormalColor.toHexString()];
         }else{
             dataReturn["textColorNormal"] = ["type":"COLOR"]
+        }
+        if let fontString = titleLabel?.font.toDesignString() {
+            dataReturn["font"] = ["type":"FONT", "value":fontString];
+        }else{
+            dataReturn["font"] = ["type":"FONT"]
         }
         return dataReturn;
     }

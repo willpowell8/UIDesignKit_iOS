@@ -190,15 +190,7 @@ extension UIView{
                             print("Font VALUE NOT STRING");
                             return;
                         }
-                        let parts = value.characters.split{$0 == "|"}.map(String.init)
-                        var size = CGFloat(9.0)
-                        if(parts.count > 1){
-                            if let n = Float(parts[2]) {
-                                size = CGFloat(n)
-                            }
-                        }
-                        let descriptor = UIFontDescriptor(name: parts[0], size: size)
-                        let font = UIFont(descriptor: descriptor, size: size);
+                        let font = UIFont.fromString(value: value)
                         apply(font);
                         break;
                     default:

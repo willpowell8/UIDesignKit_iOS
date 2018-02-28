@@ -247,11 +247,27 @@ class ColorDesignViewCell:DesignViewCell{
 }
 
 class FontDesignViewCell:DesignViewCell{
+    
+    var cellFont:UIFont?
+    
     override func setup() {
         super.setup()
         self.accessoryType = .disclosureIndicator
         if let strValue = self.details?["value"] as? String {
             detailTextLabel?.text = strValue
+            self.cellFont = UIFont.fromString(value: strValue)
         }
+    }
+    
+    func applyFont(font:UIFont){
+        cellFont = font
+        self.detailTextLabel?.text = font.toDesignString()
+    }
+}
+
+class FontFamilyDesignViewCell:DesignViewCell{
+    
+    override func setup() {
+        super.setup()
     }
 }

@@ -109,9 +109,23 @@ extension DesignViewController:UITableViewDelegate{
                 colorVC.applyColor(colorCell.color)
                 colorVC.property = colorCell.property
                 navigationController?.pushViewController(colorVC, animated: true)
-            }else if cell is FontDesignViewCell {
+            }else if let fontCell = cell as? FontDesignViewCell {
                 let fontSelector = FontSelectorViewController()
+                fontSelector.designFont = fontCell.cellFont
+                fontSelector.property = fontCell.property
+                fontSelector.delegate = self
                 navigationController?.pushViewController(fontSelector, animated: true)
+            }
+        }
+    }
+}
+
+extension DesignViewController: FontSelectorViewControllerDelegate {
+    func selectedFont(font: UIFont, property:String?) {
+        if let fontCell = selectedCell as? FontDesignViewCell {
+            fontCell.applyFont(font: font)
+            if let property = property {
+                self.updateValue(property: property, value: font.toDesignString())
             }
         }
     }
