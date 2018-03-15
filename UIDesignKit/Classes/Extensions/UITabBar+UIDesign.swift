@@ -15,7 +15,6 @@ extension UITabBar{
                 self.tintColor = v
             }
         })
-        
     }
     override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data);

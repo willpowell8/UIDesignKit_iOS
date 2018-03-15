@@ -13,40 +13,64 @@ protocol FontListDelegate {
 
 class FontList:UITableViewController {
     
-    
+    let searchController = UISearchController(searchResultsController: nil)
     
     var selectedFontFamily:String?
     var selectedFont:String?
     var delegate:FontListDelegate?
     
-    var fonts = [(name:String, children:[String])]()
+    var fonts = [(name:String, children:[String])]() {
+        didSet{
+            filteredFonts = fonts
+        }
+    }
+    var filteredFonts = [(name:String, children:[String])]()
     func getFonts(){
         let fontFamilyNames = UIFont.familyNames
+        var newFonts = [(name:String, children:[String])]()
         for familyName in fontFamilyNames {
-            print("------------------------------")
-            print("Font Family Name = [\(familyName)]")
-            let names = UIFont.fontNames(forFamilyName: familyName)
-            print("Font Names = [\(names)]")
-            fonts.append((name: familyName, children: names))
+            var names = UIFont.fontNames(forFamilyName: familyName)
+            names = names.sorted(by: { (name1, name2) -> Bool in
+                return name1 > name2
+            })
+            newFonts.append((name: familyName, children: names))
+        }
+        fonts = newFonts.sorted { (n1, n2) -> Bool in
+            return n1.name < n2.name
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchController.searchResultsUpdater = self
+        if #available(iOS 9.1, *) {
+            searchController.obscuresBackgroundDuringPresentation = false
+        }
+        searchController.searchBar.placeholder = "Search Fonts"
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchController
+        } else {
+            tableView.tableHeaderView = searchController.searchBar
+        }
+        definesPresentationContext = true
         getFonts()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return fonts.count
+        return filteredFonts.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fonts[section].children.count
+        return filteredFonts[section].children.count
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return filteredFonts[section].name
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        let family = fonts[indexPath.section]
+        let family = filteredFonts[indexPath.section]
         let font = family.children[indexPath.row]
         let fontValue = UIFont(name: font, size: 14.0)
         cell.textLabel?.text = font
@@ -56,7 +80,7 @@ class FontList:UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let family = fonts[indexPath.section]
+        let family = filteredFonts[indexPath.section]
         let font = family.children[indexPath.row]
         self.selectedFont = font
         self.selectedFontFamily = family.name
@@ -88,9 +112,14 @@ class FontSelectorViewController: UIViewController, FontListDelegate {
     var selectedCell:DesignViewCell?
     var delegate:FontSelectorViewControllerDelegate?
     var demoFontLabel = UILabel()
+    var recentFonts = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
+        UserDefaults.standard.array(forKey: "UIDesignKit_fonts")
         view.backgroundColor = .white
         navigationItem.title = "Font Selector"
         designCells = [UITableViewCell]()
@@ -125,16 +154,19 @@ class FontSelectorViewController: UIViewController, FontListDelegate {
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 200).isActive = true
         }
         tableView.reloadData()
-        
-        view.addSubview(demoFontLabel)
+        let label = UILabel(frame: CGRect.init(x: 0, y: 0, width: self.view.frame.width, height: 200))
+        view.addSubview(label)
         if #available(iOS 9.0, *) {
-            demoFontLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-            demoFontLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-            demoFontLabel.heightAnchor.constraint(equalToConstant: 200).isActive = true
-            demoFontLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+            label.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+            label.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+            label.heightAnchor.constraint(equalToConstant: 200).isActive = true
+            label.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         }
-        demoFontLabel.text = "Example Font"
-        demoFontLabel.font = self.designFont
+        label.text = "Example Font"
+        label.textColor = UIColor.black
+        label.textAlignment = .center
+        label.font = self.designFont
+        demoFontLabel = label
         
         // Do any additional setup after loading the view.
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneClick))
@@ -202,5 +234,24 @@ extension FontSelectorViewController:UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         return designCells?[indexPath.row] ?? UITableViewCell()
+    }
+}
+
+extension FontList: UISearchResultsUpdating {
+    // MARK: - UISearchResultsUpdating Delegate
+    func updateSearchResults(for searchController: UISearchController) {
+        guard var term = searchController.searchBar.text, term != "" else {
+            filteredFonts = fonts
+            tableView.reloadData()
+            return
+        }
+        term = term.lowercased()
+        filteredFonts = fonts.flatMap({ (name,children) -> (name:String, children:[String])? in
+            if name.lowercased().contains(term) {
+                return (name:name, children:children)
+            }
+            return nil
+        })
+        tableView.reloadData()
     }
 }

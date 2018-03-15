@@ -27,7 +27,7 @@ open class PickerImage {
              self.height = height
              let size:Int = width * height * 4
              mutableData = CFDataCreateMutable(kCFAllocatorDefault, size)
-             //CFDataSetLength(mutableData, size)
+             CFDataSetLength(mutableData, size)
              createImageFromData(width, height: height)
         }
     }
@@ -37,6 +37,7 @@ open class PickerImage {
         self.height = height
         let size:Int = width * height * 4
         mutableData = CFDataCreateMutable(kCFAllocatorDefault, size)
+        CFDataSetLength(mutableData, size)
         createImageFromData(width, height: height)
     }
     
