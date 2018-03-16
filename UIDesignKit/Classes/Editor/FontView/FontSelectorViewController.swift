@@ -48,6 +48,7 @@ class FontList:UITableViewController {
         }
         searchController.searchBar.placeholder = "Search Fonts"
         if #available(iOS 11.0, *) {
+            navigationItem.hidesSearchBarWhenScrolling = false
             navigationItem.searchController = searchController
         } else {
             tableView.tableHeaderView = searchController.searchBar
