@@ -251,7 +251,7 @@ class DesignColorViewController: UIViewController{
     }
     
     func didChangeTextfield(){
-        if let colorStr = self.hexText?.text, colorStr.characters.count == 7 {
+        if let colorStr = self.hexText?.text, colorStr.count == 7 {
             var color = UIColor(fromHexString: colorStr)
             color = color.withAlphaComponent(CGFloat(getAlphaValue()))
             self.applyColor(color)

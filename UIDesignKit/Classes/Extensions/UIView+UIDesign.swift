@@ -182,7 +182,7 @@ extension UIView{
                                 guard let url = URL(string:value) else{
                                     return;
                                 }
-                                apply(url);
+                                apply(url)
                             }
                             break;
                     case .font:
@@ -190,7 +190,9 @@ extension UIView{
                             print("Font VALUE NOT STRING");
                             return;
                         }
-                        let font = UIFont.fromString(value: value)
+                        guard let font = UIFont.fromString(value: value) else{
+                            return
+                        }
                         apply(font);
                         break;
                     default:

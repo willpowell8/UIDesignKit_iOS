@@ -27,20 +27,22 @@ extension UINavigationController {
 
     func designClear(){
         NotificationCenter.default.removeObserver(self, name: UIDesign.LOADED, object: nil);
-        if DesignKey != nil && (DesignKey?.characters.count)! > 0 {
-            let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
+        if let designKey = DesignKey, designKey.count > 0 {
+            let eventHighlight = "DESIGN_HIGHLIGHT_\(designKey)"
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventHighlight), object: nil);
-            let eventText = "DESIGN_UPDATE_\(DesignKey!)"
+            let eventText = "DESIGN_UPDATE_\(designKey)"
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: eventText), object: nil);
         }
     }
     
     func setupNotifications(){
         NotificationCenter.default.addObserver(self, selector: #selector(updateDesignFromNotification), name: UIDesign.LOADED, object: nil)
-        let eventHighlight = "DESIGN_HIGHLIGHT_\(DesignKey!)"
-        NotificationCenter.default.addObserver(self, selector: #selector(designHighlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
-        let eventText = "DESIGN_UPDATE_\(DesignKey!)"
-        NotificationCenter.default.addObserver(self, selector: #selector(updateDesignFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
+        if let designKey = DesignKey, designKey.count > 0 {
+            let eventHighlight = "DESIGN_HIGHLIGHT_\(designKey)"
+            NotificationCenter.default.addObserver(self, selector: #selector(designHighlight), name: NSNotification.Name(rawValue:eventHighlight), object: nil)
+            let eventText = "DESIGN_UPDATE_\(designKey)"
+            NotificationCenter.default.addObserver(self, selector: #selector(updateDesignFromNotification), name: NSNotification.Name(rawValue:eventText), object: nil)
+        }
         
     }
     
@@ -60,15 +62,17 @@ extension UINavigationController {
     }
     
     private func checkForDesignUpdate(){
-        if ((self.DesignKey?.isEmpty) != nil)  {
-            guard let design = UIDesign.get(self.DesignKey!) else {
-                UIDesign.createKey(self.DesignKey!, type:self.getType(), properties: self.getAvailableDesignProperties())
+        if let designKey = self.DesignKey, !designKey.isEmpty  {
+            guard let design = UIDesign.get(designKey) else {
+                UIDesign.createKey(designKey, type:self.getType(), properties: self.getAvailableDesignProperties())
                 return;
             }
-            let data = design["data"] as! [AnyHashable: Any];
-            let type = design["type"] as! String;
+            
             if UIDesign.ignoreRemote == true {
                 return;
+            }
+            guard let data = design["data"] as? [AnyHashable: Any],  let type = design["type"] as? String else{
+                return
             }
             if Thread.isMainThread {
                 self.updateDesign(type:type, data: data)
@@ -87,7 +91,6 @@ extension UINavigationController {
     
     public func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = data;
-        
         dataReturn["barTintColor"] = ["type":"COLOR", "value":self.navigationBar.barTintColor?.toHexString()];
         dataReturn["tintColor"] = ["type":"COLOR", "value":self.navigationBar.tintColor.toHexString()];
         dataReturn["navigationTitleFontColor"] = ["type":"COLOR"];
@@ -144,7 +147,7 @@ extension UINavigationController {
                         print("Font VALUE NOT STRING");
                         return;
                     }
-                    let parts = value.characters.split{$0 == "|"}.map(String.init)
+                    let parts = value.components(separatedBy: "|")
                     if ( parts.count > 1 ) {
                         var size = CGFloat(9.0)
                         if let n = Float(parts[2]) {
@@ -165,8 +168,8 @@ extension UINavigationController {
         }else{
             // NEED TO ADD PROPERTY
             let properties = self.getAvailableDesignProperties()
-            if let propertyValue = properties[property] {
-                UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: propertyValue)
+            if let propertyValue = properties[property], let designKey = self.DesignKey, !designKey.isEmpty {
+                UIDesign.addPropertyToKey(designKey, property: property, attribute: propertyValue)
             }
             
         }

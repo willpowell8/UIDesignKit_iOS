@@ -60,7 +60,7 @@ extension UIColor {
     public convenience init(fromHexString hexStr:String) {
         var hexString:String = hexStr.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
         var alpha = CGFloat(1.0);
-        let hexStringParts = hexString.characters.split{$0 == "|"}.map(String.init)
+        let hexStringParts = hexString.components(separatedBy: "|")
         hexString = hexStringParts[0]
         if hexStringParts.count > 1 {
             let part2 = hexStringParts[1]
