@@ -2,6 +2,7 @@
 # UIDesignKit - Change Log
 
 
+## 1.1.9 - add textfield ability to change int
 ## 1.1.4 - updated to socketio 2.0
 ## 1.1.3 - added alphabetical sort and search bar to all properties list
 

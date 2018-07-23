@@ -77,31 +77,32 @@ class SelectorDesignViewCell:DesignViewCell{
 }
 
 class IntDesignViewCell:DesignViewCell{
-    var valueLabel = UILabel()
+    var textField = UITextField()
     var slider = UISlider()
     var roundingFactor = Float(1.0)
     override func setup(){
-        addSubview(valueLabel)
-        valueLabel.translatesAutoresizingMaskIntoConstraints = false
-        valueLabel.textAlignment = .right
+        addSubview(textField)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.textAlignment = .right
         if #available(iOS 9.0, *) {
-            valueLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -30).isActive = true
-            valueLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-            valueLabel.widthAnchor.constraint(equalToConstant: 40).isActive = true
-            valueLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+            textField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -30).isActive = true
+            textField.heightAnchor.constraint(equalToConstant: 20).isActive = true
+            textField.widthAnchor.constraint(equalToConstant: 40).isActive = true
+            textField.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         }
         slider.minimumValue = 0.0
-        slider.maximumValue = 25.0
+        slider.maximumValue = 100.0
         
         addSubview(slider)
         
         slider.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 9.0, *) {
-            slider.rightAnchor.constraint(equalTo: valueLabel.leftAnchor, constant: -10).isActive = true
+            slider.rightAnchor.constraint(equalTo: textField.leftAnchor, constant: -10).isActive = true
             slider.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
             slider.heightAnchor.constraint(equalToConstant: 20).isActive = true
             slider.widthAnchor.constraint(equalToConstant: 170).isActive = true
         }
+        textField.addTarget(self, action: #selector(changeCount(_:)), for: .editingChanged)
         slider.addTarget(self, action: #selector(didChangeSlider), for: UIControlEvents.valueChanged)
         if let float = self.details?["value"] as? CGFloat {
             slider.value = Float(float)
@@ -109,13 +110,22 @@ class IntDesignViewCell:DesignViewCell{
         }
     }
     
+    func changeCount(_ sender:Any?){
+        if let txt = textField.text, let int = Float(txt) {
+            slider.value = int
+            if let property = self.property {
+                delegate?.updateValue(property: property, value: getValue())
+            }
+        }
+    }
+    
     func updateDisplay(){
         let newValue = getValue()
         if roundingFactor == 1 {
             let intNewValue = Int(newValue)
-            valueLabel.text = String(describing:intNewValue)
+            textField.text = String(describing:intNewValue)
         }else{
-            valueLabel.text = String(describing:newValue)
+            textField.text = String(describing:newValue)
         }
     }
     
