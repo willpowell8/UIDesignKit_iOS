@@ -81,19 +81,44 @@ public class UIDesign {
         }
     }
     
+    public static func stop(){
+        _liveEnabled = false
+        if let socket = self.socket {
+            socket.disconnect()
+        }
+        self.loadedTheme = [AnyHashable:Any]()
+        self.hasLoaded = false
+        self.loadedDesign = [AnyHashable:Any]()
+        self.socket = nil
+        self.allowInlineEdit = false
+        NotificationCenter.default.removeObserver(self, name:UserDefaults.didChangeNotification, object: nil)
+    }
+    
     
     public static func start(appKey:String, live:Bool){
+        guard self.appKey == appKey else {
+            print("App Key Already Set")
+            return
+        }
+        stop()
         self.appKey = appKey
-        loadDesign();
-        self.liveEnabled = live;
+        loadDesign()
+        self.liveEnabled = live
         
     }
     
     public static func start(appKey:String, useSettings:Bool){
+        guard self.appKey == appKey else {
+            print("App Key Already Set")
+            return
+        }
+        stop()
         self.appKey = appKey
-        NotificationCenter.default.addObserver(self, selector: #selector(UIDesign.defaultsChanged),
+        if useSettings == true {
+            NotificationCenter.default.addObserver(self, selector: #selector(UIDesign.defaultsChanged),
                                                name: UserDefaults.didChangeNotification, object: nil)
-        loadDesign();
+        }
+        loadDesign()
     }
     
     @objc public static func defaultsChanged(){
