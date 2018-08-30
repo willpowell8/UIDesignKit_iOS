@@ -96,7 +96,7 @@ public class UIDesign {
     
     
     public static func start(appKey:String, live:Bool){
-        guard self.appKey == appKey else {
+        guard self.appKey != appKey else {
             print("App Key Already Set")
             return
         }
@@ -108,7 +108,7 @@ public class UIDesign {
     }
     
     public static func start(appKey:String, useSettings:Bool){
-        guard self.appKey == appKey else {
+        guard self.appKey != appKey else {
             print("App Key Already Set")
             return
         }
