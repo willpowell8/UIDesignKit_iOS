@@ -14,7 +14,10 @@ open class PickerImage {
     fileprivate func createImageFromData(_ width:Int, height:Int) {
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue)
-        provider = CGDataProvider(data: mutableData)
+        guard let p = CGDataProvider(data: mutableData) else {
+            return
+        }
+        provider = p
         imageSource = CGImageSourceCreateWithDataProvider(provider, nil)
         let cgimg = CGImage(width: Int(width), height: Int(height), bitsPerComponent: Int(8), bitsPerPixel: Int(32), bytesPerRow: Int(width) * Int(4),
             space: colorSpace, bitmapInfo: bitmapInfo, provider: provider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)

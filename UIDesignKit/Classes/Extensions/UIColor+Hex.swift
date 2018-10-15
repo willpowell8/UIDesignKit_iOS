@@ -18,7 +18,13 @@ extension UIColor {
         set(newValue) {
             design_ThemeClear()
             if(newValue?.isDesignStringAcceptable == false){
-                print("UIDESIGN ERROR: key contans invalid characters must be a-z,A-Z,0-9 and . only")
+                if UIDesign.debug {
+                    var str = "UIDESIGN ERROR: key contans invalid characters must be a-z,A-Z,0-9 and . only"
+                    if let v = newValue {
+                        str = "UIDESIGN ERROR: \(v)"
+                    }
+                    print(str)
+                }
                 return;
             }
             

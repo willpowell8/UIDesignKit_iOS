@@ -34,6 +34,8 @@ public enum UIUserInterfaceIdiom : Int {
 
 public class UIDesign {
     
+    
+    public static var debug:Bool = false
     public static var server:String = "http://www.uidesignkit.com";
     
     public static var socket:SocketIOClient?
@@ -166,7 +168,7 @@ public class UIDesign {
         guard let data = standard.object(forKey: "UIDesign") else {
             return
         }
-        if let loaded = data as? [AnyHashable:Any] {
+        if let loaded = data as? [AnyHashable:Any], loaded.keys.count > 0 {
             self.loadedDesign = loaded
             self.hasLoaded = true
             NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
@@ -279,7 +281,7 @@ public class UIDesign {
     }
     
     public static func createKey(_ key:String,type:String,  properties:[String:Any]){
-        if socket?.status == SocketIOClientStatus.connected, loadedDesign[key] == nil, hasLoaded == true, let appKey = self.appKey {
+        if socket?.status == SocketIOClientStatus.connected, loadedDesign[key] == nil, hasLoaded == true, let appKey = self.appKey, self.loadedDesign[key] == nil {
             self.sendMessage(type: "key:add", data: ["appuuid":appKey, "type":type, "key":key, "properties":properties])
             self.loadedDesign[key] = ["type": type, "data":properties];
         }
@@ -340,6 +342,39 @@ public class UIDesign {
                 keyElement["data"] = keyData
                 self.loadedDesign[key] = keyElement
             }*/
+        }
+    }
+    
+    static var _colours = [String]()
+    static var _loadedColours = false
+    public static var colours:[String] {
+        get{
+            if !_loadedColours {
+                loadColours()
+            }
+            return _colours
+        }
+        set{
+            var coloursTemp = [String]()
+            for i in 0..<newValue.count {
+                if i<8{
+                    coloursTemp.append(newValue[i])
+                }
+            }
+            _colours = coloursTemp
+            saveColors()
+        }
+    }
+    
+    public static func saveColors(){
+        UserDefaults.standard.set(_colours, forKey: "UIDESIGN_ref_colours")
+        UserDefaults.standard.synchronize()
+    }
+    
+    public static func loadColours(){
+        _loadedColours = true
+        if let ref_colours = UserDefaults.standard.array(forKey: "UIDESIGN_ref_colours") as? [String] {
+            _colours = ref_colours
         }
     }
 }

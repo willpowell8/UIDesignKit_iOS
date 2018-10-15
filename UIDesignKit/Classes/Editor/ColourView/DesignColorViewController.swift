@@ -43,6 +43,10 @@ class DesignColorViewController: UIViewController{
     var bLabel:UILabel?
     var bText:UITextField?
     
+    var colours = [String]()
+    
+    var previousCollectionView:UICollectionView?
+    
     var property:String? {
         didSet{
             self.navigationItem.title = self.property
@@ -51,6 +55,7 @@ class DesignColorViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        colours = UIDesign.colours
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.barStyle = .default
         colorWell = ColorWell(frame: CGRect(x: 0, y: 100, width: 100, height: 100))
@@ -214,28 +219,43 @@ class DesignColorViewController: UIViewController{
         }
         alphaSlider?.addTarget(self, action: #selector(didChangeSlider), for: UIControlEvents.valueChanged)
         
-        
-        
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 40, height: 40)
+        layout.scrollDirection = .horizontal
+        previousCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        previousCollectionView?.delegate = self
+        previousCollectionView?.dataSource = self
+        previousCollectionView?.backgroundColor = .clear
+        previousCollectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        self.view.addSubview(previousCollectionView!)
+        previousCollectionView?.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 9.0, *) {
+            previousCollectionView?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
+            previousCollectionView?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
+            previousCollectionView?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
+            previousCollectionView?.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        }
+        previousCollectionView?.reloadData()
         
         huePicker = HuePicker(frame: CGRect(x: 0, y: 300, width: 100, height: 100))
         self.view.addSubview(huePicker!)
         huePicker?.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 9.0, *) {
-        huePicker?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -30).isActive = true
-        huePicker?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
-        huePicker?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
-        huePicker?.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            huePicker?.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -120).isActive = true
+            huePicker?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
+            huePicker?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
+            huePicker?.heightAnchor.constraint(equalToConstant: 50).isActive = true
         }
         
         colorPicker = ColorPicker(frame: CGRect(x: 0, y: 200, width: 100, height: 100))
         self.view.addSubview(colorPicker!)
         colorPicker?.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 9.0, *) {
-        colorPicker?.topAnchor.constraint(equalTo: alphaLabel!.bottomAnchor, constant: 20).isActive = true
-        colorPicker?.bottomAnchor.constraint(equalTo: huePicker!.topAnchor, constant: -30).isActive = true
-        colorPicker?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
-        colorPicker?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
-        colorPicker?.heightAnchor.constraint(equalToConstant: 400).isActive = true
+            colorPicker?.topAnchor.constraint(equalTo: alphaLabel!.bottomAnchor, constant: 20).isActive = true
+            colorPicker?.bottomAnchor.constraint(equalTo: huePicker!.topAnchor, constant: -30).isActive = true
+            colorPicker?.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
+            colorPicker?.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
+            colorPicker?.heightAnchor.constraint(equalToConstant: 400).isActive = true
         }
         pickerController = ColorPickerController(svPickerView: colorPicker!, huePickerView: huePicker!, colorWell: colorWell!)
         pickerController?.color = UIColor.red
@@ -276,6 +296,12 @@ class DesignColorViewController: UIViewController{
     func close(){
         if var color = pickerController?.color {
             color = color.withAlphaComponent(CGFloat(getAlphaValue()))
+            let colourHex = color.toHexString()
+            var ary = UIDesign.colours.filter { (val) -> Bool in
+                return val != colourHex
+            }
+            ary.insert(color.toHexString(), at: 0)
+            UIDesign.colours = ary
             self.delegate?.update(color: color)
             self.navigationController?.popViewController(animated: true)
         }
@@ -289,4 +315,26 @@ class DesignColorViewController: UIViewController{
         self.pickerController?.color = color
     }
     
+}
+
+extension DesignColorViewController:UICollectionViewDelegate{
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let colour = UIColor(fromHexString: colours[indexPath.row])
+        applyColor(colour)
+    }
+}
+
+extension DesignColorViewController:UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        cell.layer.borderColor = UIColor.gray.cgColor
+        cell.layer.borderWidth = CGFloat(1.0)
+        let colour = UIColor(fromHexString: colours[indexPath.row])
+        cell.backgroundColor = colour
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return colours.count
+    }
 }

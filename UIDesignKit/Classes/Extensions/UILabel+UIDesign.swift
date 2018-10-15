@@ -13,20 +13,29 @@ extension UILabel{
     override open func updateDesign(type:String, data:[AnyHashable: Any]) {
         super.updateDesign(type:type, data: data);
         self.applyData(data: data, property: "textColor", targetType: .color, apply: { (value) in
-            self.textColor = value as! UIColor;
+            guard let c = value as? UIColor else {
+                return
+            }
+            self.textColor = c
         })
         
         self.applyData(data: data, property: "font", targetType: .font, apply: {(value) in
-            self.font = value as! UIFont;
+            guard let f = value as? UIFont else {
+                return
+            }
+            self.font = f
         })
         
         self.applyData(data: data, property: "adjustsFontSizeToFitWidth", targetType: .bool, apply: {(value) in
-            self.adjustsFontSizeToFitWidth = value as! Bool;
+            guard let a = value as? Bool else {
+                return
+            }
+            self.adjustsFontSizeToFitWidth = a
         })
         
     }
     override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
-        var dataReturn = super.getDesignProperties(data: data);
+        var dataReturn = super.getDesignProperties(data: data)
         dataReturn["textColor"] = ["type":"COLOR", "value":self.textColor.toHexString()]
         dataReturn["font"] = ["type":"FONT", "value": font.toDesignString()]
         dataReturn["adjustsFontSizeToFitWidth"] =  ["type":"BOOL", "value": adjustsFontSizeToFitWidth ? 1 : 0]
