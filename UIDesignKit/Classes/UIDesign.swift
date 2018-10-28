@@ -49,7 +49,7 @@ public class UIDesign {
     private static var appKey:String?
     public static var deviceType:String = ""
     
-    public static var layoutAlignment:UIDesignAligment = UIDesignAligment.ltr
+    public static var layoutAlignment:UIDesignAligment = UIDesignAligment.rtl
     
     
     public static var ignoreRemote:Bool = false

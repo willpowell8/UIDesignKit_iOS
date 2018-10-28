@@ -34,8 +34,11 @@ extension UILabel{
         })
         
         self.applyData(data: data, property: "textAlignment", targetType: .int) { (value) in
-            guard let i = value as? Int, let alignment = NSTextAlignment(rawValue: i) else {
+            guard let i = value as? Int, var alignment = NSTextAlignment(rawValue: i) else {
                 return
+            }
+            if self.designLayout == true {
+                alignment = NSTextAlignment.designConvertAlignment(alignment, layout: UIDesign.layoutAlignment)
             }
             self.textAlignment = alignment
         }
@@ -43,7 +46,11 @@ extension UILabel{
     }
     override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data)
-        dataReturn["textAlignment"] = ["type":"INT", "value":self.textAlignment.rawValue]
+        var alignment = self.textAlignment
+        if self.designLayout == true {
+            alignment = NSTextAlignment.designConvertAlignment(alignment, layout: UIDesign.layoutAlignment)
+        }
+        dataReturn["textAlignment"] = ["type":"INT", "value":alignment.rawValue]
         dataReturn["textColor"] = ["type":"COLOR", "value":self.textColor.toHexString()]
         dataReturn["font"] = ["type":"FONT", "value": font.toDesignString()]
         dataReturn["adjustsFontSizeToFitWidth"] =  ["type":"BOOL", "value": adjustsFontSizeToFitWidth ? 1 : 0]
