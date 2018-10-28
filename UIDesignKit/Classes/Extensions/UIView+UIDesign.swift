@@ -10,8 +10,20 @@ import Foundation
 import ObjectiveC
 
 private var designKey: UInt8 = 9
+private var designLanguageKey: UInt8 = 10
 
 extension UIView{
+    @IBInspectable
+    public var designLanguage: Bool  {
+        get {
+            return objc_getAssociatedObject(self, &designLanguageKey) as? Bool ?? true
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &designLanguageKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+            designSetup();
+        }
+    }
+    
     @IBInspectable
     public var DesignKey: String?  {
         get {

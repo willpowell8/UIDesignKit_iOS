@@ -80,6 +80,7 @@ class IntDesignViewCell:DesignViewCell{
     var textField = UITextField()
     var slider = UISlider()
     var roundingFactor = Float(1.0)
+    var outputMechanism = "INT"
     override func setup(){
         addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -104,9 +105,20 @@ class IntDesignViewCell:DesignViewCell{
         }
         textField.addTarget(self, action: #selector(changeCount(_:)), for: .editingChanged)
         slider.addTarget(self, action: #selector(didChangeSlider), for: UIControlEvents.valueChanged)
-        if let float = self.details?["value"] as? CGFloat {
-            slider.value = Float(float)
-            updateDisplay()
+        if let val = self.details?["value"] {
+            if let f  = val as? Double {
+                outputMechanism = "DOUBLE"
+                slider.value = Float(f)
+                updateDisplay()
+            }else if let f  = val as? Float {
+                outputMechanism = "FLOAT"
+                slider.value = Float(f)
+                updateDisplay()
+            }else if let f  = val as? Int {
+                 outputMechanism = "INT"
+                slider.value = Float(f)
+                updateDisplay()
+            }
         }
     }
     
@@ -137,7 +149,22 @@ class IntDesignViewCell:DesignViewCell{
     func didChangeSlider(){
         updateDisplay()
         if let property = self.property {
-            delegate?.updateValue(property: property, value: getValue())
+            let value = getValue()
+            switch(outputMechanism) {
+            case "INT":
+                delegate?.updateValue(property: property, value: Int(value))
+                break
+            case "FLOAT":
+                delegate?.updateValue(property: property, value: value)
+                break
+            case "DOUBLE":
+                delegate?.updateValue(property: property, value: Double(value))
+                break
+            default:
+                delegate?.updateValue(property: property, value: value)
+                break
+            }
+            
         }
     }
 }

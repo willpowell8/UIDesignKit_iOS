@@ -32,6 +32,12 @@ public enum UIUserInterfaceIdiom : Int {
     case Pad // iPad style UI
 }
 
+public enum UIDesignAligment:String {
+    case ltr = "ltr"
+    case rtl = "rtl"
+    case unknown = "unknown"
+}
+
 public class UIDesign {
     
     
@@ -42,6 +48,8 @@ public class UIDesign {
     
     private static var appKey:String?
     public static var deviceType:String = ""
+    
+    public static var layoutAlignment:UIDesignAligment = UIDesignAligment.ltr
     
     
     public static var ignoreRemote:Bool = false

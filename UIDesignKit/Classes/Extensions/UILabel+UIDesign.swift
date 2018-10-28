@@ -33,9 +33,17 @@ extension UILabel{
             self.adjustsFontSizeToFitWidth = a
         })
         
+        self.applyData(data: data, property: "textAlignment", targetType: .int) { (value) in
+            guard let i = value as? Int, let alignment = NSTextAlignment(rawValue: i) else {
+                return
+            }
+            self.textAlignment = alignment
+        }
+        
     }
     override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data)
+        dataReturn["textAlignment"] = ["type":"INT", "value":self.textAlignment.rawValue]
         dataReturn["textColor"] = ["type":"COLOR", "value":self.textColor.toHexString()]
         dataReturn["font"] = ["type":"FONT", "value": font.toDesignString()]
         dataReturn["adjustsFontSizeToFitWidth"] =  ["type":"BOOL", "value": adjustsFontSizeToFitWidth ? 1 : 0]
