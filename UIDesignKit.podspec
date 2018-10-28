@@ -28,6 +28,7 @@ UIDesignKit fills the need for allowing users to change things like the backgrou
   s.source           = { :git => 'https://github.com/willpowell8/UIDesignKit_iOS.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/willpowelluk'
 
+    s.swift_version = '4.2'
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'UIDesignKit/Classes/**/*'
@@ -37,6 +38,7 @@ UIDesignKit fills the need for allowing users to change things like the backgrou
    }
 
     s.frameworks = 'UIKit'
-    s.dependency 'Socket.IO-Client-Swift', '~>11.1.3'
+    s.dependency 'Socket.IO-Client-Swift', '~>13.1.0'
     s.dependency 'SDWebImage'
+
 end

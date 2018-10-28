@@ -70,7 +70,7 @@ extension UIView{
         }
     }
     
-    @objc private func designUpdateFromNotification() {
+    @objc open func designUpdateFromNotification() {
         if Thread.isMainThread {
             self.checkForDesignUpdate()
         }else{
@@ -81,7 +81,7 @@ extension UIView{
     }
     
     
-    public func designHighlight() {
+    @objc public func designHighlight() {
         DispatchQueue.main.async(execute: {
             let originalCGColor = self.layer.backgroundColor
             UIView.animate(withDuration: 0.4, animations: {
@@ -126,7 +126,7 @@ extension UIView{
         return self.getDesignProperties(data: data);
     }
     
-    open func getDesignProperties(data:[String:Any]) -> [String:Any]{
+    @objc open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = data;
         dataReturn["backgroundColor"] = ["type":"COLOR", "value":self.backgroundColor?.toHexString()];
         dataReturn["cornerRadius"] = ["type":"INT", "value":self.layer.cornerRadius];
@@ -143,7 +143,7 @@ extension UIView{
         return dataReturn
     }
     
-    public func getDesignType() -> String{
+    @objc public func getDesignType() -> String{
         return "VIEW";
     }
     
@@ -228,7 +228,7 @@ extension UIView{
         }
     }
     
-    open func updateDesign(type:String, data:[AnyHashable: Any]) {
+    @objc open func updateDesign(type:String, data:[AnyHashable: Any]) {
         // OVERRIDE TO GO HERE FOR INDIVIDUAL CLASSES
         self.applyData(data: data, property: "backgroundColor", targetType: .color, apply: { (value) in
             if let v = value as? UIColor {
@@ -272,7 +272,7 @@ extension UIView{
     }
     
     /// Inline Editor - gesture recognize Long Press
-    func design_inlineEditorGestureLongPress(_ sender: UILongPressGestureRecognizer)
+    @objc func design_inlineEditorGestureLongPress(_ sender: UILongPressGestureRecognizer)
     {
         if sender.state == .began, sender.view == self {
             let inline = DesignInlineEditorHandler()
@@ -281,7 +281,7 @@ extension UIView{
     }
     
     /// Inline Edit State Update
-    func design_inlineEditStateUpdate(){
+    @objc func design_inlineEditStateUpdate(){
         if UIDesign.allowInlineEdit {
             DispatchQueue.main.async {
                 self.isUserInteractionEnabled = true

@@ -45,6 +45,7 @@ public class UIDesign {
     public static var server:String = "http://www.uidesignkit.com";
     
     public static var socket:SocketIOClient?
+    public static var manager:SocketManager?
     
     private static var appKey:String?
     public static var deviceType:String = ""
@@ -234,8 +235,10 @@ public class UIDesign {
             print("Socket URL error")
             return
         }
-        socket = SocketIOClient(socketURL: url)
-        socket?.on("connect", callback: {(data,ack) in
+        let manager = SocketManager(socketURL: url, config: [.log(false), .compress])//, .path("/v2/socket.io")])
+        self.manager = manager
+        let socket = manager.defaultSocket
+        socket.on("connect", callback: {(data,ack) in
             guard let appKey = self.appKey else{
                 print("Socket Connected but no app key")
                 return
@@ -244,14 +247,14 @@ public class UIDesign {
             sendMessage(type: "join", data: ["room":appRoom])
             NotificationCenter.default.post(name: LOADED, object: self)
         })
-        socket?.on("highlight", callback: {(data,ack) in
+        socket.on("highlight", callback: {(data,ack) in
             guard let dictionary = data[0] as? [AnyHashable : Any], let meta = dictionary["meta"] as? String else{
                 return
             }
             let event = "DESIGN_HIGHLIGHT_\(meta)"
             NotificationCenter.default.post(name: Notification.Name(rawValue: event), object: self)
         })
-        socket?.on("design", callback: {(data,ack) in
+        socket.on("design", callback: {(data,ack) in
             guard let dictionary = data[0] as? [AnyHashable : Any] else{
                 return
             }
@@ -268,7 +271,8 @@ public class UIDesign {
                 self.updateLocalKeyProperty(key: key, property: property, form: form, value: value)
             }
         })
-        socket?.connect()
+        socket.connect()
+        self.socket = socket
     }
     
     
@@ -281,7 +285,7 @@ public class UIDesign {
     }
     
     private static func sendMessage(type:String, data:SocketData...){
-        if socket?.status == SocketIOClientStatus.connected {
+        if socket?.status == .connected {
             socket?.emit(type, with: data)
         }
     }
@@ -294,7 +298,7 @@ public class UIDesign {
     }
     
     public static func createKey(_ key:String,type:String,  properties:[String:Any]){
-        if socket?.status == SocketIOClientStatus.connected, loadedDesign[key] == nil, hasLoaded == true, let appKey = self.appKey, self.loadedDesign[key] == nil {
+        if socket?.status == .connected, loadedDesign[key] == nil, hasLoaded == true, let appKey = self.appKey, self.loadedDesign[key] == nil {
             self.sendMessage(type: "key:add", data: ["appuuid":appKey, "type":type, "key":key, "properties":properties])
             self.loadedDesign[key] = ["type": type, "data":properties]
             saveDesignToDisk(design: self.loadedDesign)
@@ -302,7 +306,7 @@ public class UIDesign {
     }
     
     public static func updateKeyProperty(_ key:String, property:String, value:Any ){
-        if socket?.status == SocketIOClientStatus.connected, self.loadedDesign[key] != nil, self.hasLoaded == true, let appKey = self.appKey {
+        if socket?.status == .connected, self.loadedDesign[key] != nil, self.hasLoaded == true, let appKey = self.appKey {
             self.sendMessage(type: "design:save", data: ["appuuid":appKey,"key":key, "property":property, "value":value])
             self.updateLocalKeyProperty(key: key, property: property, form: "universal", value: value)
         }
@@ -331,7 +335,7 @@ public class UIDesign {
     }
     
     public static func addPropertyToKey(_ key:String, property:String, attribute:Any){
-        if socket?.status == SocketIOClientStatus.connected, self.hasLoaded == true, let appKey = self.appKey {
+        if socket?.status == .connected, self.hasLoaded == true, let appKey = self.appKey {
             self.sendMessage(type: "key:add_property", data: ["appuuid":appKey, "key":key, "name":property, "attribute":attribute])
             if let attr = attribute  as? [AnyHashable:Any],var keyElement = self.loadedDesign[key] as? [AnyHashable:Any],  var keyData = keyElement["data"] as? [AnyHashable:Any]{
                 keyData[property] = ["universal":attr["value"]]
@@ -351,7 +355,7 @@ public class UIDesign {
     }
     
     public static func addThemeToKey(_ name:String, type:String, value:String){
-        if socket?.status == SocketIOClientStatus.connected, self.hasLoaded == true , let appKey = self.appKey {
+        if socket?.status == .connected, self.hasLoaded == true , let appKey = self.appKey {
             self.sendMessage(type: "theme:save", data: ["appuuid":appKey, "name":name, "type":type, "value":value])
             /*if var keyElement = self.loadedTheme[name] as? [AnyHashable:Any],  var keyData = keyElement["data"] as? [AnyHashable:Any]{
                 keyData[property] = ["universal":attr["value"]]

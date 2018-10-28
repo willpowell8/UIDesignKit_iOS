@@ -179,7 +179,7 @@ class FontSelectorViewController: UIViewController, FontListDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func doneClick(){
+    @objc func doneClick(){
         if let font = self.designFont {
             delegate?.selectedFont(font: font, property:self.property)
         }

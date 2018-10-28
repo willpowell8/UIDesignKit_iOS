@@ -270,7 +270,7 @@ class DesignColorViewController: UIViewController{
         self.navigationItem.rightBarButtonItems = [cancelButton]
     }
     
-    func didChangeTextfield(){
+    @objc func didChangeTextfield(){
         if let colorStr = self.hexText?.text, colorStr.count == 7 {
             var color = UIColor(fromHexString: colorStr)
             color = color.withAlphaComponent(CGFloat(getAlphaValue()))
@@ -278,10 +278,10 @@ class DesignColorViewController: UIViewController{
         }
     }
     
-    func didChangeRGBTextfield(){
+    @objc func didChangeRGBTextfield(){
         
     }
-    func didChangeSlider(){
+    @objc func didChangeSlider(){
         self.alphaValue?.text = String(describing:getAlphaValue())
     }
     
@@ -293,7 +293,7 @@ class DesignColorViewController: UIViewController{
     }
     
     
-    func close(){
+    @objc func close(){
         if var color = pickerController?.color {
             color = color.withAlphaComponent(CGFloat(getAlphaValue()))
             let colourHex = color.toHexString()

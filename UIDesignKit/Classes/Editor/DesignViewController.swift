@@ -49,11 +49,11 @@ class DesignViewController:UIViewController{
         navigationItem.rightBarButtonItems = [openAll]
     }
     
-    func close(){
+    @objc func close(){
         self.dismiss(animated: true, completion: nil)
     }
     
-    func closeAndOpenAll(){
+    @objc func closeAndOpenAll(){
         self.dismiss(animated: true) {
             UIDesign.showAllDesignKeysView()
         }

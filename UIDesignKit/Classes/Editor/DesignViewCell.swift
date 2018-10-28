@@ -67,7 +67,7 @@ class TextDesignViewCell:DesignViewCell{
         }
     }
     
-    func didChangeTextfield(){
+    @objc func didChangeTextfield(){
         self.details?["value"] = textField?.text
     }
 }
@@ -122,7 +122,7 @@ class IntDesignViewCell:DesignViewCell{
         }
     }
     
-    func changeCount(_ sender:Any?){
+    @objc func changeCount(_ sender:Any?){
         if let txt = textField.text, let int = Float(txt) {
             slider.value = int
             if let property = self.property {
@@ -146,7 +146,7 @@ class IntDesignViewCell:DesignViewCell{
         return Float(val)
     }
     
-    func didChangeSlider(){
+    @objc func didChangeSlider(){
         updateDisplay()
         if let property = self.property {
             let value = getValue()
@@ -195,7 +195,7 @@ class BoolDesignViewCell:DesignViewCell{
             uiswitch?.isOn = boolVal == 1
         }
     }
-    func didChangeSwitch(){
+    @objc func didChangeSwitch(){
         if let property = self.property, let ui = uiswitch {
             delegate?.updateValue(property: property, value: ui.isOn ? 1 : 0)
         }

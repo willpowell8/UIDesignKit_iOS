@@ -17,14 +17,14 @@ extension UISegmentedControl{
         })
         self.applyData(data: data, property: "normalFont", targetType: .font) { (value) in
             if let v = value as? UIFont {
-                self.setTitleTextAttributes([NSFontAttributeName: v],
+                self.setTitleTextAttributes([NSAttributedStringKey.font: v],
                                                         for: .normal)
             }
         }
         
         self.applyData(data: data, property: "selectedFont", targetType: .font) { (value) in
             if let v = value as? UIFont {
-                self.setTitleTextAttributes([NSFontAttributeName: v],
+                self.setTitleTextAttributes([NSAttributedStringKey.font: v],
                                             for: .selected)
             }
         }
@@ -33,13 +33,13 @@ extension UISegmentedControl{
         var dataReturn = super.getDesignProperties(data: data);
         dataReturn["tintColor"] = ["type":"COLOR", "value":self.tintColor.toHexString()];
         let normalFontAttributes = self.titleTextAttributes(for: .normal)
-        if let font = normalFontAttributes?[NSFontAttributeName] as? UIFont {
+        if let font = normalFontAttributes?[NSAttributedStringKey.font] as? UIFont {
             dataReturn["normalFont"] = ["type":"FONT", "value":font.toDesignString()];
         }else{
             dataReturn["normalFont"] = ["type":"FONT"]
         }
         let selectedFontAttributes = self.titleTextAttributes(for: .selected)
-        if let font = selectedFontAttributes?[NSFontAttributeName] as? UIFont {
+        if let font = selectedFontAttributes?[NSAttributedStringKey.font] as? UIFont {
             dataReturn["selectedFont"] = ["type":"FONT", "value":font.toDesignString()];
         }else{
             dataReturn["selectedFont"] = ["type":"FONT"]
@@ -47,7 +47,7 @@ extension UISegmentedControl{
         return dataReturn;
     }
     
-    override public func getDesignType() -> String{
+    @objc override public func getDesignType() -> String{
         return "SEGMENTCONTROL";
     }
 }

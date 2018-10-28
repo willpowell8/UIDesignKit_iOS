@@ -39,7 +39,7 @@ class AllDesignKeysTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    func close(){
+    @objc func close(){
         self.dismiss(animated: true, completion: nil)
     }
 

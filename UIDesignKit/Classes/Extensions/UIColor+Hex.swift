@@ -53,7 +53,7 @@ extension UIColor {
         }
     }
     
-    func design_themeUpdatedFromNotifiation(){
+    @objc func design_themeUpdatedFromNotifiation(){
         design_apply()
     }
     
