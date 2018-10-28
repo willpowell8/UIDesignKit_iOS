@@ -49,7 +49,12 @@ public class UIDesign {
     private static var appKey:String?
     public static var deviceType:String = ""
     
-    public static var layoutAlignment:UIDesignAligment = UIDesignAligment.ltr
+    internal static var layoutAlignment:UIDesignAligment = UIDesignAligment.ltr
+    
+    public static func updateLayoutAlignment(layout:UIDesignAligment){
+        layoutAlignment = layout
+        NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
+    }
     
     
     public static var ignoreRemote:Bool = false

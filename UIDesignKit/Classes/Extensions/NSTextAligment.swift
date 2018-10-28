@@ -16,8 +16,14 @@ extension NSTextAlignment {
                 return NSTextAlignment.right
             case .right:
                 return NSTextAlignment.left
+            case .natural:
+                return NSTextAlignment.right
             default:
                 return aligment
+            }
+        } else if layout == .ltr {
+            if aligment == .natural {
+                return NSTextAlignment.left
             }
         }
         return aligment
