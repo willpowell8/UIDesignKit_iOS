@@ -1,6 +1,7 @@
 
 # UIDesignKit - Change Log
 
+## 1.2.1 - update to 13.3.1 socket client
 ## 1.2.0 - update of socket library used in library
 ## 1.1.13 - added text alignment to UILabel field, fixed issue with slider
 ## 1.1.12 - add colour memory and fix issue with saving keys repeatedly
