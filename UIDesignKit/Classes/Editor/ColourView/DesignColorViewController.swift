@@ -99,7 +99,7 @@ class DesignColorViewController: UIViewController{
         }else{
             // todo
         }
-        hexText?.addTarget(self, action: #selector(didChangeTextfield), for: UIControlEvents.editingChanged)
+        hexText?.addTarget(self, action: #selector(didChangeTextfield), for: UIControl.Event.editingChanged)
         
         
         rLabel = UILabel()
@@ -124,7 +124,7 @@ class DesignColorViewController: UIViewController{
             rText?.topAnchor.constraint(equalTo: self.hexLabel!.bottomAnchor, constant: 10).isActive = true
             rText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
             rText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
-            rText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
+            rText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControl.Event.editingChanged)
         }else{
                 // todo
         }
@@ -151,7 +151,7 @@ class DesignColorViewController: UIViewController{
             gText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
             gText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
         }
-        gText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
+        gText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControl.Event.editingChanged)
         
         bLabel = UILabel()
         self.view.addSubview(bLabel!)
@@ -175,7 +175,7 @@ class DesignColorViewController: UIViewController{
             bText?.heightAnchor.constraint(equalToConstant: 30).isActive = true
             bText?.widthAnchor.constraint(equalToConstant: 60).isActive = true
         }
-        bText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControlEvents.editingChanged)
+        bText?.addTarget(self, action: #selector(didChangeRGBTextfield), for: UIControl.Event.editingChanged)
         
         rLabel?.isHidden = true
         rText?.isHidden = true
@@ -217,7 +217,7 @@ class DesignColorViewController: UIViewController{
         alphaSlider?.centerYAnchor.constraint(equalTo: self.alphaLabel!.centerYAnchor).isActive = true
         alphaSlider?.heightAnchor.constraint(equalToConstant: 20).isActive = true
         }
-        alphaSlider?.addTarget(self, action: #selector(didChangeSlider), for: UIControlEvents.valueChanged)
+        alphaSlider?.addTarget(self, action: #selector(didChangeSlider), for: UIControl.Event.valueChanged)
         
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 40, height: 40)

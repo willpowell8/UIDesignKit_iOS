@@ -191,18 +191,18 @@ extension UINavigationController {
         self.applyData(data: data, property: "navigationTitleFontColor", targetType: .color, apply: { (value) in
             if let v = value as? UIColor {
                 if self.navigationBar.titleTextAttributes == nil {
-                    self.navigationBar.titleTextAttributes = [NSAttributedStringKey:Any]()
+                    self.navigationBar.titleTextAttributes = [NSAttributedString.Key:Any]()
                 }
-                self.navigationBar.titleTextAttributes?[NSAttributedStringKey.foregroundColor] = v
+                self.navigationBar.titleTextAttributes?[NSAttributedString.Key.foregroundColor] = v
             }
         })
         
         self.applyData(data: data, property: "navigationTitleFont", targetType: .font, apply: { (value) in
             if let v = value as? UIFont {
                 if self.navigationBar.titleTextAttributes == nil {
-                    self.navigationBar.titleTextAttributes = [NSAttributedStringKey:Any]()
+                    self.navigationBar.titleTextAttributes = [NSAttributedString.Key:Any]()
                 }
-                self.navigationBar.titleTextAttributes?[NSAttributedStringKey.font] = v
+                self.navigationBar.titleTextAttributes?[NSAttributedString.Key.font] = v
             }
         })
     }

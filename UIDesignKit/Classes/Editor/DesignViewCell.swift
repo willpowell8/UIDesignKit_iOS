@@ -59,7 +59,7 @@ class TextDesignViewCell:DesignViewCell{
         textField?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         textField?.heightAnchor.constraint(equalToConstant: 20).isActive = true
         }
-        textField?.addTarget(self, action: #selector(didChangeTextfield), for: UIControlEvents.editingChanged)
+        textField?.addTarget(self, action: #selector(didChangeTextfield), for: UIControl.Event.editingChanged)
         if let details = self.details {
             if let value = details["value"] {
                 textField?.text = String(describing:value)
@@ -104,7 +104,7 @@ class IntDesignViewCell:DesignViewCell{
             slider.widthAnchor.constraint(equalToConstant: 170).isActive = true
         }
         textField.addTarget(self, action: #selector(changeCount(_:)), for: .editingChanged)
-        slider.addTarget(self, action: #selector(didChangeSlider), for: UIControlEvents.valueChanged)
+        slider.addTarget(self, action: #selector(didChangeSlider), for: UIControl.Event.valueChanged)
         if let val = self.details?["value"] {
             if let f  = val as? Double {
                 outputMechanism = "DOUBLE"
@@ -190,7 +190,7 @@ class BoolDesignViewCell:DesignViewCell{
             uiswitch?.rightAnchor.constraint(equalTo: valueLabel!.leftAnchor, constant: -10).isActive = true
             uiswitch?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         }
-        uiswitch?.addTarget(self, action: #selector(didChangeSwitch), for: UIControlEvents.valueChanged)
+        uiswitch?.addTarget(self, action: #selector(didChangeSwitch), for: UIControl.Event.valueChanged)
         if let boolVal = self.details?["value"] as? Int {
             uiswitch?.isOn = boolVal == 1
         }

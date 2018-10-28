@@ -247,7 +247,7 @@ extension FontList: UISearchResultsUpdating {
             return
         }
         term = term.lowercased()
-        filteredFonts = fonts.flatMap({ (name,children) -> (name:String, children:[String])? in
+        filteredFonts = fonts.compactMap({ (name,children) -> (name:String, children:[String])? in
             if name.lowercased().contains(term) {
                 return (name:name, children:children)
             }

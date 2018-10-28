@@ -19,7 +19,7 @@ extension UIImageView{
         })
         
         self.applyData(data: data, property: "contentMode", targetType: .int, apply: { (value) in
-            if let v = value as? Int, let contentModeVal = UIViewContentMode(rawValue:v)  {
+            if let v = value as? Int, let contentModeVal = UIView.ContentMode(rawValue:v)  {
                 self.contentMode = contentModeVal
             }
         })
