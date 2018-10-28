@@ -2,6 +2,7 @@
 # UIDesignKit - Change Log
 
 
+## 1.1.13 - added text alignment to UILabel field, fixed issue with slider
 ## 1.1.12 - add colour memory and fix issue with saving keys repeatedly
 ## 1.1.9 - add textfield ability to change int
 ## 1.1.4 - updated to socketio 2.0
