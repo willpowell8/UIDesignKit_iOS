@@ -49,7 +49,7 @@ public class UIDesign {
     private static var appKey:String?
     public static var deviceType:String = ""
     
-    public static var layoutAlignment:UIDesignAligment = UIDesignAligment.rtl
+    public static var layoutAlignment:UIDesignAligment = UIDesignAligment.ltr
     
     
     public static var ignoreRemote:Bool = false
@@ -211,7 +211,7 @@ public class UIDesign {
                     if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyHashable:Any] {
                         if let loaded = json["data"] as? [AnyHashable:Any] {
                             self.loadedDesign = loaded
-                            saveDesignToDisk(design: self.loadedDesign);
+                            saveDesignToDisk(design: self.loadedDesign)
                             NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
                         }
                     }
@@ -291,7 +291,8 @@ public class UIDesign {
     public static func createKey(_ key:String,type:String,  properties:[String:Any]){
         if socket?.status == SocketIOClientStatus.connected, loadedDesign[key] == nil, hasLoaded == true, let appKey = self.appKey, self.loadedDesign[key] == nil {
             self.sendMessage(type: "key:add", data: ["appuuid":appKey, "type":type, "key":key, "properties":properties])
-            self.loadedDesign[key] = ["type": type, "data":properties];
+            self.loadedDesign[key] = ["type": type, "data":properties]
+            saveDesignToDisk(design: self.loadedDesign)
         }
     }
     
@@ -319,6 +320,7 @@ public class UIDesign {
         }
         keyElement["data"] = outputProperties
         self.loadedDesign[key] = keyElement
+        saveDesignToDisk(design: self.loadedDesign)
         let event = "DESIGN_UPDATE_\(key)"
         NotificationCenter.default.post(name: Notification.Name(rawValue: event), object: self)
     }
@@ -330,6 +332,7 @@ public class UIDesign {
                 keyData[property] = ["universal":attr["value"]]
                 keyElement["data"] = keyData
                 self.loadedDesign[key] = keyElement
+                saveDesignToDisk(design: self.loadedDesign)
             }
         }
     }
