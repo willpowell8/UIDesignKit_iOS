@@ -50,7 +50,7 @@ public class UIDesign {
     private static var appKey:String?
     public static var deviceType:String = ""
     
-    internal static var layoutAlignment:UIDesignAligment = UIDesignAligment.ltr
+    public static var layoutAlignment:UIDesignAligment = UIDesignAligment.ltr
     
     public static func updateLayoutAlignment(layout:UIDesignAligment){
         layoutAlignment = layout

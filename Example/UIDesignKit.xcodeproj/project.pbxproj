@@ -32,7 +32,7 @@
 /* Begin PBXFileReference section */
 		2210D22C111083921DD13585 /* Pods_UIDesignKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UIDesignKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F04D7CC57DEF0C8C7D4C6B6 /* Pods_UIDesignKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UIDesignKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		30DAD88626B1A1E206579CEF /* UIDesignKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = UIDesignKit.podspec; path = ../UIDesignKit.podspec; sourceTree = "<group>"; };
+		30DAD88626B1A1E206579CEF /* UIDesignKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = UIDesignKit.podspec; path = ../UIDesignKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		5FD4EFF2A69B44FD34ABFB14 /* Pods-UIDesignKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIDesignKit_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-UIDesignKit_Tests/Pods-UIDesignKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* UIDesignKit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIDesignKit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
