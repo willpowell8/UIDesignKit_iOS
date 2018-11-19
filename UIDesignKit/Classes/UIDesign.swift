@@ -165,13 +165,14 @@ public class UIDesign {
             self.deviceType = "universal"
             break
         }
-        loadDesign();
-        
-        startSocket();
-        
+        loadDesign()
+        startSocket()
     }
     
     public static func saveDesignToDisk(design:[AnyHashable:Any]){
+        guard self.hasLoaded == true else {
+            return
+        }
         let standard = UserDefaults.standard;
         standard.set(design, forKey: "UIDesign");
         standard.synchronize()
@@ -190,7 +191,10 @@ public class UIDesign {
     }
     
     public static func showAllDesignKeysView(){
-        let v = AllDesignKeysTableViewController()
+        let podBundle = Bundle(for: DesignInlineEditorHandler.self)
+        let bundleURL = podBundle.url(forResource: "UIDesignKit", withExtension: "bundle")
+        let bundle = Bundle(url: bundleURL!)!
+        let v = UIStoryboard(name: "Storyboard", bundle: bundle).instantiateViewController(withIdentifier: "AllDesignKeysTableViewController")
         if let vc = UIApplication.shared.keyWindow?.rootViewController {
             let popController = UINavigationController(rootViewController: v)
             popController.navigationBar.barStyle = .default

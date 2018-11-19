@@ -11,7 +11,12 @@ import Foundation
 class DesignInlineEditorHandler:NSObject {
     
     func showAlert(view:UIView){
-        let vc = DesignViewController()
+        let podBundle = Bundle(for: DesignInlineEditorHandler.self)
+        let bundleURL = podBundle.url(forResource: "UIDesignKit", withExtension: "bundle")
+        let bundle = Bundle(url: bundleURL!)!
+        guard let vc = UIStoryboard(name: "Storyboard", bundle: bundle).instantiateViewController(withIdentifier: "DesignViewController") as? DesignViewController else {
+            return
+        }
         vc.targetView = view
         let popController = UINavigationController(rootViewController: vc)
         popController.navigationBar.barStyle = .default

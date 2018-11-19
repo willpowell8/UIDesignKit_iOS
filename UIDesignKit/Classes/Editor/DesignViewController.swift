@@ -23,22 +23,22 @@ class DesignViewController:UIViewController{
     var designStrings:[String]?
     var designKey:String?
     var designCells:[UITableViewCell]?
-    var tableView = UITableView()
+    @IBOutlet var tableView:UITableView?
     var selectedCell:DesignViewCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        tableView.dataSource = self
-        tableView.delegate = self
-        view.addSubview(tableView)
+        tableView?.dataSource = self
+        tableView?.delegate = self
+        /*view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 9.0, *) {
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
             tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        }
+        }*/
     }
     
     func addDesignViewButton(){
@@ -95,7 +95,7 @@ class DesignViewController:UIViewController{
         
         designCells = cells
         navigationItem.title = designKey
-        tableView.reloadData()
+        tableView?.reloadData()
     }
 }
 

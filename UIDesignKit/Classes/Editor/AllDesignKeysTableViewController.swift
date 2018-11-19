@@ -7,11 +7,12 @@
 
 import UIKit
 
-class AllDesignKeysTableViewController: UITableViewController {
+class AllDesignKeysTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var values = [String]()
     var originalValues = [String]()
-     let searchController = UISearchController(searchResultsController: nil)
+    @IBOutlet var tableView:UITableView?
+    @IBOutlet var searchBar:UISearchBar?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,9 +20,7 @@ class AllDesignKeysTableViewController: UITableViewController {
         // Setup the Scope Bar
         //searchController.searchBar.scopeButtonTitles = ["All", "Recent"]
         self.definesPresentationContext = true 
-        searchController.searchBar.delegate = self
-        searchController.dimsBackgroundDuringPresentation = false
-        self.tableView.tableHeaderView = searchController.searchBar
+        searchBar?.delegate = self
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(close))
         self.navigationItem.leftBarButtonItems = [cancelButton]
         var originalValues1 = [String]()
@@ -35,8 +34,8 @@ class AllDesignKeysTableViewController: UITableViewController {
             return v1 < v2
         }
         values = originalValues
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "KEYCELL")
-        tableView.reloadData()
+        tableView?.register(UITableViewCell.self, forCellReuseIdentifier: "KEYCELL")
+        tableView?.reloadData()
     }
     
     @objc func close(){
@@ -47,20 +46,25 @@ class AllDesignKeysTableViewController: UITableViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        searchBar?.becomeFirstResponder()
+    }
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return values.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "KEYCELL", for: indexPath)
 
         let value = values[indexPath.row]
@@ -69,9 +73,9 @@ class AllDesignKeysTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let value = values[indexPath.row]
-        searchController.searchBar.resignFirstResponder()
+        searchBar?.resignFirstResponder()
         if let elementData = UIDesign.get(value), let data = elementData["data"] as?[String:Any] {
             var formatterData = [String:Any]()
             data.forEach({ (arg) in
@@ -99,20 +103,28 @@ extension AllDesignKeysTableViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         values = originalValues
-        tableView.reloadData()
+        tableView?.reloadData()
         return
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard let searchTerm = searchBar.text, !searchTerm.isEmpty else{
             values = originalValues
-            tableView.reloadData()
+            tableView?.reloadData()
             return
         }
         values = originalValues.filter({ (str) -> Bool in
             return str.lowercased().contains(searchTerm.lowercased())
         })
-        tableView.reloadData()
+        tableView?.reloadData()
     }
 }
 
