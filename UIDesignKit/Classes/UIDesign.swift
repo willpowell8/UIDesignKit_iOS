@@ -47,8 +47,32 @@ public enum UIDesignStatus {
     case unknown
 }
 
+
+
 public class UIDesign {
     
+    static let textAlignmentOptions:[(label:String, value:Int)] = [
+        (label:"Left", value: NSTextAlignment.left.rawValue),
+        (label:"Right", value: NSTextAlignment.right.rawValue),
+        (label:"Natural", value: NSTextAlignment.natural.rawValue),
+        (label:"Center", value: NSTextAlignment.center.rawValue),
+        (label:"Justified", value: NSTextAlignment.justified.rawValue)
+    ]
+    
+    static let imageContentModeOptions:[(label:String, value:Int)] = [
+        (label:"Aspect Fit", value: UIView.ContentMode.scaleAspectFit.rawValue),
+        (label:"Aspect Fill", value: UIView.ContentMode.scaleAspectFill.rawValue),
+        (label:"Scale Fill", value: UIView.ContentMode.scaleToFill.rawValue),
+        (label:"Bottom", value: UIView.ContentMode.bottom.rawValue),
+        (label:"Bottom Left", value: UIView.ContentMode.bottomLeft.rawValue),
+        (label:"Bottom Right", value: UIView.ContentMode.bottomRight.rawValue),
+        (label:"Center", value: UIView.ContentMode.center.rawValue),
+        (label:"Left", value: UIView.ContentMode.left.rawValue),
+        (label:"Right", value: UIView.ContentMode.right.rawValue),
+        (label:"Top", value: UIView.ContentMode.top.rawValue),
+        (label:"Top Left", value: UIView.ContentMode.topLeft.rawValue),
+        (label:"Top Right", value: UIView.ContentMode.topRight.rawValue)
+    ]
     
     public static var debug:Bool = false
     public static var server:String = "http://www.uidesignkit.com"

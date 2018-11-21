@@ -72,10 +72,6 @@ class TextDesignViewCell:DesignViewCell{
     }
 }
 
-class SelectorDesignViewCell:DesignViewCell{
-    
-}
-
 class IntDesignViewCell:DesignViewCell{
     var textField = UITextField()
     var slider = UISlider()
@@ -303,6 +299,36 @@ class FontDesignViewCell:DesignViewCell{
     func applyFont(font:UIFont){
         cellFont = font
         detailTextLabel?.text = font.toDesignDisplayString()
+    }
+}
+
+
+class SelectorDesignViewCell:DesignViewCell{
+    
+    var value:Int? {
+        didSet{
+            let label = possibleValues?.first { (posLabel, posValue) -> Bool in
+                return posValue == value
+            }
+            valueString = label?.label
+        }
+    }
+    var valueString:String? {
+        didSet{
+            detailTextLabel?.text = valueString
+        }
+    }
+    var possibleValues:[(label:String, value:Int)]?
+    
+    override func setup() {
+        super.setup()
+        self.accessoryType = .disclosureIndicator
+        if let intValue = self.details?["value"] as? Int {
+            value = intValue
+        }
+    }
+    
+    func applyFont(value:Int){
     }
 }
 

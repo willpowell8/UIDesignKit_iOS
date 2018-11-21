@@ -77,7 +77,18 @@ class DesignViewController:UIViewController{
             if let details = value as? [String:Any] {
                 if let type = details["type"] as? String {
                     switch(type){
-                        case "INT": cell = IntDesignViewCell()
+                        case "INT":
+                            if key == "textAlignment" {
+                                let s = SelectorDesignViewCell(style: .value1, reuseIdentifier: "TextAlignmentCell")
+                                s.possibleValues = UIDesign.textAlignmentOptions
+                                cell = s
+                            }else if key == "contentMode"{
+                                let s = SelectorDesignViewCell(style: .value1, reuseIdentifier: "ContentModeCell")
+                                s.possibleValues = UIDesign.imageContentModeOptions
+                                cell = s
+                            }else{
+                                cell = IntDesignViewCell()
+                            }
                         case "FLOAT": cell = FloatDesignViewCell()
                         case "COLOR": cell = ColorDesignViewCell()
                         case "FONT": cell = FontDesignViewCell(style: .value1, reuseIdentifier: "FontCell")
@@ -115,6 +126,13 @@ extension DesignViewController:UITableViewDelegate{
                 fontSelector.property = fontCell.property
                 fontSelector.delegate = self
                 navigationController?.pushViewController(fontSelector, animated: true)
+            }else if let selectorCell = cell as? SelectorDesignViewCell {
+                let selectorViewController = DesignSelectorTableViewController()
+                selectorViewController.values = selectorCell.possibleValues
+                selectorViewController.currentlySelected = selectorCell.value
+                selectorViewController.field = selectorCell.property
+                selectorViewController.delegate = self
+                navigationController?.pushViewController(selectorViewController, animated: true)
             }
         }
     }
@@ -127,6 +145,17 @@ extension DesignViewController: FontSelectorViewControllerDelegate {
             if let property = property {
                 self.updateValue(property: property, value: font.toDesignString())
             }
+        }
+    }
+}
+
+extension DesignViewController:DesignSelectorTableViewControllerDelegate{
+    func designSelectedValue(_ field: String?, _ int: Int) {
+        if let property = field {
+            self.updateValue(property: property, value: int)
+        }
+        if let cell = selectedCell as? SelectorDesignViewCell {
+            cell.value = int
         }
     }
 }
