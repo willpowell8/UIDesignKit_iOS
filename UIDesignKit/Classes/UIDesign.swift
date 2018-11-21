@@ -38,17 +38,52 @@ public enum UIDesignAligment:String {
     case unknown = "unknown"
 }
 
+public enum UIDesignStatus {
+    case connected
+    case notConnected
+    case disconnected
+    case connecting
+    case starting
+    case unknown
+}
+
 public class UIDesign {
     
     
     public static var debug:Bool = false
-    public static var server:String = "http://www.uidesignkit.com";
+    public static var server:String = "http://www.uidesignkit.com"
     
     public static var socket:SocketIOClient?
     public static var manager:SocketManager?
     
-    private static var appKey:String?
+    internal static var appKey:String?
     public static var deviceType:String = ""
+    
+    private static var _appName:String?
+    
+    public static var appName:String?{
+        get{
+            return _appName
+        }
+    }
+    
+    public static var status:UIDesignStatus {
+        get{
+            guard let s = socket else {
+                return UIDesignStatus.unknown
+            }
+            switch(s.status){
+            case .connected:
+                return UIDesignStatus.connected
+            case .connecting:
+                return UIDesignStatus.connecting
+            case .disconnected:
+                return UIDesignStatus.disconnected
+            case .notConnected:
+                return UIDesignStatus.notConnected
+            }
+        }
+    }
     
     public static var layoutAlignment:UIDesignAligment = UIDesignAligment.ltr
     
@@ -76,6 +111,7 @@ public class UIDesign {
     
     
     private static var _liveEnabled:Bool = false;
+    private static var eventHandler:((_ error:String?,_ result:String?) -> Void)?
     
     public static var liveEnabled:Bool {
         get {
@@ -93,7 +129,6 @@ public class UIDesign {
                     }
                 }
             }
-            
         }
     }
     
@@ -107,46 +142,56 @@ public class UIDesign {
         self.loadedDesign = [AnyHashable:Any]()
         self.socket = nil
         self.allowInlineEdit = false
+        _appName = nil
         NotificationCenter.default.removeObserver(self, name:UserDefaults.didChangeNotification, object: nil)
     }
     
     
-    public static func start(appKey:String, live:Bool){
+    public static func start(appKey:String, live:Bool, event:((_ error:String?,_ result:String?) -> Void)? = nil){
         guard self.appKey != appKey else {
             print("App Key Already Set")
             return
         }
         stop()
+        eventHandler = event
         self.appKey = appKey
         loadDesign()
         self.liveEnabled = live
         
     }
     
-    public static func start(appKey:String, useSettings:Bool){
+    public static func start(appKey:String, useSettings:Bool, event:((_ error:String?,_ result:String?) -> Void)? = nil){
         guard self.appKey != appKey else {
             print("App Key Already Set")
             return
         }
         stop()
+        eventHandler = event
         self.appKey = appKey
+        var hasTriggeredLoad = false
         if useSettings == true {
             NotificationCenter.default.addObserver(self, selector: #selector(UIDesign.defaultsChanged),
                                                name: UserDefaults.didChangeNotification, object: nil)
+            hasTriggeredLoad = UIDesign.defaultsChanged()
         }
-        loadDesign()
+        if hasTriggeredLoad == false {
+            loadDesign()
+        }
     }
     
-    @objc public static func defaultsChanged(){
+    @objc public static func defaultsChanged()->Bool{
+        var hasTriggeredLoad = false
         let userDefaults = UserDefaults.standard
         let val = userDefaults.bool(forKey: "live_design");
         if(val == true && self.liveEnabled == false){
-            loadDesign();
+            loadDesign()
+            hasTriggeredLoad = true
         }
         self.liveEnabled = val;
         
         let inlineEdit = userDefaults.bool(forKey: "live_design_edit");
-        self.allowInlineEdit = inlineEdit;
+        self.allowInlineEdit = inlineEdit
+        return hasTriggeredLoad
     }
 
     
@@ -165,8 +210,10 @@ public class UIDesign {
             self.deviceType = "universal"
             break
         }
-        loadDesign()
-        startSocket()
+        loadDesign();
+        
+        startSocket();
+        
     }
     
     public static func saveDesignToDisk(design:[AnyHashable:Any]){
@@ -206,29 +253,43 @@ public class UIDesign {
     private static func loadDesign(){
         self.loadDesignFromDisk();
         guard let appKey = self.appKey else{
+            self.eventHandler?("No App Key", nil)
             return
         }
         let config = URLSessionConfiguration.default
         let session = URLSession(configuration: config)
         let urlString = UIDesign.server+"/api/app/\(appKey)/data"
         guard let url = URL(string: urlString as String) else{
+            self.eventHandler?("Invalid URL", nil)
             return
         }
-        session.dataTask(with: url) {
-            (data, response, error) in
+        session.dataTask(with: url) { (data, response, error) in
             if (response as? HTTPURLResponse) != nil, let data = data {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyHashable:Any] {
+                        if let appData = json["app"] as? [AnyHashable:Any]{
+                            if let appName = appData["name"] as? String {
+                                self._appName = appName
+                            }
+                        }
                         if let loaded = json["data"] as? [AnyHashable:Any] {
+                            self.hasLoaded = true
                             self.loadedDesign = loaded
                             saveDesignToDisk(design: self.loadedDesign)
                             NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
+                            self.eventHandler?(nil, "Loaded")
+                        }else{
+                            // designs failed to load
+                            self.eventHandler?("Failed to load design", nil)
                         }
                     }
                 } catch {
                     print("error serializing JSON: \(error)")
+                     self.eventHandler?("error serializing JSON", nil)
                 }
                 
+            }else{
+                self.eventHandler?("No response from url", nil)
             }
             }.resume()
     }

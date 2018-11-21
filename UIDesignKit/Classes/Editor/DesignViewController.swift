@@ -50,11 +50,11 @@ class DesignViewController:UIViewController{
     }
     
     @objc func close(){
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func closeAndOpenAll(){
-        self.dismiss(animated: true) {
+        dismiss(animated: true) {
             UIDesign.showAllDesignKeysView()
         }
     }

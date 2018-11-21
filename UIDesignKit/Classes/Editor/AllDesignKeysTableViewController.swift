@@ -13,6 +13,12 @@ class AllDesignKeysTableViewController: UIViewController, UITableViewDelegate, U
     var originalValues = [String]()
     @IBOutlet var tableView:UITableView?
     @IBOutlet var searchBar:UISearchBar?
+    
+    
+    @IBOutlet var appNameLabel:UILabel?
+    @IBOutlet var appUuidLabel:UILabel?
+    @IBOutlet var statusLabel:UILabel?
+    @IBOutlet var statusView:UIView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +42,38 @@ class AllDesignKeysTableViewController: UIViewController, UITableViewDelegate, U
         values = originalValues
         tableView?.register(UITableViewCell.self, forCellReuseIdentifier: "KEYCELL")
         tableView?.reloadData()
+        updateStatus()
+    }
+    
+    func updateStatus(){
+        appNameLabel?.text = UIDesign.appName ?? "Unknown"
+        appUuidLabel?.text = UIDesign.appKey ?? "Unknown"
+        switch(UIDesign.status){
+        case .unknown:
+            statusLabel?.text = "unknown"
+            statusView?.backgroundColor = UIColor.lightGray
+            break
+        case .connected:
+            statusLabel?.text = "connected"
+            statusView?.backgroundColor = UIColor.green
+            break
+        case .connecting:
+            statusLabel?.text = "connecting"
+            statusView?.backgroundColor = UIColor.orange
+            break
+        case .disconnected:
+            statusLabel?.text = "disconnected"
+            statusView?.backgroundColor = UIColor.red
+            break
+        case .notConnected:
+            statusLabel?.text = "not connected"
+            statusView?.backgroundColor = UIColor.black
+            break
+        case .starting:
+            statusLabel?.text = "starting"
+            statusView?.backgroundColor = UIColor.orange
+            break
+        }
     }
     
     @objc func close(){

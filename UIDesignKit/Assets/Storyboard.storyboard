@@ -108,7 +108,11 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="appNameLabel" destination="ji7-mF-rd2" id="81n-cK-etk"/>
+                        <outlet property="appUuidLabel" destination="f9E-qd-kvR" id="kws-fA-kGM"/>
                         <outlet property="searchBar" destination="hok-Nb-38X" id="qb8-Os-yVC"/>
+                        <outlet property="statusLabel" destination="Oq9-sh-4TM" id="Jsf-Hr-Ynz"/>
+                        <outlet property="statusView" destination="CGJ-tM-h4m" id="4co-F5-wGs"/>
                         <outlet property="tableView" destination="tbg-5F-tfs" id="Skr-7d-qL7"/>
                     </connections>
                 </viewController>
