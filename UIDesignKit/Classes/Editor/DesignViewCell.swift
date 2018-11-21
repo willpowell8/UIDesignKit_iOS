@@ -110,6 +110,10 @@ class IntDesignViewCell:DesignViewCell{
                 outputMechanism = "DOUBLE"
                 slider.value = Float(f)
                 updateDisplay()
+            }else if let f  = val as? CGFloat {
+                outputMechanism = "FLOAT"
+                slider.value = Float(f)
+                updateDisplay()
             }else if let f  = val as? Float {
                 outputMechanism = "FLOAT"
                 slider.value = Float(f)
@@ -180,15 +184,15 @@ class BoolDesignViewCell:DesignViewCell{
         if #available(iOS 9.0, *) {
             valueLabel?.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -30).isActive = true
             valueLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
-            valueLabel?.widthAnchor.constraint(equalToConstant: 40).isActive = true
+            valueLabel?.widthAnchor.constraint(equalToConstant: 25).isActive = true
             valueLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         }
         uiswitch = UISwitch()
         self.addSubview(uiswitch!)
         uiswitch?.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 9.0, *) {
-            uiswitch?.rightAnchor.constraint(equalTo: valueLabel!.leftAnchor, constant: -10).isActive = true
-            uiswitch?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+            uiswitch?.rightAnchor.constraint(equalTo: valueLabel!.leftAnchor, constant: 0).isActive = true
+            uiswitch?.leftAnchor.constraint(equalTo: self.textLabel!.rightAnchor, constant: 10).isActive = true
         }
         uiswitch?.addTarget(self, action: #selector(didChangeSwitch), for: UIControl.Event.valueChanged)
         if let boolVal = self.details?["value"] as? Int {
@@ -230,7 +234,7 @@ class ColorDesignViewCell:DesignViewCell{
         if #available(iOS 9.0, *) {
         alphaValueLabel?.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -34).isActive = true
         alphaValueLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        alphaValueLabel?.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        alphaValueLabel?.widthAnchor.constraint(equalToConstant: 25).isActive = true
         alphaValueLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         }
         alphaLabel = UILabel()
@@ -239,7 +243,7 @@ class ColorDesignViewCell:DesignViewCell{
         alphaLabel?.translatesAutoresizingMaskIntoConstraints = false
         alphaLabel?.textAlignment = .right
         if #available(iOS 9.0, *) {
-        alphaLabel?.rightAnchor.constraint(equalTo: self.alphaValueLabel!.leftAnchor, constant: -5).isActive = true
+        alphaLabel?.rightAnchor.constraint(equalTo: self.alphaValueLabel!.leftAnchor, constant: 0).isActive = true
         alphaLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
         alphaLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         }
@@ -248,7 +252,7 @@ class ColorDesignViewCell:DesignViewCell{
         hexValueLabel?.translatesAutoresizingMaskIntoConstraints = false
         hexValueLabel?.textAlignment = .left
         if #available(iOS 9.0, *) {
-        hexValueLabel?.rightAnchor.constraint(equalTo: self.alphaLabel!.leftAnchor, constant: -5).isActive = true
+        hexValueLabel?.rightAnchor.constraint(equalTo: self.alphaLabel!.leftAnchor, constant: 0).isActive = true
         hexValueLabel?.widthAnchor.constraint(equalToConstant: 80).isActive = true
         hexValueLabel?.heightAnchor.constraint(equalToConstant: 20).isActive = true
         hexValueLabel?.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
@@ -291,14 +295,14 @@ class FontDesignViewCell:DesignViewCell{
         super.setup()
         self.accessoryType = .disclosureIndicator
         if let strValue = self.details?["value"] as? String {
-            detailTextLabel?.text = strValue
             self.cellFont = UIFont.fromString(value: strValue)
+            detailTextLabel?.text = cellFont?.toDesignDisplayString()
         }
     }
     
     func applyFont(font:UIFont){
         cellFont = font
-        self.detailTextLabel?.text = font.toDesignString()
+        detailTextLabel?.text = font.toDesignDisplayString()
     }
 }
 

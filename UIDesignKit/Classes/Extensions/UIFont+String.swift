@@ -14,6 +14,10 @@ extension UIFont {
         return "\(self.fontName)|\(self.familyName)|\(self.pointSize)"
     }
     
+    func toDesignDisplayString() -> String {
+        return "\(self.fontName) \(self.pointSize)"
+    }
+    
     static func fromString(value:String)->UIFont?{
         let parts = value.split{$0 == "|"}.map(String.init)
         var size = CGFloat(9.0)
