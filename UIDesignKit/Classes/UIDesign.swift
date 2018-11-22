@@ -244,17 +244,21 @@ public class UIDesign {
         guard self.hasLoaded == true else {
             return
         }
+        let data = NSKeyedArchiver.archivedData(withRootObject: design)
         let standard = UserDefaults.standard;
-        standard.set(design, forKey: "UIDesign");
+        standard.set(data, forKey: "UIDesign");
         standard.synchronize()
     }
     
     public static func loadDesignFromDisk(){
         let standard = UserDefaults.standard
-        guard let data = standard.object(forKey: "UIDesign") else {
-            return
+        var diskData:[AnyHashable:Any]?
+        if let data = standard.object(forKey: "UIDesign") as? Data, let dataFromData = NSKeyedUnarchiver.unarchiveObject(with: data) as? [AnyHashable:Any] {
+            diskData = dataFromData
+        }else if let data = standard.object(forKey: "UIDesign") as? [AnyHashable:Any] {
+            diskData = data
         }
-        if let loaded = data as? [AnyHashable:Any], loaded.keys.count > 0 {
+        if let loaded = diskData, loaded.keys.count > 0 {
             self.loadedDesign = loaded
             self.hasLoaded = true
             NotificationCenter.default.post(name: UIDesign.LOADED, object: self)
@@ -270,7 +274,7 @@ public class UIDesign {
             let popController = UINavigationController(rootViewController: v)
             popController.navigationBar.barStyle = .default
             popController.modalPresentationStyle = .formSheet
-            vc.present(popController, animated: true, completion: nil)
+            vc.present(popController, animated: false, completion: nil)
         }
     }
     
@@ -406,15 +410,27 @@ public class UIDesign {
             return
         }
         var outputProperties = [AnyHashable:Any]()
+        var shouldUpdate = false
         for (vKey, vValue) in keyData {
             if let vKeyStr = vKey as? String, vKeyStr == property{
                 if var vValueMod = vValue as? [AnyHashable:Any] {
-                    vValueMod[form] = value
+                    if let currentValue = vValueMod[form] as? AnyHashable, let val = value as? AnyHashable {
+                        if currentValue != val {
+                            vValueMod[form] = value
+                            shouldUpdate = true
+                        }
+                    }else{
+                        vValueMod[form] = value
+                        shouldUpdate = true
+                    }
                     outputProperties[vKey] = vValueMod
                 }
             }else{
                 outputProperties[vKey] = vValue
             }
+        }
+        guard shouldUpdate == true else {
+            return
         }
         keyElement["data"] = outputProperties
         self.loadedDesign[key] = keyElement
