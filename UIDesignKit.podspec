@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'UIDesignKit'
-  s.version          = '1.2.7'
+  s.version          = '5.0.0'
   s.summary          = 'Remotely tweak and change colours, fonts, style and design parameters without recompiling your app.'
 
 # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ UIDesignKit fills the need for allowing users to change things like the backgrou
   s.source           = { :git => 'https://github.com/willpowell8/UIDesignKit_iOS.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/willpowelluk'
 
-    s.swift_version = '4.2'
+    s.swift_version = '5.0'
   s.ios.deployment_target = '8.0'
 
   s.source_files = 'UIDesignKit/Classes/**/*'
@@ -38,7 +38,7 @@ UIDesignKit fills the need for allowing users to change things like the backgrou
    }
 
     s.frameworks = 'UIKit'
-    s.dependency 'Socket.IO-Client-Swift', '~>13.3.1'
+    s.dependency 'Socket.IO-Client-Swift', '~> 15.0.0'
     s.dependency 'SDWebImage'
 
 end
