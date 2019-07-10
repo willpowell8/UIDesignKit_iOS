@@ -1,6 +1,8 @@
 
 # UIDesignKit - Change Log
 
+## 5.0.1 - added switch design key
+
 ## 1.2.7 - updates to better change tracking and fix data storage issue with iOS12 swift 4.2
 ## 1.2.1 - update to 13.3.1 socket client
 ## 1.2.0 - update of socket library used in library
