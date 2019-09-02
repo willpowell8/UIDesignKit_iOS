@@ -26,6 +26,10 @@ extension UIFont {
                 size = CGFloat(n)
             }
         }
+        let fontName = parts[0]
+        guard fontName != ".SFUIText", fontName != ".SFUIRegular" else {
+            return UIFont.systemFont(ofSize: size)
+        }
         let descriptor = UIFontDescriptor(name: parts[0], size: size)
         let font = UIFont(descriptor: descriptor, size: size);
         return font
