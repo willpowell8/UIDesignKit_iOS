@@ -27,10 +27,21 @@ extension UIFont {
             }
         }
         let fontName = parts[0]
-        guard fontName != ".SFUIText", fontName != ".SFUIRegular" else {
-            return UIFont.systemFont(ofSize: size)
+        if #available(iOS 13, *) {
+            guard fontName != "", fontName != ".SFUIText", fontName != ".SFUIRegular" else {
+                return UIFont.systemFont(ofSize: size)
+            }
+            if fontName == ".SFUIDisplay-Ultralight" {
+                return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.ultraLight)
+            }
+            if fontName == ".SFUIText-Semibold" {
+                return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.semibold)
+            }
+            if fontName == ".SFUIText-Bold" {
+                return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.bold)
+            }
         }
-        let descriptor = UIFontDescriptor(name: parts[0], size: size)
+        let descriptor = UIFontDescriptor(name: fontName, size: size)
         let font = UIFont(descriptor: descriptor, size: size);
         return font
     }
