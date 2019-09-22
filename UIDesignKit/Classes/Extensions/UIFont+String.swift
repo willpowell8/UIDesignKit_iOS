@@ -40,6 +40,9 @@ extension UIFont {
             if fontName == ".SFUIText-Bold" {
                 return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.bold)
             }
+            if fontName == ".SFUIText-Medium"{
+                return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.medium)
+            }
         }
         let descriptor = UIFontDescriptor(name: fontName, size: size)
         let font = UIFont(descriptor: descriptor, size: size);
