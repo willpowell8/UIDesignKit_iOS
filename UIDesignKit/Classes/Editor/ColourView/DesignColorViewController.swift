@@ -55,6 +55,9 @@ class DesignColorViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 13.0, *) {
+            self.isModalInPresentation = true // available in IOS13
+        }
         colours = UIDesign.colours
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.barStyle = .default

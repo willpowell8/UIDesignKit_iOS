@@ -26,9 +26,17 @@ class DesignViewController:UIViewController{
     @IBOutlet var tableView:UITableView?
     var selectedCell:DesignViewCell?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 13.0, *) {
+            self.isModalInPresentation = true // available in IOS13
+        }
         view.backgroundColor = .white
+        if #available(iOS 13.0, *) {
+            self.view.gestureRecognizers?[0].isEnabled = false
+            self.navigationController?.isModalInPresentation = false
+        }
         tableView?.dataSource = self
         tableView?.delegate = self
         /*view.addSubview(tableView)

@@ -28,6 +28,14 @@ extension UISegmentedControl{
                                             for: .selected)
             }
         }
+        
+        if #available(iOS 13.0, *) {
+            self.applyData(data: data, property: "selectedSegmentTintColor", targetType: .color, apply: { (value) in
+                if let v = value as? UIColor {
+                    self.selectedSegmentTintColor = v
+                }
+            })
+        }
     }
     override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data);
@@ -43,6 +51,10 @@ extension UISegmentedControl{
             dataReturn["selectedFont"] = ["type":"FONT", "value":font.toDesignString()];
         }else{
             dataReturn["selectedFont"] = ["type":"FONT"]
+        }
+        
+        if #available(iOS 13.0, *) {
+            dataReturn["selectedSegmentTintColor"] = ["type":"COLOR", "value":self.selectedSegmentTintColor?.toHexString()]
         }
         return dataReturn;
     }
