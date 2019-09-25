@@ -51,7 +51,15 @@ extension UILabel{
             alignment = NSTextAlignment.designConvertAlignment(alignment, layout: UIDesign.layoutAlignment)
         }
         dataReturn["textAlignment"] = ["type":"INT", "value":alignment.rawValue]
-        dataReturn["textColor"] = ["type":"COLOR", "value":self.textColor.toHexString()]
+        
+        if #available(iOS 13.0, *) {
+            let lightColor = colorForTrait(color: self.textColor, trait: .light)
+            let darkColor = colorForTrait(color: self.textColor, trait: .dark)
+            dataReturn["textColor"] = ["type":"COLOR", "value":lightColor?.toHexString()];
+            dataReturn["textColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()];
+        }else{
+            dataReturn["textColor"] = ["type":"COLOR", "value":self.textColor.toHexString()]
+        }
         dataReturn["font"] = ["type":"FONT", "value": font.toDesignString()]
         dataReturn["adjustsFontSizeToFitWidth"] =  ["type":"BOOL", "value": adjustsFontSizeToFitWidth ? 1 : 0]
         return dataReturn;

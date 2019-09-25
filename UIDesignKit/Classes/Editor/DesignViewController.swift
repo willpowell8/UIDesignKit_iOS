@@ -79,8 +79,16 @@ class DesignViewController:UIViewController{
     func applyDesignProperties(){
         var strings = [String]()
         var cells = [DesignViewCell]()
-        designProperties?.forEach({ (key,value) in
+        var keys = designProperties?.compactMap({ (key,_) -> String? in
+            return key
+        })
+        keys = keys?.sorted(by: { (k1, k2) -> Bool in
+            return k1 < k2
+        })
+        
+        keys?.forEach({ (key) in
             strings.append(key)
+            let value = designProperties?[key]
             var cell = DesignViewCell()
             if let details = value as? [String:Any] {
                 if let type = details["type"] as? String {

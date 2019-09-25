@@ -89,11 +89,45 @@ extension UINavigationController {
         return self.getDesignProperties(data: data);
     }
     
+    @available(iOS 13.0, *)
+    func colorForTrait(color:UIColor?, trait:UIUserInterfaceStyle)->UIColor?{
+        guard color != nil else {
+            return nil
+        }
+        let view = UIView()
+        view.overrideUserInterfaceStyle = trait
+        view.backgroundColor = color
+        guard let c = view.layer.backgroundColor else {
+            return nil
+        }
+        let outputColor = UIColor(cgColor: c)
+        return outputColor
+    }
+    
     public func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = data;
-        dataReturn["barTintColor"] = ["type":"COLOR", "value":self.navigationBar.barTintColor?.toHexString()];
-        dataReturn["tintColor"] = ["type":"COLOR", "value":self.navigationBar.tintColor.toHexString()];
-        dataReturn["navigationTitleFontColor"] = ["type":"COLOR"];
+        if #available(iOS 13.0, *) {
+            let lightColor = colorForTrait(color: self.navigationBar.barTintColor, trait: .light)
+            let darkColor = colorForTrait(color: self.navigationBar.barTintColor, trait: .dark)
+            dataReturn["barTintColor"] = ["type":"COLOR", "value":lightColor?.toHexString()]
+            dataReturn["barTintColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()]
+        }else{
+            dataReturn["barTintColor"] = ["type":"COLOR", "value":self.navigationBar.barTintColor?.toHexString()]
+        }
+        if #available(iOS 13.0, *) {
+            let lightColor = colorForTrait(color: self.navigationBar.tintColor, trait: .light)
+            let darkColor = colorForTrait(color: self.navigationBar.tintColor, trait: .dark)
+            dataReturn["tintColor"] = ["type":"COLOR", "value":lightColor?.toHexString()]
+            dataReturn["tintColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()]
+        }else{
+            dataReturn["tintColor"] = ["type":"COLOR", "value":self.navigationBar.tintColor.toHexString()]
+        }
+        if #available(iOS 13.0, *) {
+            dataReturn["navigationTitleFontColor"] = ["type":"COLOR"]
+            dataReturn["navigationTitleFontColor-dark"] = ["type":"COLOR"]
+        }else{
+            dataReturn["navigationTitleFontColor"] = ["type":"COLOR"]
+        }
         dataReturn["navigationTitleFont"] = ["type":"FONT"];
         return dataReturn;
     }

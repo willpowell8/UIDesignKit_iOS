@@ -126,9 +126,31 @@ extension UIView{
         return self.getDesignProperties(data: data);
     }
     
+    @available(iOS 13.0, *)
+    func colorForTrait(color:UIColor?, trait:UIUserInterfaceStyle)->UIColor?{
+        guard color != nil else {
+            return nil
+        }
+        let view = UIView()
+        view.overrideUserInterfaceStyle = trait
+        view.backgroundColor = color
+        guard let c = view.layer.backgroundColor else {
+            return nil
+        }
+        let outputColor = UIColor(cgColor: c)
+        return outputColor
+    }
+    
     @objc open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = data;
-        dataReturn["backgroundColor"] = ["type":"COLOR", "value":self.backgroundColor?.toHexString()];
+        if #available(iOS 13.0, *) {
+            let lightColor = colorForTrait(color: self.backgroundColor, trait: .light)
+            let darkColor = colorForTrait(color: self.backgroundColor, trait: .dark)
+            dataReturn["backgroundColor"] = ["type":"COLOR", "value":lightColor?.toHexString()];
+            dataReturn["backgroundColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()];
+        }else{
+            dataReturn["backgroundColor"] = ["type":"COLOR", "value":self.backgroundColor?.toHexString()];
+        }
         dataReturn["cornerRadius"] = ["type":"INT", "value":self.layer.cornerRadius];
         if self.layer.borderWidth > 0 {
             dataReturn["borderWidth"] = ["type":"FLOAT", "value":self.layer.borderWidth];
@@ -165,9 +187,20 @@ extension UIView{
                             else{
                                 return;
                             }
-                            
-                            let color = UIColor(fromHexString:value);
-                            apply(color);
+                            if #available(iOS 13.0, *) {
+                                if let darkDictionary = data["\(property)-dark"] as? [AnyHashable: Any], let darkValue = darkDictionary[propertyForDeviceType] as? String {
+                                    let adaptiveColor = UIColor { (traits) -> UIColor in
+                                        // Return one of two colors depending on light or dark mode
+                                        return traits.userInterfaceStyle == .dark ?
+                                            UIColor(fromHexString:darkValue) :
+                                            UIColor(fromHexString:value)
+                                    }
+                                    apply(adaptiveColor)
+                                    break
+                                }
+                            }
+                            let color = UIColor(fromHexString:value)
+                            apply(color)
                             break;
                         case .int:
                             guard let value = element[propertyForDeviceType] as? Int
