@@ -14,9 +14,12 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="nW7-sa-eOz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="DesignKey" value="Navigator"/>
+                        </userDefinedRuntimeAttributes>
                     </navigationBar>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="DesignKey" value="Dev1"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="DesignKey" value="Dev2"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="Gss-Uv-B5W"/>

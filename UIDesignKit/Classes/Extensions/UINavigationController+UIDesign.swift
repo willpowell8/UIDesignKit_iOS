@@ -107,18 +107,32 @@ extension UINavigationController {
     public func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = data;
         if #available(iOS 13.0, *) {
-            let lightColor = colorForTrait(color: self.navigationBar.barTintColor, trait: .light)
-            let darkColor = colorForTrait(color: self.navigationBar.barTintColor, trait: .dark)
-            dataReturn["barTintColor"] = ["type":"COLOR", "value":lightColor?.toHexString()]
-            dataReturn["barTintColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()]
+            var lightValue = ["type":"COLOR"]
+            var darkValue = ["type":"COLOR"]
+            if let lightColor = colorForTrait(color: self.navigationBar.barTintColor, trait: .light){
+                lightValue["value"] = lightColor.toHexString()
+            }
+            
+            if let darkColor = colorForTrait(color: self.navigationBar.barTintColor, trait: .dark){
+                darkValue["value"] = darkColor.toHexString()
+            }
+            dataReturn["barTintColor"] = lightValue
+            dataReturn["barTintColor-dark"] = darkValue
         }else{
             dataReturn["barTintColor"] = ["type":"COLOR", "value":self.navigationBar.barTintColor?.toHexString()]
         }
         if #available(iOS 13.0, *) {
-            let lightColor = colorForTrait(color: self.navigationBar.tintColor, trait: .light)
-            let darkColor = colorForTrait(color: self.navigationBar.tintColor, trait: .dark)
-            dataReturn["tintColor"] = ["type":"COLOR", "value":lightColor?.toHexString()]
-            dataReturn["tintColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()]
+            var lightValue = ["type":"COLOR"]
+            var darkValue = ["type":"COLOR"]
+            if let lightColor = colorForTrait(color: self.navigationBar.tintColor, trait: .light){
+                lightValue["value"] = lightColor.toHexString()
+            }
+            
+            if let darkColor = colorForTrait(color: self.navigationBar.tintColor, trait: .dark){
+                darkValue["value"] = darkColor.toHexString()
+            }
+            dataReturn["barTintColor"] = lightValue
+            dataReturn["barTintColor-dark"] = darkValue
         }else{
             dataReturn["tintColor"] = ["type":"COLOR", "value":self.navigationBar.tintColor.toHexString()]
         }
@@ -150,12 +164,23 @@ extension UINavigationController {
                 switch(targetType){
                 case .color:
                     guard let value = element[propertyForDeviceType] as? String
-                        else{
-                            return;
+                    else{
+                        return;
                     }
-                    
-                    let color = UIColor(fromHexString:value);
-                    apply(color);
+                    if #available(iOS 13.0, *) {
+                        if let darkDictionary = data["\(property)-dark"] as? [AnyHashable: Any], let darkValue = darkDictionary[propertyForDeviceType] as? String {
+                            let adaptiveColor = UIColor { (traits) -> UIColor in
+                                // Return one of two colors depending on light or dark mode
+                                return traits.userInterfaceStyle == .dark ?
+                                    UIColor(fromHexString:darkValue) :
+                                    UIColor(fromHexString:value)
+                            }
+                            apply(adaptiveColor)
+                            break
+                        }
+                    }
+                    let color = UIColor(fromHexString:value)
+                    apply(color)
                     break;
                 case .int:
                     guard let value = element[propertyForDeviceType] as? Int
@@ -206,6 +231,21 @@ extension UINavigationController {
                 UIDesign.addPropertyToKey(designKey, property: property, attribute: propertyValue)
             }
             
+        }
+        if #available(iOS 13.0, *) {
+            if targetType == .color {
+                checkData(data: data, property: "\(property)-dark")
+            }
+        }
+    }
+
+    //  used to check new components
+    public func checkData(data:[AnyHashable:Any], property:String){
+        if data[property] == nil {
+            let properties = self.getAvailableDesignProperties()
+            if let attribute = properties[property] {
+                UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: attribute)
+            }
         }
     }
     

@@ -1,6 +1,9 @@
 
 # UIDesignKit - Change Log
 
+
+## 5.0.10 - Added dark mode support
+## 5.0.8 - added segment controller component support
 ## 5.0.1 - added switch design key
 
 ## 1.2.7 - updates to better change tracking and fix data storage issue with iOS12 swift 4.2
