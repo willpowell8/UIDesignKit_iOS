@@ -259,7 +259,24 @@ extension UIView{
                 UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: attribute)
             }
         }
+        if #available(iOS 13.0, *) {
+            if targetType == .color {
+                checkData(data: data, property: "\(property)-dark")
+            }
+        }
     }
+    
+    
+    //  used to check new components
+    public func checkData(data:[AnyHashable:Any], property:String){
+        if data[property] == nil {
+            let properties = self.getAvailableDesignProperties()
+            if let attribute = properties[property] {
+                UIDesign.addPropertyToKey(self.DesignKey!, property: property, attribute: attribute)
+            }
+        }
+    }
+    
     
     @objc open func updateDesign(type:String, data:[AnyHashable: Any]) {
         // OVERRIDE TO GO HERE FOR INDIVIDUAL CLASSES
@@ -268,6 +285,7 @@ extension UIView{
                 self.backgroundColor = v
             }
         })
+        
         
         self.applyData(data: data, property: "borderColor", targetType: .color, apply: { (value) in
             if let v = value as? UIColor {
