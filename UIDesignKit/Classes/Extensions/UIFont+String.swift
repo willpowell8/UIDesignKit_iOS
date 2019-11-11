@@ -28,19 +28,23 @@ extension UIFont {
         }
         let fontName = parts[0]
         if #available(iOS 13, *) {
-            guard fontName != "", fontName != ".SFUIText", fontName != ".SFUIRegular" else {
+            guard fontName != "", fontName != ".SFUIText", fontName != ".SFUIRegular", fontName != ".SFUI-Regular" else {
                 return UIFont.systemFont(ofSize: size)
             }
-            if fontName == ".SFUIDisplay-Ultralight" {
+            if fontName == ".SFUIDisplay-Ultralight" || fontName == ".SFUI-Ultralight" {
                 return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.ultraLight)
             }
-            if fontName == ".SFUIText-Semibold" {
+            
+            if fontName == ".SFUIText-Light" || fontName == ".SFUI-Light" {
+                return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.light)
+            }
+            if fontName == ".SFUIText-Semibold" || fontName == ".SFUI-Semibold" {
                 return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.semibold)
             }
-            if fontName == ".SFUIText-Bold" {
+            if fontName == ".SFUIText-Bold" || fontName == ".SFUI-Bold" {
                 return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.bold)
             }
-            if fontName == ".SFUIText-Medium"{
+            if fontName == ".SFUIText-Medium" || fontName == ".SFUI-Medium"{
                 return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.medium)
             }
         }

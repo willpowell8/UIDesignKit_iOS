@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pcB-P3-I4n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pcB-P3-I4n">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -88,9 +88,10 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="DesignKey" value="SegmentTest1"/>
                                 </userDefinedRuntimeAttributes>
                             </segmentedControl>
-                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cm2-a5-uJH">
+                            <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="prominent" translatesAutoresizingMaskIntoConstraints="NO" id="cm2-a5-uJH">
                                 <rect key="frame" x="0.0" y="114" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="barTintColor" red="0.14117647059999999" green="0.14117647059999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <userDefinedRuntimeAttributes>
@@ -119,6 +120,11 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="DesignKey" value="MainLabelXXX3"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
+                            <searchBar contentMode="redraw" fixedFrame="YES" searchBarStyle="prominent" translatesAutoresizingMaskIntoConstraints="NO" id="Q0b-E8-tRE">
+                                <rect key="frame" x="0.0" y="158" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <userDefinedRuntimeAttributes>
