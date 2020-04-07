@@ -209,7 +209,7 @@ extension UINavigationController {
                     let parts = value.components(separatedBy: "|")
                     if ( parts.count > 1 ) {
                         var size = CGFloat(9.0)
-                        if let n = Float(parts[2]) {
+                        if parts.count > 2, let n = Float(parts[2]) {
                             size = CGFloat(n)
                         }
                         let descriptor = UIFontDescriptor(name: parts[0], size: size)

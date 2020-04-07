@@ -21,7 +21,7 @@ extension UIFont {
     static func fromString(value:String)->UIFont?{
         let parts = value.split{$0 == "|"}.map(String.init)
         var size = CGFloat(9.0)
-        if(parts.count > 1){
+        if(parts.count > 2){
             if let n = Float(parts[2]) {
                 size = CGFloat(n)
             }
