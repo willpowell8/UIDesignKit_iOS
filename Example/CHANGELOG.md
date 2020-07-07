@@ -1,7 +1,7 @@
 
 # UIDesignKit - Change Log
 
-
+## 5.0.15 - Added textview change
 ## 5.0.10 - Added dark mode support
 ## 5.0.8 - added segment controller component support
 ## 5.0.1 - added switch design key
