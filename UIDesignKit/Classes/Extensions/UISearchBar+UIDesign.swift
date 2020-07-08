@@ -48,10 +48,19 @@ extension UISearchBar{
             dataReturn["tintColor"] = ["type":"COLOR", "value":self.tintColor.toHexString()]
         }
         if #available(iOS 13.0, *) {
-            let searchTextFieldHex = (searchTextField.textColor ?? UIColor.black).toHexString()
-            let searchTextFieldBGHex = (searchTextField.backgroundColor ?? UIColor.white).toHexString()
-            dataReturn["searchBarTextColor"] = ["type":"COLOR", "value":searchTextFieldHex]
-            dataReturn["searchBarBackgroundColor"] = ["type":"COLOR", "value":searchTextFieldBGHex]
+            let searchTextFieldHex = (searchTextField.textColor ?? UIColor.black)
+            let lightColor = colorForTrait(color: searchTextFieldHex, trait: .light)
+            let darkColor = colorForTrait(color: searchTextFieldHex, trait: .dark)
+            dataReturn["searchBarTextColor"] = ["type":"COLOR", "value":lightColor?.toHexString()]
+            dataReturn["searchBarTextColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()]
+        }
+        
+        if #available(iOS 13.0, *) {
+            let searchTextFieldBGHex = (searchTextField.backgroundColor ?? UIColor.white)
+            let lightColor = colorForTrait(color: searchTextFieldBGHex, trait: .light)
+            let darkColor = colorForTrait(color: searchTextFieldBGHex, trait: .dark)
+            dataReturn["searchBarBackgroundColor"] = ["type":"COLOR", "value":lightColor?.toHexString()]
+            dataReturn["searchBarBackgroundColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()]
         }
         if let barTintColor = self.barTintColor {
             if #available(iOS 13.0, *) {
