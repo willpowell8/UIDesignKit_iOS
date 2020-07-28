@@ -158,9 +158,18 @@ extension UIView{
             dataReturn["borderWidth"] = ["type":"FLOAT", "value":self.layer.borderWidth];
         }
         if let borderColor = layer.borderColor {
-            dataReturn["borderColor"] = ["type":"COLOR", "value":UIColor(cgColor:borderColor).toHexString()];
+            if #available(iOS 13.0, *) {
+                let lightColor = colorForTrait(color: UIColor(cgColor:borderColor), trait: .light)
+                let darkColor = colorForTrait(color: UIColor(cgColor:borderColor), trait: .dark)
+                dataReturn["borderColor"] = ["type":"COLOR", "value":lightColor?.toHexString()];
+                dataReturn["borderColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()];
+            }else{
+                dataReturn["borderColor"] = ["type":"COLOR", "value":UIColor(cgColor:borderColor).toHexString()];
+            }
+            
         }else{
             dataReturn["borderColor"] = ["type":"COLOR"];
+             dataReturn["borderColor-dark"] = ["type":"COLOR"];
         }
         return dataReturn
     }
