@@ -11,6 +11,7 @@ import ObjectiveC
 
 private var designKey: UInt8 = 9
 private var designLayoutKey: UInt8 = 10
+private var borderColour: UInt8 = 12
 
 extension UIView{
     @IBInspectable
@@ -21,6 +22,16 @@ extension UIView{
         set(newValue) {
             objc_setAssociatedObject(self, &designLayoutKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
             designSetup();
+        }
+    }
+    
+    
+    public var tempBorderColor: UIColor?  {
+        get {
+            return objc_getAssociatedObject(self, &borderColour) as? UIColor
+        }
+        set(newValue) {
+            objc_setAssociatedObject(self, &borderColour, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
         }
     }
     
@@ -157,16 +168,19 @@ extension UIView{
         }else{
             dataReturn["borderWidth"] = ["type":"FLOAT", "value":self.layer.borderWidth];
         }
-        if let borderColor = layer.borderColor {
+        if let borderColor = tempBorderColor {
             if #available(iOS 13.0, *) {
-                let lightColor = colorForTrait(color: UIColor(cgColor:borderColor), trait: .light)
-                let darkColor = colorForTrait(color: UIColor(cgColor:borderColor), trait: .dark)
+                let lightColor = colorForTrait(color: borderColor, trait: .light)
+                let darkColor = colorForTrait(color:borderColor, trait: .dark)
                 dataReturn["borderColor"] = ["type":"COLOR", "value":lightColor?.toHexString()];
                 dataReturn["borderColor-dark"] = ["type":"COLOR", "value":darkColor?.toHexString()];
             }else{
-                dataReturn["borderColor"] = ["type":"COLOR", "value":UIColor(cgColor:borderColor).toHexString()];
+                dataReturn["borderColor"] = ["type":"COLOR", "value":borderColor.toHexString()];
             }
-            
+        }else if let borderColor = layer.borderColor {
+            let uiColor = UIColor(cgColor: borderColor)
+            dataReturn["borderColor"] = ["type":"COLOR", "value":uiColor.toHexString()];
+             dataReturn["borderColor-dark"] = ["type":"COLOR", "value":uiColor.toHexString()];
         }else{
             dataReturn["borderColor"] = ["type":"COLOR"];
              dataReturn["borderColor-dark"] = ["type":"COLOR"];
@@ -298,6 +312,7 @@ extension UIView{
         
         self.applyData(data: data, property: "borderColor", targetType: .color, apply: { (value) in
             if let v = value as? UIColor {
+                self.tempBorderColor = v
                 self.layer.borderColor = v.cgColor
             }
         })
