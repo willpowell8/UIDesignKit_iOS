@@ -313,7 +313,18 @@ extension UIView{
         self.applyData(data: data, property: "borderColor", targetType: .color, apply: { (value) in
             if let v = value as? UIColor {
                 self.tempBorderColor = v
-                self.layer.borderColor = v.cgColor
+                if #available(iOS 13.0, *) {
+                    if UITraitCollection.current.userInterfaceStyle == .dark {
+                        let c = self.colorForTrait(color:v, trait: .dark) ?? v
+                        self.layer.borderColor = c.cgColor
+                    }
+                    else {
+                        let c2 = self.colorForTrait(color:v, trait: .light) ?? v
+                        self.layer.borderColor = c2.cgColor
+                    }
+                }else{
+                    self.layer.borderColor = v.cgColor
+                }
             }
         })
         self.applyData(data: data, property: "borderWidth", targetType: .float, apply: { (value) in
