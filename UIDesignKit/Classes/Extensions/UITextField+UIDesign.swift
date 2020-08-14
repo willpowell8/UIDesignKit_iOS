@@ -17,6 +17,13 @@ extension UITextField{
                 self.tintColor = v
             }
         })
+        
+        self.applyData(data: data, property: "font", targetType: .font, apply: {(value) in
+            guard let f = value as? UIFont else {
+                return
+            }
+            self.font = f
+        })
     }
     override open func getDesignProperties(data:[String:Any]) -> [String:Any]{
         var dataReturn = super.getDesignProperties(data: data)
@@ -28,6 +35,7 @@ extension UITextField{
         }else{
             dataReturn["tintColor"] = ["type":"COLOR", "value":self.tintColor.toHexString()]
         }
+        dataReturn["font"] = ["type":"FONT", "value": font?.toDesignString() ?? ""]
         return dataReturn;
     }
     

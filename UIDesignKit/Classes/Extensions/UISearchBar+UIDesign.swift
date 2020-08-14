@@ -21,6 +21,15 @@ extension UISearchBar{
             }
         })
         
+        self.applyData(data: data, property: "font", targetType: .font, apply: {(value) in
+            guard let f = value as? UIFont else {
+                return
+            }
+            if #available(iOS 13.0, *) {
+                self.searchTextField.font = f
+            }
+        })
+        
         if #available(iOS 13.0, *) {
             applyData(data: data, property: "searchBarTextColor", targetType: .color) { (value) in
                 if let v = value as? UIColor {
@@ -76,6 +85,9 @@ extension UISearchBar{
             if #available(iOS 13.0, *) {
                 dataReturn["barTintColor-dark"] = ["type":"COLOR"]
             }
+        }
+        if #available(iOS 13.0, *) {
+            dataReturn["font"] = ["type":"FONT", "value": searchTextField.font?.toDesignString() ?? ""]
         }
         return dataReturn;
     }
